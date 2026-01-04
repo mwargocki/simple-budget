@@ -98,7 +98,6 @@ Użytkownicy chcą kontrolować swoje wydatki, ale zniechęcają ich rozbudowane
 3.2.1 Domyślna kategoria „Brak”
 
 - Każdy użytkownik ma nieusuwalną domyślną kategorię „Brak”.
-- „Brak” jest zawsze widoczna na górze listy kategorii.
 
   3.2.2 CRUD kategorii
 
@@ -111,7 +110,7 @@ Użytkownicy chcą kontrolować swoje wydatki, ale zniechęcają ich rozbudowane
 
 - Nazwy kategorii są unikalne per użytkownik (case-insensitive).
 - Limit długości nazwy: 30–40 znaków (system ma wymuszać limit).
-- Sortowanie kategorii: alfabetyczne, z „Brak” zawsze na górze.
+- Sortowanie kategorii: alfabetyczne
 
   3.2.4 Skutek usunięcia kategorii
 
@@ -279,7 +278,6 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   Opis: Jako użytkownik chcę mieć domyślną kategorię „Brak”, aby móc zapisać transakcję bez dopasowanej kategorii.
   Kryteria akceptacji:
   - Po utworzeniu konta w systemie istnieje kategoria „Brak” przypisana do użytkownika.
-  - Kategoria „Brak” jest zawsze widoczna na górze listy kategorii.
   - Kategoria „Brak” nie może zostać usunięta.
 
 - ID: US-009
@@ -296,7 +294,6 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   Opis: Jako użytkownik chcę widzieć posortowaną listę kategorii, aby szybko znaleźć właściwą.
   Kryteria akceptacji:
   - Lista kategorii jest sortowana alfabetycznie.
-  - Kategoria „Brak” zawsze znajduje się na początku listy niezależnie od sortowania.
 
 - ID: US-011
   Tytuł: Edycja nazwy kategorii
