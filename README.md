@@ -1,94 +1,149 @@
-# 10x Astro Starter
+# SimpleBudget
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+A web application for quick expense tracking and simple monthly budget analysis.
+
+## Table of Contents
+
+- [Project Description](#project-description)
+- [Tech Stack](#tech-stack)
+- [Getting Started Locally](#getting-started-locally)
+- [Available Scripts](#available-scripts)
+- [Project Scope](#project-scope)
+- [Project Status](#project-status)
+- [License](#license)
+
+## Project Description
+
+SimpleBudget is a minimalist web application designed for users who want to track their daily expenses without the complexity of full-featured financial applications. The app focuses on speed and simplicity, allowing users to record transactions in just a few taps and analyze their spending on a monthly basis.
+
+### Key Features
+
+- **Quick Transaction Entry** - Minimal form fields with smart defaults (current date/time)
+- **Two Transaction Types** - Track both expenses and income
+- **Custom Categories** - Organize transactions with user-defined categories
+- **Monthly Analysis** - View summaries by total and per category
+- **Filtered Transaction Lists** - Browse transactions by month and category
+
+### Target Audience
+
+Everyday users who want to control their spending (groceries, services, etc.) in the simplest and fastest way possible.
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
+### Frontend
 
-## Prerequisites
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| [Astro](https://astro.build/) | 5.x | Fast, efficient pages with minimal JavaScript |
+| [React](https://react.dev/) | 19.x | Interactive components |
+| [TypeScript](https://www.typescriptlang.org/) | 5.x | Static typing and IDE support |
+| [Tailwind CSS](https://tailwindcss.com/) | 4.x | Utility-first styling |
+| [shadcn/ui](https://ui.shadcn.com/) | - | Accessible component library |
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+### Backend
 
-## Getting Started
+| Technology | Purpose |
+|------------|---------|
+| [Supabase](https://supabase.com/) | PostgreSQL database, authentication, and BaaS SDK |
+
+### DevOps
+
+| Technology | Purpose |
+|------------|---------|
+| GitHub Actions | CI/CD pipelines |
+| DigitalOcean | Application hosting via Docker |
+
+## Getting Started Locally
+
+### Prerequisites
+
+- **Node.js** 22.14.0
+- **npm**
+
+### Installation
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
+   ```bash
+   git clone https://github.com/mwargocki/simple-budget.git
+   cd simple-budget
+   ```
 
 2. Install dependencies:
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
-3. Run the development server:
+3. Start the development server:
 
-```bash
-npm run dev
-```
+   ```bash
+   npm run dev
+   ```
 
-4. Build for production:
-
-```bash
-npm run build
-```
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
+| Script | Command | Description |
+|--------|---------|-------------|
+| `dev` | `npm run dev` | Start the development server |
+| `build` | `npm run build` | Create a production build |
+| `preview` | `npm run preview` | Preview the production build locally |
+| `lint` | `npm run lint` | Run ESLint to check for code issues |
+| `lint:fix` | `npm run lint:fix` | Automatically fix ESLint issues |
+| `format` | `npm run format` | Format code with Prettier |
 
-## Project Structure
+## Project Scope
 
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
+### MVP Features
 
-## AI Development Support
+- **User Authentication**
+  - Registration with email and password
+  - Login/logout functionality
+  - Password change (requires current password)
+  - Account deletion with all associated data
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+- **Category Management**
+  - Create, read, update, and delete custom categories
+  - Default "None" category (non-deletable)
+  - Alphabetical sorting with "None" always at top
+  - Automatic transaction reassignment when deleting categories
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+- **Transaction Management**
+  - Create, read, update, and delete transactions
+  - Fields: amount (PLN), date/time, category, description (optional), type (expense/income)
+  - Amount validation: 0.01 - 1,000,000.00 PLN
+  - Support for both comma and period as decimal separators
 
-### Cursor IDE
+- **Transaction List**
+  - Sorted by date (newest first)
+  - Filtering by month and category
+  - Pagination with "load more" functionality
 
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
+- **Monthly Summary**
+  - Total balance (income minus expenses)
+  - Per-category breakdown
+  - Click-through navigation to filtered transaction list
 
-### GitHub Copilot
+### Out of Scope (Post-MVP)
 
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
+- Bank import (CSV, PDF)
+- Multi-currency support
+- Budget planning and spending limits
+- Shared accounts
+- External integrations
+- Mobile applications
+- Full-text search in descriptions
 
-### Windsurf
+## Project Status
 
-The `.windsurfrules` file contains AI configuration for Windsurf.
-
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+🚧 **In Development** - This project is currently in the early stages of development. The MVP is being built according to the product requirements document.
 
 ## License
 
-MIT
+This project is proprietary software. All rights reserved.
+
+---
+
+For more detailed documentation, see the `.ai/` directory containing the PRD and technical specifications.
