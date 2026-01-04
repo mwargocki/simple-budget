@@ -12,14 +12,7 @@
       "Bash(npm run format)",
       "WebFetch(domain:github.com)"
     ],
-    "ask": [
-      "Bash(git commit:*)",
-      "Bash(git push:*)"
-    ],
-    "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Read(./secrets/**)"
-    ]
+    "ask": ["Bash(git commit:*)", "Bash(git push:*)"],
+    "deny": ["Read(./.env)", "Read(./.env.*)", "Read(./secrets/**)"]
   }
 }

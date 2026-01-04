@@ -32,26 +32,26 @@ Everyday users who want to control their spending (groceries, services, etc.) in
 
 ### Frontend
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| [Astro](https://astro.build/) | 5.x | Fast, efficient pages with minimal JavaScript |
-| [React](https://react.dev/) | 19.x | Interactive components |
-| [TypeScript](https://www.typescriptlang.org/) | 5.x | Static typing and IDE support |
-| [Tailwind CSS](https://tailwindcss.com/) | 4.x | Utility-first styling |
-| [shadcn/ui](https://ui.shadcn.com/) | - | Accessible component library |
+| Technology                                    | Version | Purpose                                       |
+| --------------------------------------------- | ------- | --------------------------------------------- |
+| [Astro](https://astro.build/)                 | 5.x     | Fast, efficient pages with minimal JavaScript |
+| [React](https://react.dev/)                   | 19.x    | Interactive components                        |
+| [TypeScript](https://www.typescriptlang.org/) | 5.x     | Static typing and IDE support                 |
+| [Tailwind CSS](https://tailwindcss.com/)      | 4.x     | Utility-first styling                         |
+| [shadcn/ui](https://ui.shadcn.com/)           | -       | Accessible component library                  |
 
 ### Backend
 
-| Technology | Purpose |
-|------------|---------|
+| Technology                        | Purpose                                           |
+| --------------------------------- | ------------------------------------------------- |
 | [Supabase](https://supabase.com/) | PostgreSQL database, authentication, and BaaS SDK |
 
 ### DevOps
 
-| Technology | Purpose |
-|------------|---------|
-| GitHub Actions | CI/CD pipelines |
-| DigitalOcean | Application hosting via Docker |
+| Technology     | Purpose                        |
+| -------------- | ------------------------------ |
+| GitHub Actions | CI/CD pipelines                |
+| DigitalOcean   | Application hosting via Docker |
 
 ## Getting Started Locally
 
@@ -81,18 +81,18 @@ Everyday users who want to control their spending (groceries, services, etc.) in
    npm run dev
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Available Scripts
 
-| Script | Command | Description |
-|--------|---------|-------------|
-| `dev` | `npm run dev` | Start the development server |
-| `build` | `npm run build` | Create a production build |
-| `preview` | `npm run preview` | Preview the production build locally |
-| `lint` | `npm run lint` | Run ESLint to check for code issues |
-| `lint:fix` | `npm run lint:fix` | Automatically fix ESLint issues |
-| `format` | `npm run format` | Format code with Prettier |
+| Script     | Command            | Description                          |
+| ---------- | ------------------ | ------------------------------------ |
+| `dev`      | `npm run dev`      | Start the development server         |
+| `build`    | `npm run build`    | Create a production build            |
+| `preview`  | `npm run preview`  | Preview the production build locally |
+| `lint`     | `npm run lint`     | Run ESLint to check for code issues  |
+| `lint:fix` | `npm run lint:fix` | Automatically fix ESLint issues      |
+| `format`   | `npm run format`   | Format code with Prettier            |
 
 ## Project Scope
 
