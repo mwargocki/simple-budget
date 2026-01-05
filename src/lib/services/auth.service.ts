@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "../../db/supabase.client";
-import type { RegisterCommand, RegisterResponseDTO } from "../../types";
+import type { RegisterCommand, RegisterResponseDTO, LoginCommand, LoginResponseDTO } from "../../types";
 
 export class AuthService {
   constructor(private supabase: SupabaseClient) {}
@@ -22,6 +22,33 @@ export class AuthService {
       user: {
         id: data.user.id,
         email: data.user.email,
+      },
+    };
+  }
+
+  async login(command: LoginCommand): Promise<LoginResponseDTO> {
+    const { data, error } = await this.supabase.auth.signInWithPassword({
+      email: command.email,
+      password: command.password,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data.user || !data.user.email || !data.session) {
+      throw new Error("Login failed");
+    }
+
+    return {
+      user: {
+        id: data.user.id,
+        email: data.user.email,
+      },
+      session: {
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
+        expires_at: data.session.expires_at ?? 0,
       },
     };
   }
