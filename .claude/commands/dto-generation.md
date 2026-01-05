@@ -23,6 +23,7 @@ Twoim zadaniem jest utworzenie definicji typów TypeScript dla DTO i Command Mod
 5. Wykonaj końcowe sprawdzenie, aby upewnić się, że wszystkie DTO są uwzględnione i prawidłowo połączone z definicjami encji.
 
 Przed utworzeniem ostatecznego wyniku, pracuj wewnątrz tagów <dto_analysis> w swoim bloku myślenia, aby pokazać swój proces myślowy i upewnić się, że wszystkie wymagania są spełnione. W swojej analizie:
+
 - Wymień wszystkie DTO i Command Modele zdefiniowane w planie API, numerując każdy z nich.
 - Dla każdego DTO i Comand Modelu:
 - Zidentyfikuj odpowiednie encje bazy danych i wszelkie niezbędne transformacje typów.
@@ -33,6 +34,7 @@ Przed utworzeniem ostatecznego wyniku, pracuj wewnątrz tagów <dto_analysis> w 
 Po przeprowadzeniu analizy, podaj ostateczne definicje typów DTO i Command Modeli, które pojawią się w pliku src/types.ts. Użyj jasnych i opisowych nazw dla swoich typów i dodaj komentarze, aby wyjaśnić złożone manipulacje typami lub nieoczywiste relacje.
 
 Pamiętaj:
+
 - Upewnij się, że wszystkie DTO i Command Modele zdefiniowane w planie API są uwzględnione.
 - Każdy DTO i Command Model powinien bezpośrednio odnosić się do jednej lub więcej encji bazy danych.
 - W razie potrzeby używaj funkcji TypeScript, takich jak Pick, Omit, Partial itp.
