@@ -86,13 +86,6 @@ Użytkownicy chcą kontrolować swoje wydatki, ale zniechęcają ich rozbudowane
 - Użytkownik może usunąć konto.
 - Usunięcie konta usuwa wszystkie jego transakcje i kategorie (włącznie z informacją o nich), zgodnie z zasadą „moje dane należą do mnie”.
 
-  3.1.6 Bezpieczeństwo haseł (wymóg minimalny przed wdrożeniem)
-
-- Pomimo decyzji tymczasowej o przechowywaniu haseł w czystym tekście, przed wdrożeniem na produkcję wymagane jest wdrożenie minimalnego standardu bezpieczeństwa:
-  - hashowanie haseł w bazie danych,
-  - ochrona przed atakami brute-force (np. ograniczanie prób logowania).
-- W PRD traktowane jako blokujące wydanie produkcyjne.
-
 ### 3.2 Kategorie
 
 3.2.1 Domyślna kategoria „Brak”
