@@ -5,6 +5,8 @@ import type {
   LoginCommand,
   LoginResponseDTO,
   LogoutResponseDTO,
+  ChangePasswordCommand,
+  ChangePasswordResponseDTO,
 } from "../../types";
 
 export class AuthService {
@@ -68,6 +70,31 @@ export class AuthService {
 
     return {
       message: "Logged out successfully",
+    };
+  }
+
+  async changePassword(command: ChangePasswordCommand, userEmail: string): Promise<ChangePasswordResponseDTO> {
+    // Verify current password by attempting to sign in
+    const { error: signInError } = await this.supabase.auth.signInWithPassword({
+      email: userEmail,
+      password: command.currentPassword,
+    });
+
+    if (signInError) {
+      throw signInError;
+    }
+
+    // Update the password
+    const { error: updateError } = await this.supabase.auth.updateUser({
+      password: command.newPassword,
+    });
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    return {
+      message: "Password changed successfully",
     };
   }
 }
