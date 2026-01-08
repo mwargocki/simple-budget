@@ -22,3 +22,5 @@ export const createTransactionSchema = z.object({
 });
 
 export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
+
+export const transactionIdSchema = z.string().uuid("Invalid transaction ID format");

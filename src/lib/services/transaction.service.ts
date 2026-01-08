@@ -8,6 +8,13 @@ export class CategoryNotFoundError extends Error {
   }
 }
 
+export class TransactionNotFoundError extends Error {
+  constructor() {
+    super("Transaction not found");
+    this.name = "TransactionNotFoundError";
+  }
+}
+
 export class TransactionService {
   constructor(private supabase: SupabaseClient) {}
 
@@ -52,6 +59,39 @@ export class TransactionService {
       type: data.type,
       category_id: data.category_id,
       category_name: category.name,
+      description: data.description,
+      occurred_at: data.occurred_at,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+    };
+  }
+
+  async getTransactionById(transactionId: string, userId: string): Promise<TransactionDTO> {
+    const { data, error } = await this.supabase
+      .from("transactions")
+      .select(
+        `
+        id, amount, type, category_id, description,
+        occurred_at, created_at, updated_at,
+        categories!inner(name)
+      `
+      )
+      .eq("id", transactionId)
+      .eq("user_id", userId)
+      .single();
+
+    if (error || !data) {
+      throw new TransactionNotFoundError();
+    }
+
+    const categoryData = data.categories as unknown as { name: string };
+
+    return {
+      id: data.id,
+      amount: data.amount.toFixed(2),
+      type: data.type,
+      category_id: data.category_id,
+      category_name: categoryData.name,
       description: data.description,
       occurred_at: data.occurred_at,
       created_at: data.created_at,
