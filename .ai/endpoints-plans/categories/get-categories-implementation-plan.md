@@ -38,12 +38,12 @@ export interface ErrorResponseDTO {
 
 ```typescript
 {
-  id: string;           // UUID kategorii
-  name: string;         // Nazwa kategorii (citext, 1-40 znaków)
-  is_system: boolean;   // Czy kategoria systemowa
-  system_key: string | null;  // Klucz systemowy (np. 'none')
-  created_at: string;   // Timestamp utworzenia
-  updated_at: string;   // Timestamp ostatniej modyfikacji
+  id: string; // UUID kategorii
+  name: string; // Nazwa kategorii (citext, 1-40 znaków)
+  is_system: boolean; // Czy kategoria systemowa
+  system_key: string | null; // Klucz systemowy (np. 'none')
+  created_at: string; // Timestamp utworzenia
+  updated_at: string; // Timestamp ostatniej modyfikacji
 }
 ```
 
@@ -126,48 +126,56 @@ Client Request
 ## 6. Względy bezpieczeństwa
 
 ### Uwierzytelnianie:
+
 - Wymagana ważna sesja użytkownika
 - Weryfikacja tokenu przez `supabase.auth.getUser()`
 - Brak sesji → 401 Unauthorized
 
 ### Autoryzacja:
+
 - Row Level Security (RLS) w Supabase zapewnia, że użytkownik widzi tylko swoje kategorie
 - Polityka RLS: `user_id = auth.uid()`
 
 ### Ochrona danych:
+
 - Pole `user_id` jest usuwane z odpowiedzi (CategoryDTO = Omit<CategoryRow, "user_id">)
 - Brak możliwości dostępu do kategorii innych użytkowników
 
 ### Walidacja:
+
 - Brak danych wejściowych do walidacji (GET bez parametrów)
 - Walidacja odbywa się tylko na poziomie autoryzacji
 
 ## 7. Obsługa błędów
 
-| Scenariusz | Kod HTTP | Kod błędu | Wiadomość |
-|------------|----------|-----------|-----------|
-| Brak tokenu/sesji | 401 | UNAUTHORIZED | No valid session |
-| Nieprawidłowy/wygasły token | 401 | UNAUTHORIZED | No valid session |
-| Błąd zapytania do bazy | 500 | INTERNAL_ERROR | An unexpected error occurred |
-| Nieoczekiwany błąd | 500 | INTERNAL_ERROR | An unexpected error occurred |
+| Scenariusz                  | Kod HTTP | Kod błędu      | Wiadomość                    |
+| --------------------------- | -------- | -------------- | ---------------------------- |
+| Brak tokenu/sesji           | 401      | UNAUTHORIZED   | No valid session             |
+| Nieprawidłowy/wygasły token | 401      | UNAUTHORIZED   | No valid session             |
+| Błąd zapytania do bazy      | 500      | INTERNAL_ERROR | An unexpected error occurred |
+| Nieoczekiwany błąd          | 500      | INTERNAL_ERROR | An unexpected error occurred |
 
 ### Logowanie błędów:
+
 - Błędy 500 powinny być logowane po stronie serwera dla debugowania
 - Nie ujawniać szczegółów błędów bazy danych w odpowiedzi klienta
 
 ## 8. Rozważania dotyczące wydajności
 
 ### Optymalizacja zapytań:
+
 - Pojedyncze zapytanie do tabeli `categories`
 - Sortowanie po stronie bazy danych (`ORDER BY name ASC`)
 - Indeks na `(user_id, name)` już istnieje (UNIQUE constraint)
 
 ### Rozważania:
+
 - Brak paginacji - zakładamy rozsądną liczbę kategorii per użytkownik (< 100)
 - Brak cachowania - dane kategorii mogą się często zmieniać
 - RLS zapewnia efektywne filtrowanie na poziomie bazy
 
 ### Potencjalne ulepszenia (przyszłość):
+
 - Dodanie paginacji jeśli liczba kategorii znacząco wzrośnie
 - Cache po stronie klienta z invalidacją przy zmianach
 
@@ -215,7 +223,10 @@ export const prerender = false;
 export const GET: APIRoute = async ({ locals }) => {
   try {
     // Verify user authentication
-    const { data: { user }, error: authError } = await locals.supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await locals.supabase.auth.getUser();
 
     if (authError || !user) {
       const errorResponse: ErrorResponseDTO = {

@@ -22,23 +22,26 @@ Endpoint służy do tworzenia nowej kategorii dla zalogowanego użytkownika. Kat
   ```
 
 ### Walidacja pola `name`:
-| Reguła | Komunikat błędu |
-|--------|-----------------|
-| Pole wymagane | "Name is required" |
-| Typ string | "Name must be a string" |
-| Niepuste po trim | "Name cannot be empty or whitespace-only" |
-| Max 40 znaków | "Name must not exceed 40 characters" |
+
+| Reguła                          | Komunikat błędu                                 |
+| ------------------------------- | ----------------------------------------------- |
+| Pole wymagane                   | "Name is required"                              |
+| Typ string                      | "Name must be a string"                         |
+| Niepuste po trim                | "Name cannot be empty or whitespace-only"       |
+| Max 40 znaków                   | "Name must not exceed 40 characters"            |
 | Brak wiodących/końcowych spacji | "Name must not have leading or trailing spaces" |
 
 ## 3. Wykorzystywane typy
 
 ### Istniejące typy (src/types.ts):
+
 - `CreateCategoryCommand` - komenda tworzenia kategorii (linie 112-114)
 - `CategoryDTO` - DTO zwracanej kategorii (linia 104)
 - `ErrorResponseDTO` - struktura odpowiedzi błędu
 - `ErrorDetailDTO` - szczegóły błędu walidacji
 
 ### Nowy schemat walidacji (src/lib/schemas/category.schema.ts):
+
 ```typescript
 import { z } from "zod";
 
@@ -61,6 +64,7 @@ export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 ## 4. Szczegóły odpowiedzi
 
 ### Sukces (201 Created):
+
 ```json
 {
   "id": "uuid",
@@ -73,6 +77,7 @@ export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 ```
 
 ### Błąd walidacji (400 Bad Request):
+
 ```json
 {
   "error": {
@@ -89,6 +94,7 @@ export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 ```
 
 ### Brak autoryzacji (401 Unauthorized):
+
 ```json
 {
   "error": {
@@ -99,6 +105,7 @@ export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 ```
 
 ### Konflikt nazwy (409 Conflict):
+
 ```json
 {
   "error": {
@@ -109,6 +116,7 @@ export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 ```
 
 ### Błąd serwera (500 Internal Server Error):
+
 ```json
 {
   "error": {
@@ -179,19 +187,21 @@ export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 
 ## 7. Obsługa błędów
 
-| Scenariusz | Kod HTTP | Kod błędu | Komunikat |
-|------------|----------|-----------|-----------|
-| Brak nagłówka Authorization | 401 | UNAUTHORIZED | No valid session |
-| Nieprawidłowy token | 401 | UNAUTHORIZED | No valid session |
-| Puste body lub brak pola name | 400 | VALIDATION_ERROR | Validation failed + details |
-| Nazwa pusta lub tylko whitespace | 400 | VALIDATION_ERROR | Validation failed + details |
-| Nazwa > 40 znaków | 400 | VALIDATION_ERROR | Validation failed + details |
-| Nazwa ze spacjami na początku/końcu | 400 | VALIDATION_ERROR | Validation failed + details |
-| Kategoria o tej nazwie już istnieje | 409 | CONFLICT | Category with this name already exists |
-| Błąd bazy danych (inny) | 500 | INTERNAL_ERROR | An unexpected error occurred |
+| Scenariusz                          | Kod HTTP | Kod błędu        | Komunikat                              |
+| ----------------------------------- | -------- | ---------------- | -------------------------------------- |
+| Brak nagłówka Authorization         | 401      | UNAUTHORIZED     | No valid session                       |
+| Nieprawidłowy token                 | 401      | UNAUTHORIZED     | No valid session                       |
+| Puste body lub brak pola name       | 400      | VALIDATION_ERROR | Validation failed + details            |
+| Nazwa pusta lub tylko whitespace    | 400      | VALIDATION_ERROR | Validation failed + details            |
+| Nazwa > 40 znaków                   | 400      | VALIDATION_ERROR | Validation failed + details            |
+| Nazwa ze spacjami na początku/końcu | 400      | VALIDATION_ERROR | Validation failed + details            |
+| Kategoria o tej nazwie już istnieje | 409      | CONFLICT         | Category with this name already exists |
+| Błąd bazy danych (inny)             | 500      | INTERNAL_ERROR   | An unexpected error occurred           |
 
 ### Wykrywanie konfliktu nazwy:
+
 Supabase zwraca błąd z kodem `23505` (unique_violation) gdy próbujemy wstawić duplikat. Należy to sprawdzić w catch block:
+
 ```typescript
 if (error.code === "23505") {
   // unique constraint violation - kategoria już istnieje
@@ -215,12 +225,16 @@ if (error.code === "23505") {
 ## 9. Etapy wdrożenia
 
 ### Krok 1: Utworzenie schematu walidacji
+
 Utworzyć plik `src/lib/schemas/category.schema.ts`:
+
 - Zdefiniować `createCategorySchema` z walidacją pola `name`
 - Eksportować typ `CreateCategoryInput`
 
 ### Krok 2: Rozszerzenie CategoryService
+
 W pliku `src/lib/services/category.service.ts` dodać metodę:
+
 ```typescript
 async createCategory(command: CreateCategoryCommand): Promise<CategoryDTO> {
   const { data, error } = await this.supabase
@@ -238,7 +252,9 @@ async createCategory(command: CreateCategoryCommand): Promise<CategoryDTO> {
 ```
 
 ### Krok 3: Dodanie handlera POST w route
+
 W pliku `src/pages/api/categories/index.ts` dodać eksport `POST`:
+
 1. Walidacja nagłówka Authorization (jak w GET)
 2. Walidacja tokena przez `locals.supabase.auth.getUser(token)`
 3. Parsowanie body JSON
@@ -252,7 +268,9 @@ W pliku `src/pages/api/categories/index.ts` dodać eksport `POST`:
 8. Zwrot 201 z CategoryDTO
 
 ### Krok 4: Testy manualne
+
 Przetestować endpoint za pomocą curl:
+
 ```bash
 # Sukces
 curl -X POST http://localhost:4321/api/categories \

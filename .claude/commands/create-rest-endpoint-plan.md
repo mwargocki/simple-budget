@@ -7,12 +7,12 @@ Zanim zaczniemy, zapoznaj się z poniższymi informacjami:
 1. Route API specification:
    <route_api_specification>
    {{part of api-plan}}
-  </route_api_specification>
+   </route_api_specification>
 
 2. Related database resources:
    <related_db_resources>
-    {{part of db-plan}}
-  </related_db_resources>
+   {{part of db-plan}}
+   </related_db_resources>
 
 3. Definicje typów:
    <type_definitions>
