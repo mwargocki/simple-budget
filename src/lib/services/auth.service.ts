@@ -1,5 +1,11 @@
 import type { SupabaseClient } from "../../db/supabase.client";
-import type { RegisterCommand, RegisterResponseDTO, LoginCommand, LoginResponseDTO } from "../../types";
+import type {
+  RegisterCommand,
+  RegisterResponseDTO,
+  LoginCommand,
+  LoginResponseDTO,
+  LogoutResponseDTO,
+} from "../../types";
 
 export class AuthService {
   constructor(private supabase: SupabaseClient) {}
@@ -50,6 +56,18 @@ export class AuthService {
         refresh_token: data.session.refresh_token,
         expires_at: data.session.expires_at ?? 0,
       },
+    };
+  }
+
+  async logout(): Promise<LogoutResponseDTO> {
+    const { error } = await this.supabase.auth.signOut({ scope: "global" });
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      message: "Logged out successfully",
     };
   }
 }
