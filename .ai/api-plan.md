@@ -459,7 +459,7 @@ Create a new transaction.
 | `amount`      | string/number | Yes      | Amount in PLN (0.01 - 1,000,000.00)                      |
 | `type`        | string        | Yes      | Either "expense" or "income"                             |
 | `category_id` | uuid          | Yes      | Must belong to current user                              |
-| `description` | string        | No       | Optional description (max 255 chars, no whitespace-only) |
+| `description` | string        | Yes      | Required description (max 255 chars, no whitespace-only) |
 | `occurred_at` | string        | No       | ISO 8601 datetime. Defaults to current timestamp         |
 
 **Response (201 Created):**
@@ -774,7 +774,7 @@ All data access is protected by PostgreSQL Row Level Security (RLS) policies:
 | `amount`      | Required, decimal, range 0.01 - 1,000,000.00, 2 decimal places |
 | `type`        | Required, enum: "expense" \| "income"                          |
 | `category_id` | Required, uuid, must exist and belong to user                  |
-| `description` | Optional, max 255 characters, cannot be whitespace-only        |
+| `description` | Required, max 255 characters, cannot be whitespace-only, cannot be empty |
 | `occurred_at` | Optional, valid ISO 8601 datetime, defaults to now()           |
 
 #### Event Validation

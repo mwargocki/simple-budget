@@ -174,7 +174,7 @@ export interface CreateTransactionCommand {
   amount: string | number;
   type: TransactionType;
   category_id: string;
-  description?: string;
+  description: string;
   occurred_at?: string;
 }
 
@@ -183,7 +183,7 @@ export interface UpdateTransactionCommand {
   amount?: string | number;
   type?: TransactionType;
   category_id?: string;
-  description?: string | null;
+  description?: string;
   occurred_at?: string;
 }
 
