@@ -7,6 +7,7 @@ import type {
   LogoutResponseDTO,
   ChangePasswordCommand,
   ChangePasswordResponseDTO,
+  DeleteAccountResponseDTO,
 } from "../../types";
 
 export class AuthService {
@@ -95,6 +96,19 @@ export class AuthService {
 
     return {
       message: "Password changed successfully",
+    };
+  }
+
+  async deleteAccount(userId: string): Promise<DeleteAccountResponseDTO> {
+    const { supabaseAdmin } = await import("../../db/supabase.admin");
+    const { error } = await supabaseAdmin.auth.admin.deleteUser(userId);
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      message: "Account deleted successfully",
     };
   }
 }

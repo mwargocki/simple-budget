@@ -36,3 +36,11 @@ export const changePasswordSchema = z
   });
 
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+
+export const deleteAccountSchema = z.object({
+  confirmation: z.literal("DELETE", {
+    errorMap: () => ({ message: 'Confirmation must be "DELETE"' }),
+  }),
+});
+
+export type DeleteAccountInput = z.infer<typeof deleteAccountSchema>;
