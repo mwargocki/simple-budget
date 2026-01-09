@@ -42,3 +42,34 @@ export const transactionsQuerySchema = z.object({
 });
 
 export type TransactionsQueryInput = z.infer<typeof transactionsQuerySchema>;
+
+export const updateTransactionSchema = z
+  .object({
+    amount: z
+      .union([z.string(), z.number()])
+      .transform((val) => (typeof val === "string" ? parseFloat(val) : val))
+      .refine((val) => !isNaN(val) && val >= 0.01 && val <= 1000000.0, {
+        message: "Amount must be between 0.01 and 1,000,000.00",
+      })
+      .optional(),
+    type: z
+      .enum(["expense", "income"], {
+        errorMap: () => ({ message: "Type must be 'expense' or 'income'" }),
+      })
+      .optional(),
+    category_id: z.string().uuid("Invalid category ID format").optional(),
+    description: z
+      .string()
+      .min(1, "Description is required")
+      .max(255, "Description must not exceed 255 characters")
+      .refine((val) => val.trim().length > 0, {
+        message: "Description cannot be whitespace-only",
+      })
+      .optional(),
+    occurred_at: z.string().datetime({ message: "Invalid ISO 8601 datetime format" }).optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field must be provided for update",
+  });
+
+export type UpdateTransactionInput = z.infer<typeof updateTransactionSchema>;

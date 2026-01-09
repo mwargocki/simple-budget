@@ -4,6 +4,7 @@ import type {
   TransactionDTO,
   TransactionsListDTO,
   TransactionsQueryParams,
+  UpdateTransactionCommand,
 } from "../../types";
 
 export class CategoryNotFoundError extends Error {
@@ -180,6 +181,71 @@ export class TransactionService {
         has_more: offset + transactions.length < total,
       },
     };
+  }
+
+  async updateTransaction(
+    transactionId: string,
+    command: UpdateTransactionCommand,
+    userId: string
+  ): Promise<TransactionDTO> {
+    // 1. Verify transaction exists and belongs to user
+    const { data: existingTransaction, error: fetchError } = await this.supabase
+      .from("transactions")
+      .select("id")
+      .eq("id", transactionId)
+      .eq("user_id", userId)
+      .single();
+
+    if (fetchError || !existingTransaction) {
+      throw new TransactionNotFoundError();
+    }
+
+    // 2. If category_id is provided, verify it exists and belongs to user
+    if (command.category_id) {
+      const { data: category, error: categoryError } = await this.supabase
+        .from("categories")
+        .select("id")
+        .eq("id", command.category_id)
+        .eq("user_id", userId)
+        .single();
+
+      if (categoryError || !category) {
+        throw new CategoryNotFoundError();
+      }
+    }
+
+    // 3. Prepare update object with only provided fields
+    const updateData: Record<string, unknown> = {};
+
+    if (command.amount !== undefined) {
+      updateData.amount = typeof command.amount === "string" ? parseFloat(command.amount) : command.amount;
+    }
+    if (command.type !== undefined) {
+      updateData.type = command.type;
+    }
+    if (command.category_id !== undefined) {
+      updateData.category_id = command.category_id;
+    }
+    if (command.description !== undefined) {
+      updateData.description = command.description;
+    }
+    if (command.occurred_at !== undefined) {
+      updateData.occurred_at = command.occurred_at;
+    }
+
+    // 4. Update transaction
+    const { error: updateError } = await this.supabase
+      .from("transactions")
+      .update(updateData)
+      .eq("id", transactionId)
+      .eq("user_id", userId);
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    // 5. Fetch and return updated transaction with category name
+    return this.getTransactionById(transactionId, userId);
   }
 
   private calculateMonthRange(month?: string): { monthStart: string; monthEnd: string } {
