@@ -769,13 +769,13 @@ All data access is protected by PostgreSQL Row Level Security (RLS) policies:
 
 #### Transaction Validation
 
-| Field         | Rules                                                          |
-| ------------- | -------------------------------------------------------------- |
-| `amount`      | Required, decimal, range 0.01 - 1,000,000.00, 2 decimal places |
-| `type`        | Required, enum: "expense" \| "income"                          |
-| `category_id` | Required, uuid, must exist and belong to user                  |
+| Field         | Rules                                                                    |
+| ------------- | ------------------------------------------------------------------------ |
+| `amount`      | Required, decimal, range 0.01 - 1,000,000.00, 2 decimal places           |
+| `type`        | Required, enum: "expense" \| "income"                                    |
+| `category_id` | Required, uuid, must exist and belong to user                            |
 | `description` | Required, max 255 characters, cannot be whitespace-only, cannot be empty |
-| `occurred_at` | Optional, valid ISO 8601 datetime, defaults to now()           |
+| `occurred_at` | Optional, valid ISO 8601 datetime, defaults to now()                     |
 
 #### Event Validation
 

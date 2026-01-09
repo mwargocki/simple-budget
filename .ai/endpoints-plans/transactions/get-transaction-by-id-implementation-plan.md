@@ -64,12 +64,12 @@ Brak - wszystkie potrzebne typy już istnieją.
 
 ### Błędy
 
-| Kod | Opis | Struktura odpowiedzi |
-|-----|------|---------------------|
-| 400 | Nieprawidłowy format UUID | `{ "error": { "code": "VALIDATION_ERROR", "message": "Invalid transaction ID format" } }` |
-| 401 | Brak lub nieprawidłowy token | `{ "error": { "code": "UNAUTHORIZED", "message": "No valid session" } }` |
-| 404 | Transakcja nie istnieje lub należy do innego użytkownika | `{ "error": { "code": "NOT_FOUND", "message": "Transaction not found" } }` |
-| 500 | Błąd serwera | `{ "error": { "code": "INTERNAL_ERROR", "message": "An unexpected error occurred" } }` |
+| Kod | Opis                                                     | Struktura odpowiedzi                                                                      |
+| --- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| 400 | Nieprawidłowy format UUID                                | `{ "error": { "code": "VALIDATION_ERROR", "message": "Invalid transaction ID format" } }` |
+| 401 | Brak lub nieprawidłowy token                             | `{ "error": { "code": "UNAUTHORIZED", "message": "No valid session" } }`                  |
+| 404 | Transakcja nie istnieje lub należy do innego użytkownika | `{ "error": { "code": "NOT_FOUND", "message": "Transaction not found" } }`                |
+| 500 | Błąd serwera                                             | `{ "error": { "code": "INTERNAL_ERROR", "message": "An unexpected error occurred" } }`    |
 
 ## 5. Przepływ danych
 
@@ -124,16 +124,16 @@ WHERE t.id = :transaction_id AND t.user_id = :user_id
 
 ## 7. Obsługa błędów
 
-| Scenariusz | Kod HTTP | ErrorCode | Wiadomość |
-|------------|----------|-----------|-----------|
-| Brak nagłówka Authorization | 401 | UNAUTHORIZED | No valid session |
-| Nieprawidłowy format tokenu | 401 | UNAUTHORIZED | No valid session |
-| Token wygasł/nieprawidłowy | 401 | UNAUTHORIZED | No valid session |
-| Nieprawidłowy format UUID | 400 | VALIDATION_ERROR | Invalid transaction ID format |
-| Transakcja nie istnieje | 404 | NOT_FOUND | Transaction not found |
-| Transakcja należy do innego użytkownika | 404 | NOT_FOUND | Transaction not found |
-| Błąd bazy danych | 500 | INTERNAL_ERROR | An unexpected error occurred |
-| Nieoczekiwany wyjątek | 500 | INTERNAL_ERROR | An unexpected error occurred |
+| Scenariusz                              | Kod HTTP | ErrorCode        | Wiadomość                     |
+| --------------------------------------- | -------- | ---------------- | ----------------------------- |
+| Brak nagłówka Authorization             | 401      | UNAUTHORIZED     | No valid session              |
+| Nieprawidłowy format tokenu             | 401      | UNAUTHORIZED     | No valid session              |
+| Token wygasł/nieprawidłowy              | 401      | UNAUTHORIZED     | No valid session              |
+| Nieprawidłowy format UUID               | 400      | VALIDATION_ERROR | Invalid transaction ID format |
+| Transakcja nie istnieje                 | 404      | NOT_FOUND        | Transaction not found         |
+| Transakcja należy do innego użytkownika | 404      | NOT_FOUND        | Transaction not found         |
+| Błąd bazy danych                        | 500      | INTERNAL_ERROR   | An unexpected error occurred  |
+| Nieoczekiwany wyjątek                   | 500      | INTERNAL_ERROR   | An unexpected error occurred  |
 
 ## 8. Rozważania dotyczące wydajności
 
@@ -238,7 +238,10 @@ export const GET: APIRoute = async ({ params, request, locals }) => {
     const token = authHeader.substring(7);
 
     // 2. Walidacja tokenu
-    const { data: { user }, error: authError } = await locals.supabase.auth.getUser(token);
+    const {
+      data: { user },
+      error: authError,
+    } = await locals.supabase.auth.getUser(token);
 
     if (authError || !user) {
       const errorResponse: ErrorResponseDTO = {
@@ -272,10 +275,7 @@ export const GET: APIRoute = async ({ params, request, locals }) => {
     // 4. Pobranie transakcji
     const supabaseWithAuth = createSupabaseClientWithAuth(token);
     const transactionService = new TransactionService(supabaseWithAuth);
-    const result: TransactionDTO = await transactionService.getTransactionById(
-      idValidation.data,
-      user.id
-    );
+    const result: TransactionDTO = await transactionService.getTransactionById(idValidation.data, user.id);
 
     return new Response(JSON.stringify(result), {
       status: 200,

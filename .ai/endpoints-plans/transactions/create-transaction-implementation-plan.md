@@ -28,6 +28,7 @@ Endpoint `POST /api/transactions` służy do tworzenia nowej transakcji (wydatku
 | `occurred_at` | string | Data/czas w formacie ISO 8601. Domyślnie: bieżący timestamp |
 
 ### Request Body:
+
 ```json
 {
   "amount": "125.50",
@@ -41,6 +42,7 @@ Endpoint `POST /api/transactions` służy do tworzenia nowej transakcji (wydatku
 ## 3. Wykorzystywane typy
 
 ### Istniejące typy z `src/types.ts`:
+
 - `CreateTransactionCommand` - model komendy dla request body
 - `TransactionDTO` - DTO odpowiedzi zawierające dane transakcji z `category_name`
 - `TransactionType` - typ enum ("expense" | "income")
@@ -49,32 +51,34 @@ Endpoint `POST /api/transactions` służy do tworzenia nowej transakcji (wydatku
 ### Nowe typy do utworzenia:
 
 **Zod Schema (`src/lib/schemas/transaction.schema.ts`):**
+
 ```typescript
 export const createTransactionSchema = z.object({
-  amount: z.union([z.string(), z.number()])
-    .transform((val) => typeof val === "string" ? parseFloat(val) : val)
-    .refine((val) => !isNaN(val) && val >= 0.01 && val <= 1000000.00, {
-      message: "Amount must be between 0.01 and 1,000,000.00"
+  amount: z
+    .union([z.string(), z.number()])
+    .transform((val) => (typeof val === "string" ? parseFloat(val) : val))
+    .refine((val) => !isNaN(val) && val >= 0.01 && val <= 1000000.0, {
+      message: "Amount must be between 0.01 and 1,000,000.00",
     }),
   type: z.enum(["expense", "income"], {
-    errorMap: () => ({ message: "Type must be 'expense' or 'income'" })
+    errorMap: () => ({ message: "Type must be 'expense' or 'income'" }),
   }),
   category_id: z.string().uuid("Invalid category ID format"),
-  description: z.string()
+  description: z
+    .string()
     .min(1, "Description is required")
     .max(255, "Description must not exceed 255 characters")
     .refine((val) => val.trim().length > 0, {
-      message: "Description cannot be whitespace-only"
+      message: "Description cannot be whitespace-only",
     }),
-  occurred_at: z.string()
-    .datetime({ message: "Invalid ISO 8601 datetime format" })
-    .optional()
+  occurred_at: z.string().datetime({ message: "Invalid ISO 8601 datetime format" }).optional(),
 });
 ```
 
 ## 4. Szczegóły odpowiedzi
 
 ### Sukces (201 Created):
+
 ```json
 {
   "id": "uuid",
@@ -92,19 +96,19 @@ export const createTransactionSchema = z.object({
 ### Błędy:
 
 **400 Bad Request:**
+
 ```json
 {
   "error": {
     "code": "VALIDATION_ERROR",
     "message": "Validation failed",
-    "details": [
-      { "field": "amount", "message": "Amount must be between 0.01 and 1,000,000.00" }
-    ]
+    "details": [{ "field": "amount", "message": "Amount must be between 0.01 and 1,000,000.00" }]
   }
 }
 ```
 
 **401 Unauthorized:**
+
 ```json
 {
   "error": {
@@ -115,6 +119,7 @@ export const createTransactionSchema = z.object({
 ```
 
 **404 Not Found:**
+
 ```json
 {
   "error": {
@@ -125,6 +130,7 @@ export const createTransactionSchema = z.object({
 ```
 
 **500 Internal Server Error:**
+
 ```json
 {
   "error": {
@@ -183,45 +189,50 @@ export const createTransactionSchema = z.object({
 ## 6. Względy bezpieczeństwa
 
 ### Uwierzytelnianie:
+
 - Wymagany Bearer token w nagłówku `Authorization`
 - Token weryfikowany przez `locals.supabase.auth.getUser(token)`
 - Utworzenie klienta Supabase z tokenem użytkownika dla RLS: `createSupabaseClientWithAuth(token)`
 
 ### Autoryzacja:
+
 - RLS (Row Level Security) w Supabase zapewnia dostęp tylko do danych użytkownika
 - Kompozytowy klucz obcy `(user_id, category_id) → categories(user_id, id)` gwarantuje, że transakcja nie może wskazywać kategorii innego użytkownika
 
 ### Walidacja danych wejściowych:
+
 - Zod schema waliduje wszystkie pola przed operacją na bazie danych
 - Zapobiega injection attacks przez parametryzowane zapytania Supabase
 - Ograniczenia bazy danych (CHECK constraints) jako druga warstwa walidacji
 
 ### Ochrona przed atakami:
+
 - Brak ujawniania szczegółów błędów wewnętrznych (500 zwraca ogólny komunikat)
 - Walidacja UUID dla category_id zapobiega SQL injection
 - Sanityzacja description przez sprawdzenie długości i białych znaków
 
 ## 7. Obsługa błędów
 
-| Scenariusz | Kod HTTP | Kod błędu | Komunikat |
-|------------|----------|-----------|-----------|
-| Brak nagłówka Authorization | 401 | UNAUTHORIZED | No valid session |
-| Nieprawidłowy format Bearer | 401 | UNAUTHORIZED | No valid session |
-| Token wygasł/nieprawidłowy | 401 | UNAUTHORIZED | No valid session |
-| Nieprawidłowy JSON body | 400 | VALIDATION_ERROR | Invalid JSON body |
-| Brak wymaganego pola | 400 | VALIDATION_ERROR | [field] is required |
-| amount poza zakresem | 400 | VALIDATION_ERROR | Amount must be between 0.01 and 1,000,000.00 |
-| type nieprawidłowy | 400 | VALIDATION_ERROR | Type must be 'expense' or 'income' |
-| category_id nieprawidłowy UUID | 400 | VALIDATION_ERROR | Invalid category ID format |
-| description pusta/whitespace | 400 | VALIDATION_ERROR | Description cannot be whitespace-only |
-| description > 255 znaków | 400 | VALIDATION_ERROR | Description must not exceed 255 characters |
-| occurred_at nieprawidłowy format | 400 | VALIDATION_ERROR | Invalid ISO 8601 datetime format |
-| Kategoria nie istnieje | 404 | NOT_FOUND | Category not found |
-| Kategoria należy do innego użytkownika | 404 | NOT_FOUND | Category not found |
-| Błąd bazy danych | 500 | INTERNAL_ERROR | An unexpected error occurred |
-| Nieoczekiwany błąd | 500 | INTERNAL_ERROR | An unexpected error occurred |
+| Scenariusz                             | Kod HTTP | Kod błędu        | Komunikat                                    |
+| -------------------------------------- | -------- | ---------------- | -------------------------------------------- |
+| Brak nagłówka Authorization            | 401      | UNAUTHORIZED     | No valid session                             |
+| Nieprawidłowy format Bearer            | 401      | UNAUTHORIZED     | No valid session                             |
+| Token wygasł/nieprawidłowy             | 401      | UNAUTHORIZED     | No valid session                             |
+| Nieprawidłowy JSON body                | 400      | VALIDATION_ERROR | Invalid JSON body                            |
+| Brak wymaganego pola                   | 400      | VALIDATION_ERROR | [field] is required                          |
+| amount poza zakresem                   | 400      | VALIDATION_ERROR | Amount must be between 0.01 and 1,000,000.00 |
+| type nieprawidłowy                     | 400      | VALIDATION_ERROR | Type must be 'expense' or 'income'           |
+| category_id nieprawidłowy UUID         | 400      | VALIDATION_ERROR | Invalid category ID format                   |
+| description pusta/whitespace           | 400      | VALIDATION_ERROR | Description cannot be whitespace-only        |
+| description > 255 znaków               | 400      | VALIDATION_ERROR | Description must not exceed 255 characters   |
+| occurred_at nieprawidłowy format       | 400      | VALIDATION_ERROR | Invalid ISO 8601 datetime format             |
+| Kategoria nie istnieje                 | 404      | NOT_FOUND        | Category not found                           |
+| Kategoria należy do innego użytkownika | 404      | NOT_FOUND        | Category not found                           |
+| Błąd bazy danych                       | 500      | INTERNAL_ERROR   | An unexpected error occurred                 |
+| Nieoczekiwany błąd                     | 500      | INTERNAL_ERROR   | An unexpected error occurred                 |
 
 ### Custom Errors w TransactionService:
+
 ```typescript
 export class CategoryNotFoundError extends Error {
   constructor() {
@@ -234,15 +245,18 @@ export class CategoryNotFoundError extends Error {
 ## 8. Rozważania dotyczące wydajności
 
 ### Optymalizacje:
+
 - Pojedyncze zapytanie INSERT z SELECT dla pobrania category_name (można użyć subquery lub JOIN)
 - Używanie indeksów w bazie danych (PK na id, FK na user_id, category_id)
 - RLS policies wykorzystują indeksy na user_id
 
 ### Potencjalne wąskie gardła:
+
 - Weryfikacja tokenu przy każdym żądaniu (nieuniknione dla bezpieczeństwa)
 - Sprawdzenie istnienia kategorii przed INSERT (konieczne dla poprawnego błędu 404)
 
 ### Strategia:
+
 - Użycie pojedynczego zapytania z JOIN zamiast dwóch osobnych zapytań:
   ```sql
   INSERT INTO transactions (...)
@@ -253,6 +267,7 @@ export class CategoryNotFoundError extends Error {
 ## 9. Etapy wdrożenia
 
 ### Krok 1: Utworzenie schematu walidacji Zod
+
 **Plik:** `src/lib/schemas/transaction.schema.ts`
 
 ```typescript
@@ -276,16 +291,14 @@ export const createTransactionSchema = z.object({
     .refine((val) => val.trim().length > 0, {
       message: "Description cannot be whitespace-only",
     }),
-  occurred_at: z
-    .string()
-    .datetime({ message: "Invalid ISO 8601 datetime format" })
-    .optional(),
+  occurred_at: z.string().datetime({ message: "Invalid ISO 8601 datetime format" }).optional(),
 });
 
 export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
 ```
 
 ### Krok 2: Utworzenie TransactionService
+
 **Plik:** `src/lib/services/transaction.service.ts`
 
 ```typescript
@@ -302,10 +315,7 @@ export class CategoryNotFoundError extends Error {
 export class TransactionService {
   constructor(private supabase: SupabaseClient) {}
 
-  async createTransaction(
-    command: CreateTransactionCommand,
-    userId: string
-  ): Promise<TransactionDTO> {
+  async createTransaction(command: CreateTransactionCommand, userId: string): Promise<TransactionDTO> {
     // 1. Verify category exists and belongs to user
     const { data: category, error: categoryError } = await this.supabase
       .from("categories")
@@ -319,10 +329,7 @@ export class TransactionService {
     }
 
     // 2. Prepare amount as number
-    const amount =
-      typeof command.amount === "string"
-        ? parseFloat(command.amount)
-        : command.amount;
+    const amount = typeof command.amount === "string" ? parseFloat(command.amount) : command.amount;
 
     // 3. Insert transaction
     const { data, error } = await this.supabase
@@ -359,6 +366,7 @@ export class TransactionService {
 ```
 
 ### Krok 3: Utworzenie endpointu API
+
 **Plik:** `src/pages/api/transactions/index.ts`
 
 ```typescript
@@ -450,10 +458,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // 5. Create transaction
     const supabaseWithAuth = createSupabaseClientWithAuth(token);
     const transactionService = new TransactionService(supabaseWithAuth);
-    const result: TransactionDTO = await transactionService.createTransaction(
-      validationResult.data,
-      user.id
-    );
+    const result: TransactionDTO = await transactionService.createTransaction(validationResult.data, user.id);
 
     return new Response(JSON.stringify(result), {
       status: 201,
