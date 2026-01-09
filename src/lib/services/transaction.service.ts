@@ -183,6 +183,20 @@ export class TransactionService {
     };
   }
 
+  async deleteTransaction(transactionId: string, userId: string): Promise<void> {
+    const { data, error } = await this.supabase
+      .from("transactions")
+      .delete()
+      .eq("id", transactionId)
+      .eq("user_id", userId)
+      .select("id")
+      .single();
+
+    if (error || !data) {
+      throw new TransactionNotFoundError();
+    }
+  }
+
   async updateTransaction(
     transactionId: string,
     command: UpdateTransactionCommand,
