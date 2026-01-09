@@ -13,6 +13,164 @@
 
 ## 2. Endpoints
 
+### 2.1 Authentication Endpoints
+
+Authentication is primarily handled by Supabase Auth client-side SDK. The following server-side endpoints provide additional functionality.
+
+#### POST /api/auth/register
+
+Register a new user account.
+
+**Request Body:**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "securePassword123",
+  "passwordConfirm": "securePassword123"
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com"
+  }
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request` - Passwords do not match, invalid email format, or password too weak
+- `409 Conflict` - Email already registered
+
+---
+
+#### POST /api/auth/login
+
+Authenticate user and create session.
+
+**Request Body:**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "securePassword123"
+}
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com"
+  },
+  "session": {
+    "access_token": "jwt_token",
+    "refresh_token": "refresh_token",
+    "expires_at": 1704067200
+  }
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request` - Missing required fields
+- `401 Unauthorized` - Invalid credentials (generic message, does not reveal if email exists)
+
+---
+
+#### POST /api/auth/logout
+
+End user session.
+
+**Request Headers:**
+
+- `Authorization: Bearer <access_token>`
+
+**Response (200 OK):**
+
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+**Error Responses:**
+
+- `401 Unauthorized` - No valid session
+
+---
+
+#### POST /api/auth/change-password
+
+Change user password using current password verification.
+
+**Request Headers:**
+
+- `Authorization: Bearer <access_token>`
+
+**Request Body:**
+
+```json
+{
+  "currentPassword": "oldPassword123",
+  "newPassword": "newSecurePassword456",
+  "newPasswordConfirm": "newSecurePassword456"
+}
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "message": "Password changed successfully"
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request` - New passwords do not match or password too weak
+- `401 Unauthorized` - Current password incorrect or no valid session
+
+---
+
+#### DELETE /api/auth/account
+
+Delete user account and all associated data.
+
+**Request Headers:**
+
+- `Authorization: Bearer <access_token>`
+
+**Request Body:**
+
+```json
+{
+  "confirmation": "DELETE"
+}
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "message": "Account deleted successfully"
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request` - Missing or invalid confirmation
+- `401 Unauthorized` - No valid session
+
+---
+
 ### 2.2 Profile Endpoints
 
 #### GET /api/profile
@@ -301,7 +459,7 @@ Create a new transaction.
 | `amount`      | string/number | Yes      | Amount in PLN (0.01 - 1,000,000.00)                      |
 | `type`        | string        | Yes      | Either "expense" or "income"                             |
 | `category_id` | uuid          | Yes      | Must belong to current user                              |
-| `description` | string        | No       | Optional description (max 255 chars, no whitespace-only) |
+| `description` | string        | Yes      | Required description (max 255 chars, no whitespace-only) |
 | `occurred_at` | string        | No       | ISO 8601 datetime. Defaults to current timestamp         |
 
 **Response (201 Created):**
@@ -611,13 +769,13 @@ All data access is protected by PostgreSQL Row Level Security (RLS) policies:
 
 #### Transaction Validation
 
-| Field         | Rules                                                          |
-| ------------- | -------------------------------------------------------------- |
-| `amount`      | Required, decimal, range 0.01 - 1,000,000.00, 2 decimal places |
-| `type`        | Required, enum: "expense" \| "income"                          |
-| `category_id` | Required, uuid, must exist and belong to user                  |
-| `description` | Optional, max 255 characters, cannot be whitespace-only        |
-| `occurred_at` | Optional, valid ISO 8601 datetime, defaults to now()           |
+| Field         | Rules                                                                    |
+| ------------- | ------------------------------------------------------------------------ |
+| `amount`      | Required, decimal, range 0.01 - 1,000,000.00, 2 decimal places           |
+| `type`        | Required, enum: "expense" \| "income"                                    |
+| `category_id` | Required, uuid, must exist and belong to user                            |
+| `description` | Required, max 255 characters, cannot be whitespace-only, cannot be empty |
+| `occurred_at` | Optional, valid ISO 8601 datetime, defaults to now()                     |
 
 #### Event Validation
 

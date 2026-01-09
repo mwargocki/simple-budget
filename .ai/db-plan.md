@@ -91,9 +91,9 @@ Kolumny:
   - **CHECK**: `amount >= 0.01 AND amount <= 1000000.00`
 - `type public.transaction_type` **NOT NULL**
 - `occurred_at timestamptz` **NOT NULL** `DEFAULT now()` (zapisywane jako UTC w `timestamptz`)
-- `description text` `NULL`
-  - **CHECK**: `description IS NULL OR char_length(description) <= 255`
-  - **CHECK**: `description IS NULL OR btrim(description) <> ''` (blokada whitespace-only)
+- `description text` **NOT NULL**
+  - **CHECK**: `char_length(description) BETWEEN 1 AND 255`
+  - **CHECK**: `btrim(description) <> ''` (blokada whitespace-only)
 - `created_at timestamptz` **NOT NULL** `DEFAULT now()`
 - `updated_at timestamptz` **NOT NULL** `DEFAULT now()`
 

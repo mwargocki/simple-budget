@@ -103,7 +103,7 @@ export interface Database {
           amount: number;
           category_id: string;
           created_at: string;
-          description: string | null;
+          description: string;
           id: string;
           occurred_at: string;
           type: Database["public"]["Enums"]["transaction_type"];
@@ -114,7 +114,7 @@ export interface Database {
           amount: number;
           category_id: string;
           created_at?: string;
-          description?: string | null;
+          description: string;
           id?: string;
           occurred_at?: string;
           type: Database["public"]["Enums"]["transaction_type"];
@@ -125,7 +125,7 @@ export interface Database {
           amount?: number;
           category_id?: string;
           created_at?: string;
-          description?: string | null;
+          description?: string;
           id?: string;
           occurred_at?: string;
           type?: Database["public"]["Enums"]["transaction_type"];

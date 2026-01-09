@@ -48,7 +48,7 @@ Użytkownicy chcą kontrolować swoje wydatki, ale zniechęcają ich rozbudowane
 
 ### 2.3 Jak MVP rozwiązuje problem
 
-- Minimalny formularz transakcji (kwota, kategoria, opcjonalny opis, domyślny czas „teraz”).
+- Minimalny formularz transakcji (kwota, kategoria, wymagany opis, domyślny czas „teraz").
 - Proste filtrowanie i szybka analiza w ramach miesiąca.
 - Jasne zasady kategorii (w tym domyślna „Brak” i automatyczne przenoszenie transakcji po usunięciu kategorii).
 
@@ -86,13 +86,6 @@ Użytkownicy chcą kontrolować swoje wydatki, ale zniechęcają ich rozbudowane
 - Użytkownik może usunąć konto.
 - Usunięcie konta usuwa wszystkie jego transakcje i kategorie (włącznie z informacją o nich), zgodnie z zasadą „moje dane należą do mnie”.
 
-  3.1.6 Bezpieczeństwo haseł (wymóg minimalny przed wdrożeniem)
-
-- Pomimo decyzji tymczasowej o przechowywaniu haseł w czystym tekście, przed wdrożeniem na produkcję wymagane jest wdrożenie minimalnego standardu bezpieczeństwa:
-  - hashowanie haseł w bazie danych,
-  - ochrona przed atakami brute-force (np. ograniczanie prób logowania).
-- W PRD traktowane jako blokujące wydanie produkcyjne.
-
 ### 3.2 Kategorie
 
 3.2.1 Domyślna kategoria „Brak”
@@ -124,7 +117,7 @@ Użytkownicy chcą kontrolować swoje wydatki, ale zniechęcają ich rozbudowane
 - Kwota (PLN, 2 miejsca po przecinku).
 - Data i godzina (date picker + opcjonalny time picker).
 - Kategoria (wymagana; musi istnieć w katalogu użytkownika).
-- Opis (opcjonalny).
+- Opis (wymagany, max 255 znaków).
 - Typ transakcji: Wydatek lub Przychód.
 
   3.3.2 Domyślne wartości i UX
@@ -324,7 +317,7 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   Tytuł: Dodanie transakcji z minimalną liczbą pól
   Opis: Jako użytkownik chcę szybko dodać transakcję, aby nie tracić czasu na skomplikowane formularze.
   Kryteria akceptacji:
-  - Formularz dodania transakcji zawiera: kwota, kategoria, typ (Wydatek/Przychód), opis (opcjonalny), data (domyślnie „dzisiaj”), godzina (domyślnie „teraz”).
+  - Formularz dodania transakcji zawiera: kwota, kategoria, typ (Wydatek/Przychód), opis (wymagany), data (domyślnie „dzisiaj"), godzina (domyślnie „teraz").
   - Jeśli użytkownik nie zmieni daty i godziny, system zapisuje bieżący moment jako datę+godzinę transakcji.
   - Po poprawnym zapisie transakcja jest widoczna na liście transakcji.
 
@@ -354,11 +347,13 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   - System odrzuca niepoprawny format daty, jeśli data jest wpisywana ręcznie (dd/MM/rrrr).
 
 - ID: US-018
-  Tytuł: Dodanie opisu do transakcji (opcjonalnie)
+  Tytuł: Dodanie opisu do transakcji
   Opis: Jako użytkownik chcę dodać opis, aby pamiętać kontekst wydatku lub przychodu.
   Kryteria akceptacji:
-  - Opis jest polem opcjonalnym.
-  - Brak opisu nie blokuje zapisu transakcji.
+  - Opis jest polem wymaganym.
+  - Opis nie może być pusty ani zawierać tylko białych znaków.
+  - Opis może mieć maksymalnie 255 znaków.
+  - Brak opisu blokuje zapis transakcji z odpowiednim komunikatem błędu.
   - Po zapisaniu opis jest widoczny w szczegółach transakcji (lub w wierszu listy, jeśli tak zaprojektowano).
 
 - ID: US-019
