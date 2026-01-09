@@ -80,4 +80,68 @@ export class CategoryService {
 
     return data as CategoryDTO;
   }
+
+  async deleteCategory(id: string, userId: string): Promise<{ transactions_moved: number }> {
+    // 1. Fetch category and verify ownership
+    const { data: category, error: fetchError } = await this.supabase
+      .from("categories")
+      .select("id, is_system, user_id")
+      .eq("id", id)
+      .eq("user_id", userId)
+      .single();
+
+    if (fetchError || !category) {
+      throw new CategoryNotFoundError();
+    }
+
+    // 2. Check if system category
+    if (category.is_system) {
+      throw new SystemCategoryError();
+    }
+
+    // 3. Get "Brak" (none) category for the user
+    const { data: noneCategory, error: noneCategoryError } = await this.supabase
+      .from("categories")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("system_key", "none")
+      .single();
+
+    if (noneCategoryError || !noneCategory) {
+      throw new Error("System category 'Brak' not found");
+    }
+
+    // 4. Count transactions to move
+    const { data: transactions, error: countError } = await this.supabase
+      .from("transactions")
+      .select("id", { count: "exact" })
+      .eq("category_id", id);
+
+    if (countError) {
+      throw countError;
+    }
+
+    const transactionsCount = transactions?.length ?? 0;
+
+    // 5. Move transactions to "Brak" category
+    if (transactionsCount > 0) {
+      const { error: updateError } = await this.supabase
+        .from("transactions")
+        .update({ category_id: noneCategory.id })
+        .eq("category_id", id);
+
+      if (updateError) {
+        throw updateError;
+      }
+    }
+
+    // 6. Delete category
+    const { error: deleteError } = await this.supabase.from("categories").delete().eq("id", id).eq("user_id", userId);
+
+    if (deleteError) {
+      throw deleteError;
+    }
+
+    return { transactions_moved: transactionsCount };
+  }
 }
