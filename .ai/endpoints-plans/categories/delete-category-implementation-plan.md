@@ -54,13 +54,13 @@ export class SystemCategoryError extends Error { ... }
 
 ### Błędy
 
-| Status | Kod błędu | Opis |
-|--------|-----------|------|
-| 400 | VALIDATION_ERROR | Nieprawidłowy format UUID |
-| 401 | UNAUTHORIZED | Brak lub nieprawidłowy token |
-| 403 | FORBIDDEN | Próba usunięcia kategorii systemowej |
-| 404 | NOT_FOUND | Kategoria nie istnieje lub należy do innego użytkownika |
-| 500 | INTERNAL_ERROR | Nieoczekiwany błąd serwera |
+| Status | Kod błędu        | Opis                                                    |
+| ------ | ---------------- | ------------------------------------------------------- |
+| 400    | VALIDATION_ERROR | Nieprawidłowy format UUID                               |
+| 401    | UNAUTHORIZED     | Brak lub nieprawidłowy token                            |
+| 403    | FORBIDDEN        | Próba usunięcia kategorii systemowej                    |
+| 404    | NOT_FOUND        | Kategoria nie istnieje lub należy do innego użytkownika |
+| 500    | INTERNAL_ERROR   | Nieoczekiwany błąd serwera                              |
 
 ## 5. Przepływ danych
 
@@ -92,14 +92,14 @@ Request → Walidacja Auth → Walidacja UUID → CategoryService.deleteCategory
 
 ## 7. Obsługa błędów
 
-| Scenariusz | Wyjątek/Warunek | Status | Odpowiedź |
-|------------|-----------------|--------|-----------|
-| Brak nagłówka Authorization | `!authHeader` | 401 | `{ error: { code: "UNAUTHORIZED", message: "No valid session" } }` |
-| Nieprawidłowy token | `authError \|\| !user` | 401 | `{ error: { code: "UNAUTHORIZED", message: "No valid session" } }` |
-| Nieprawidłowy format UUID | `!categoryIdSchema.safeParse().success` | 400 | `{ error: { code: "VALIDATION_ERROR", ... } }` |
-| Kategoria nie istnieje | `CategoryNotFoundError` | 404 | `{ error: { code: "NOT_FOUND", message: "Category not found" } }` |
-| Kategoria systemowa | `SystemCategoryError` | 403 | `{ error: { code: "FORBIDDEN", message: "Cannot delete system category" } }` |
-| Błąd bazy danych | Inne wyjątki | 500 | `{ error: { code: "INTERNAL_ERROR", message: "An unexpected error occurred" } }` |
+| Scenariusz                  | Wyjątek/Warunek                         | Status | Odpowiedź                                                                        |
+| --------------------------- | --------------------------------------- | ------ | -------------------------------------------------------------------------------- |
+| Brak nagłówka Authorization | `!authHeader`                           | 401    | `{ error: { code: "UNAUTHORIZED", message: "No valid session" } }`               |
+| Nieprawidłowy token         | `authError \|\| !user`                  | 401    | `{ error: { code: "UNAUTHORIZED", message: "No valid session" } }`               |
+| Nieprawidłowy format UUID   | `!categoryIdSchema.safeParse().success` | 400    | `{ error: { code: "VALIDATION_ERROR", ... } }`                                   |
+| Kategoria nie istnieje      | `CategoryNotFoundError`                 | 404    | `{ error: { code: "NOT_FOUND", message: "Category not found" } }`                |
+| Kategoria systemowa         | `SystemCategoryError`                   | 403    | `{ error: { code: "FORBIDDEN", message: "Cannot delete system category" } }`     |
+| Błąd bazy danych            | Inne wyjątki                            | 500    | `{ error: { code: "INTERNAL_ERROR", message: "An unexpected error occurred" } }` |
 
 ## 8. Rozważania dotyczące wydajności
 
