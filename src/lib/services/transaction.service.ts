@@ -1,5 +1,10 @@
 import type { SupabaseClient } from "../../db/supabase.client";
-import type { CreateTransactionCommand, TransactionDTO } from "../../types";
+import type {
+  CreateTransactionCommand,
+  TransactionDTO,
+  TransactionsListDTO,
+  TransactionsQueryParams,
+} from "../../types";
 
 export class CategoryNotFoundError extends Error {
   constructor() {
@@ -97,5 +102,106 @@ export class TransactionService {
       created_at: data.created_at,
       updated_at: data.updated_at,
     };
+  }
+
+  async getTransactions(params: TransactionsQueryParams, userId: string): Promise<TransactionsListDTO> {
+    // Calculate date range for month filter
+    const { monthStart, monthEnd } = this.calculateMonthRange(params.month);
+
+    // Build base query for counting
+    let countQuery = this.supabase
+      .from("transactions")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId)
+      .gte("occurred_at", monthStart)
+      .lt("occurred_at", monthEnd);
+
+    // Build base query for fetching data
+    let dataQuery = this.supabase
+      .from("transactions")
+      .select(
+        `
+        id, amount, type, category_id, description,
+        occurred_at, created_at, updated_at,
+        categories!inner(name)
+      `
+      )
+      .eq("user_id", userId)
+      .gte("occurred_at", monthStart)
+      .lt("occurred_at", monthEnd);
+
+    // Apply optional category filter
+    if (params.category_id) {
+      countQuery = countQuery.eq("category_id", params.category_id);
+      dataQuery = dataQuery.eq("category_id", params.category_id);
+    }
+
+    // Apply sorting and pagination
+    const limit = params.limit ?? 20;
+    const offset = params.offset ?? 0;
+
+    dataQuery = dataQuery.order("occurred_at", { ascending: false }).range(offset, offset + limit - 1);
+
+    // Execute queries
+    const [countResult, dataResult] = await Promise.all([countQuery, dataQuery]);
+
+    if (countResult.error) {
+      throw countResult.error;
+    }
+
+    if (dataResult.error) {
+      throw dataResult.error;
+    }
+
+    const total = countResult.count ?? 0;
+
+    // Map results to TransactionDTO[]
+    const transactions: TransactionDTO[] = (dataResult.data ?? []).map((row) => {
+      const categoryData = row.categories as unknown as { name: string };
+      return {
+        id: row.id,
+        amount: row.amount.toFixed(2),
+        type: row.type,
+        category_id: row.category_id,
+        category_name: categoryData.name,
+        description: row.description,
+        occurred_at: row.occurred_at,
+        created_at: row.created_at,
+        updated_at: row.updated_at,
+      };
+    });
+
+    return {
+      transactions,
+      pagination: {
+        total,
+        limit,
+        offset,
+        has_more: offset + transactions.length < total,
+      },
+    };
+  }
+
+  private calculateMonthRange(month?: string): { monthStart: string; monthEnd: string } {
+    let year: number;
+    let monthNum: number;
+
+    if (month) {
+      const [yearStr, monthStr] = month.split("-");
+      year = parseInt(yearStr, 10);
+      monthNum = parseInt(monthStr, 10);
+    } else {
+      const now = new Date();
+      year = now.getUTCFullYear();
+      monthNum = now.getUTCMonth() + 1;
+    }
+
+    // First day of the month at 00:00:00 UTC
+    const monthStart = new Date(Date.UTC(year, monthNum - 1, 1)).toISOString();
+
+    // First day of next month at 00:00:00 UTC
+    const monthEnd = new Date(Date.UTC(year, monthNum, 1)).toISOString();
+
+    return { monthStart, monthEnd };
   }
 }

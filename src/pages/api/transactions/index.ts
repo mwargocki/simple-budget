@@ -1,10 +1,101 @@
 import type { APIRoute } from "astro";
 import { createSupabaseClientWithAuth } from "../../../db/supabase.client";
 import { TransactionService, CategoryNotFoundError } from "../../../lib/services/transaction.service";
-import { createTransactionSchema } from "../../../lib/schemas/transaction.schema";
-import type { TransactionDTO, ErrorResponseDTO } from "../../../types";
+import { createTransactionSchema, transactionsQuerySchema } from "../../../lib/schemas/transaction.schema";
+import type { TransactionDTO, TransactionsListDTO, ErrorResponseDTO } from "../../../types";
 
 export const prerender = false;
+
+export const GET: APIRoute = async ({ request, locals }) => {
+  try {
+    // 1. Extract and validate Authorization header
+    const authHeader = request.headers.get("Authorization");
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      const errorResponse: ErrorResponseDTO = {
+        error: {
+          code: "UNAUTHORIZED",
+          message: "No valid session",
+        },
+      };
+      return new Response(JSON.stringify(errorResponse), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const token = authHeader.substring(7);
+
+    // 2. Validate token by getting user
+    const {
+      data: { user },
+      error: authError,
+    } = await locals.supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      const errorResponse: ErrorResponseDTO = {
+        error: {
+          code: "UNAUTHORIZED",
+          message: "No valid session",
+        },
+      };
+      return new Response(JSON.stringify(errorResponse), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // 3. Parse query params from URL
+    const url = new URL(request.url);
+    const queryParams = {
+      month: url.searchParams.get("month") ?? undefined,
+      category_id: url.searchParams.get("category_id") ?? undefined,
+      limit: url.searchParams.get("limit") ?? undefined,
+      offset: url.searchParams.get("offset") ?? undefined,
+    };
+
+    // 4. Validate query params with Zod schema
+    const validationResult = transactionsQuerySchema.safeParse(queryParams);
+
+    if (!validationResult.success) {
+      const errorResponse: ErrorResponseDTO = {
+        error: {
+          code: "VALIDATION_ERROR",
+          message: "Validation failed",
+          details: validationResult.error.errors.map((err) => ({
+            field: err.path.join("."),
+            message: err.message,
+          })),
+        },
+      };
+      return new Response(JSON.stringify(errorResponse), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // 5. Fetch transactions
+    const supabaseWithAuth = createSupabaseClientWithAuth(token);
+    const transactionService = new TransactionService(supabaseWithAuth);
+    const result: TransactionsListDTO = await transactionService.getTransactions(validationResult.data, user.id);
+
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch {
+    const errorResponse: ErrorResponseDTO = {
+      error: {
+        code: "INTERNAL_ERROR",
+        message: "An unexpected error occurred",
+      },
+    };
+    return new Response(JSON.stringify(errorResponse), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+};
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {

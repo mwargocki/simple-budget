@@ -24,3 +24,21 @@ export const createTransactionSchema = z.object({
 export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
 
 export const transactionIdSchema = z.string().uuid("Invalid transaction ID format");
+
+export const transactionsQuerySchema = z.object({
+  month: z
+    .string()
+    .regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Invalid month format. Use YYYY-MM")
+    .optional(),
+  category_id: z.string().uuid("Invalid category ID format").optional(),
+  limit: z.coerce
+    .number()
+    .int("Limit must be an integer")
+    .min(1, "Limit must be at least 1")
+    .max(100, "Limit cannot exceed 100")
+    .optional()
+    .default(20),
+  offset: z.coerce.number().int("Offset must be an integer").min(0, "Offset cannot be negative").optional().default(0),
+});
+
+export type TransactionsQueryInput = z.infer<typeof transactionsQuerySchema>;
