@@ -1,0 +1,16 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { DashboardPage } from "../../components/dashboard/DashboardPage";
+
+const {
+  data: { session },
+} = await Astro.locals.supabase.auth.getSession();
+
+if (!session) {
+  return Astro.redirect("/login");
+}
+---
+
+<Layout title="Dashboard - SimpleBudget">
+  <DashboardPage client:load />
+</Layout>
