@@ -44,7 +44,6 @@ const DASHBOARD_TILES: DashboardTileData[] = [
 export function DashboardPage() {
   return (
     <main className="container mx-auto max-w-4xl px-4 py-8">
-      <h1 className="mb-8 text-3xl font-bold">Dashboard</h1>
       <nav aria-label="Główna nawigacja aplikacji">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {DASHBOARD_TILES.map((tile) => (

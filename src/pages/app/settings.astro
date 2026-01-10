@@ -1,27 +1,15 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import AppLayout from "../../layouts/AppLayout.astro";
 import { SettingsPage } from "../../components/settings/SettingsPage";
 
 const {
   data: { session },
 } = await Astro.locals.supabase.auth.getSession();
 
-if (!session) {
-  return Astro.redirect("/login");
-}
-
-const userEmail = session.user.email ?? "";
-const accessToken = session.access_token;
-
-console.log("Settings page session:", {
-  hasSession: !!session,
-  userId: session?.user?.id,
-  hasAccessToken: !!accessToken,
-  tokenLength: accessToken?.length,
-  tokenStart: accessToken?.substring(0, 30),
-});
+const userEmail = session?.user.email ?? "";
+const accessToken = session?.access_token ?? "";
 ---
 
-<Layout title="Ustawienia - SimpleBudget">
+<AppLayout title="Ustawienia - SimpleBudget" pageTitle="Ustawienia">
   <SettingsPage client:load userEmail={userEmail} accessToken={accessToken} />
-</Layout>
+</AppLayout>
