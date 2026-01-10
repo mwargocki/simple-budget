@@ -195,7 +195,7 @@ Realizuj maksymalnie 3 kroki planu implementacji, podsumuj krótko co zrobiłeś
 
 Dokładnie przeanalizuj plan wdrożenia i zasady. Zwróć szczególną uwagę na strukturę komponentów, wymagania dotyczące integracji API i interakcje użytkownika opisane w planie.
 
-Wykonaj następujące kroki, aby zaimplementować widok frontendu:
+Wykonaj następujące kroki, aby zaimplementować zmiany:
 
 1. Struktura komponentów:
    - Zidentyfikuj wszystkie komponenty wymienione w planie wdrożenia.
