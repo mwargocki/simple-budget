@@ -1,6 +1,6 @@
 # Create Missing View components Plan (project)
 
-Jako starszy programista frontendu Twoim zadaniem jest stworzenie szczegółowego planu wdrożenia poprawek do istniejących widokow. 
+Jako starszy programista frontendu Twoim zadaniem jest stworzenie szczegółowego planu wdrożenia poprawek do istniejących widokow.
 Poniewaz nieco zmienily sie wymagania lub zapomniano o pewnych aspektach podczas pierwotnej implementacji, Twoim celem jest zidentyfikowanie brakujących komponentów widoku i stworzenie planu ich wdrożenia.
 Plan ten powinien być kompleksowy i wystarczająco jasny dla innego programisty frontendowego, aby mógł poprawnie i wydajnie wdrożyć widok.
 
@@ -20,10 +20,11 @@ Plan ten powinien być kompleksowy i wystarczająco jasny dla innego programisty
    Tytuł: Wylogowanie z aplikacji
    Opis: Jako użytkownik chcę się wylogować, aby zakończyć sesję.
    Kryteria akceptacji:
+
 - Dostępna jest akcja „Wyloguj”.
 - Po wylogowaniu użytkownik nie ma dostępu do ekranów wymagających autoryzacji.
 - Próba wejścia na chronione adresy URL po wylogowaniu wymaga ponownego zalogowania.
-   </user_stories>
+  </user_stories>
 
 4. Endpoint Description:
    <endpoint_description>
@@ -46,7 +47,7 @@ End user session.
 **Error Responses:**
 
 - `401 Unauthorized` - No valid session
-   </endpoint_description>
+  </endpoint_description>
 
 5. Endpoint Implementation:
    <endpoint_implementation>
@@ -64,9 +65,9 @@ End user session.
    </tech_stack>
 
 8. New requirements:
-    <new_requirements>
-    - wylogowanie natychmiastowe (bez modala), czyści stan UI.
-    - **Nagłówek globalny:**
+   <new_requirements>
+   - wylogowanie natychmiastowe (bez modala), czyści stan UI.
+   - **Nagłówek globalny:**
 
 - Lewa strona: e-mail użytkownika
 - Środek: tytuł bieżącego widoku
@@ -99,15 +100,15 @@ End user session.
 - **TransactionFormModal/Drawer**: create/edit + walidacja inline + normalizacja kwoty + data jako dzień.
 - **CategoryFormModal/Drawer**: create/edit nazwy kategorii + walidacja.
 - **ConfirmDialog**:
-    - dla usuwania transakcji: „Czy na pewno?”
-    - dla usuwania kategorii: informacja o przeniesieniu do „Brak”
+  - dla usuwania transakcji: „Czy na pewno?”
+  - dla usuwania kategorii: informacja o przeniesieniu do „Brak”
 
 ### 5.5 Komponenty pomocnicze
 
 - **ToastSystem**: spójne komunikaty sukcesu i błędów mutacji.
 - **LoadMoreButton**: loader, retry inline bez kasowania już pobranych elementów.
 
-    </new_requirements>
+  </new_requirements>
 
 Przed utworzeniem ostatecznego planu wdrożenia przeprowadź analizę i planowanie wewnątrz tagów <implementation_breakdown> w swoim bloku myślenia. Ta sekcja może być dość długa, ponieważ ważne jest, aby być dokładnym.
 

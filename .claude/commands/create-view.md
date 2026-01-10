@@ -5,7 +5,7 @@ Twoim zadaniem jest zaimplementowanie widoku frontendu w oparciu o podany plan i
 Najpierw przejrzyj plan implementacji:
 
 <implementation_plan>
-{{implementation-plan}} <- zamień na referencję do planu implementacji widoku (np. @generations-view-implementation-plan.md)
+@.ai/ui-plans/categories-view-implementation-plan.md
 </implementation_plan>
 
 Teraz przejrzyj zasady implementacji:
@@ -115,16 +115,16 @@ Wiele innych komponentów jest dostępnych, ale nie są one obecnie zainstalowan
 Aby zainstalować nowy komponent, wykorzystaj shadcn CLI
 
 ```bash
-npx shadcn@latest add [component-name]
+npm_config_registry=https://registry.npmjs.org/ npx shadcn@latest add [component-name]
 ```
 
 Przykładowo, aby dodać komponent accordion
 
 ```bash
-npx shadcn@latest add accordion
+npm_config_registry=https://registry.npmjs.org/ npx shadcn@latest add accordion
 ```
 
-Ważne: `npx shadcn-ui@latest` zostało wycofane, korzystaj z `npx shadcn@latest`
+Ważne: `npm_config_registry=https://registry.npmjs.org/ npx shadcn-ui@latest` zostało wycofane, korzystaj z `npm_config_registry=https://registry.npmjs.org/ npx shadcn@latest`
 
 Niektóre popularne komponenty to:
 

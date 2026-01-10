@@ -19,16 +19,17 @@ Zmiany bazują na nowych wymaganiach dotyczących nawigacji i struktury aplikacj
 
 Wymagana struktura nagłówka dla widoków `/app/*`:
 
-| Pozycja | Element | Opis |
-|---------|---------|------|
-| Lewa strona | E-mail użytkownika | Wyświetlenie adresu e-mail zalogowanego użytkownika |
-| Środek | Tytuł bieżącego widoku | Dynamiczny tytuł zależny od aktywnej strony |
-| Stały element | Ikona/link Start | Ikona Home z tooltipem "Start" → `/app` |
-| Prawa strona | Przycisk Wyloguj | Natychmiastowe wylogowanie bez modala |
+| Pozycja       | Element                | Opis                                                |
+| ------------- | ---------------------- | --------------------------------------------------- |
+| Lewa strona   | E-mail użytkownika     | Wyświetlenie adresu e-mail zalogowanego użytkownika |
+| Środek        | Tytuł bieżącego widoku | Dynamiczny tytuł zależny od aktywnej strony         |
+| Stały element | Ikona/link Start       | Ikona Home z tooltipem "Start" → `/app`             |
+| Prawa strona  | Przycisk Wyloguj       | Natychmiastowe wylogowanie bez modala               |
 
 ### 2.2 Wylogowanie (US-003)
 
 Kryteria akceptacji:
+
 - Dostępna jest akcja „Wyloguj"
 - Po wylogowaniu użytkownik nie ma dostępu do ekranów wymagających autoryzacji
 - Próba wejścia na chronione adresy URL po wylogowaniu wymaga ponownego zalogowania
@@ -94,6 +95,7 @@ AppLayout.astro
 **Opis:** Layout dla wszystkich stron w katalogu `/app/*`. Zawiera globalny nagłówek, miejsce na treść i globalne toasty. Sprawdza sesję użytkownika i przekazuje dane do nagłówka.
 
 **Główne elementy:**
+
 - Import i osadzenie `Layout.astro` (bazowy)
 - Sprawdzenie sesji użytkownika (server-side)
 - Przekierowanie na `/login?sessionExpired=true` jeśli brak sesji
@@ -102,19 +104,21 @@ AppLayout.astro
 - Osadzenie `Toaster` z `client:load`
 
 **Propsy:**
+
 ```typescript
 interface AppLayoutProps {
-  title: string;           // Tytuł strony w <title>
-  pageTitle: string;       // Tytuł wyświetlany w nagłówku
+  title: string; // Tytuł strony w <title>
+  pageTitle: string; // Tytuł wyświetlany w nagłówku
 }
 ```
 
 **Dane przekazywane do AppHeader:**
+
 ```typescript
 {
-  userEmail: string;       // Z sesji: session.user.email
-  pageTitle: string;       // Prop pageTitle
-  accessToken: string;     // Z sesji: session.access_token
+  userEmail: string; // Z sesji: session.user.email
+  pageTitle: string; // Prop pageTitle
+  accessToken: string; // Z sesji: session.access_token
 }
 ```
 
@@ -125,14 +129,16 @@ interface AppLayoutProps {
 **Opis:** Prosty layout dla stron logowania i rejestracji. Centralnie wyśrodkowany kontener z kartą formularza.
 
 **Główne elementy:**
+
 - Import i osadzenie `Layout.astro` (bazowy)
 - Centrowany kontener flexbox
 - `<slot />` dla treści (formularz)
 
 **Propsy:**
+
 ```typescript
 interface AuthLayoutProps {
-  title: string;  // Tytuł strony w <title>
+  title: string; // Tytuł strony w <title>
 }
 ```
 
@@ -143,6 +149,7 @@ interface AuthLayoutProps {
 **Opis:** Globalny nagłówek aplikacji wyświetlany na wszystkich stronach `/app/*`. Zawiera e-mail użytkownika, tytuł strony, link do startu i przycisk wylogowania.
 
 **Główne elementy:**
+
 - `<header>` z klasami stylów (sticky top-0, shadow, tło)
 - `<div>` kontener z layoutem flexbox
 - `<span>` z e-mailem użytkownika (lewa strona)
@@ -151,6 +158,7 @@ interface AuthLayoutProps {
 - `<LogoutButton>` (prawa strona)
 
 **Propsy:**
+
 ```typescript
 interface AppHeaderProps {
   userEmail: string;
@@ -160,6 +168,7 @@ interface AppHeaderProps {
 ```
 
 **Obsługiwane interakcje:**
+
 - Kliknięcie `StartLink` → nawigacja do `/app`
 - Kliknięcie `LogoutButton` → wylogowanie i przekierowanie do `/login`
 
@@ -170,12 +179,14 @@ interface AppHeaderProps {
 **Opis:** Przycisk wylogowania bez modala potwierdzającego. Natychmiast wywołuje API logout i przekierowuje na stronę logowania.
 
 **Główne elementy:**
+
 - `<Button>` z shadcn/ui (wariant `ghost` lub `outline`)
 - Ikona `LogOut` z lucide-react
 - Tekst "Wyloguj"
 - Spinner podczas ładowania
 
 **Propsy:**
+
 ```typescript
 interface LogoutButtonProps {
   accessToken: string;
@@ -184,6 +195,7 @@ interface LogoutButtonProps {
 ```
 
 **Obsługiwane interakcje:**
+
 - `onClick` → wywołanie `useLogout` hook
 - Blokada podwójnego kliknięcia podczas `isLoggingOut`
 
@@ -201,11 +213,13 @@ interface LogoutButtonProps {
 **Opis:** Link/ikona do strony głównej aplikacji (`/app`) z tooltipem "Start".
 
 **Główne elementy:**
+
 - `<a>` jako link do `/app`
 - Ikona `Home` z lucide-react
 - Tooltip z tekstem "Start" (używając shadcn/ui Tooltip)
 
 **Propsy:**
+
 ```typescript
 interface StartLinkProps {
   className?: string;
@@ -213,6 +227,7 @@ interface StartLinkProps {
 ```
 
 **Obsługiwane interakcje:**
+
 - `onClick` / nawigacja → przekierowanie na `/app`
 - `hover` → wyświetlenie tooltipa "Start"
 - Nawigacja klawiaturą (Enter/Space)
@@ -224,6 +239,7 @@ interface StartLinkProps {
 **Opis:** Hook zarządzający procesem wylogowania użytkownika. Wywołuje API, czyści stan UI i przekierowuje na stronę logowania.
 
 **API:**
+
 ```typescript
 interface UseLogoutReturn {
   logout: () => Promise<void>;
@@ -235,6 +251,7 @@ function useLogout(accessToken: string): UseLogoutReturn;
 ```
 
 **Logika:**
+
 1. Ustawienie `isLoggingOut = true`
 2. Wywołanie `POST /api/auth/logout` z tokenem
 3. Sukces → czyszczenie localStorage (jeśli używane) → `window.location.assign("/login")`
@@ -379,12 +396,14 @@ Aplikacja nie wymaga globalnego stanu React (Context/Redux) dla funkcjonalności
 **Endpoint:** `POST /api/auth/logout`
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <access_token>
 Content-Type: application/json
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "Logged out successfully"
@@ -392,6 +411,7 @@ Content-Type: application/json
 ```
 
 **Response (401 Unauthorized):**
+
 ```json
 {
   "error": {
@@ -431,30 +451,30 @@ window.location.assign("/login");
 
 ### 8.1 Wylogowanie
 
-| Akcja | Element | Rezultat |
-|-------|---------|----------|
-| Kliknięcie "Wyloguj" | `LogoutButton` | Natychmiastowe wywołanie API, spinner, przekierowanie na `/login` |
-| Kliknięcie podczas ładowania | `LogoutButton` (disabled) | Brak akcji (przycisk zablokowany) |
-| Wylogowanie z wygasłą sesją | `LogoutButton` | Przekierowanie na `/login?sessionExpired=true` |
-| Błąd sieci podczas wylogowania | `LogoutButton` | Toast z komunikatem błędu |
+| Akcja                          | Element                   | Rezultat                                                          |
+| ------------------------------ | ------------------------- | ----------------------------------------------------------------- |
+| Kliknięcie "Wyloguj"           | `LogoutButton`            | Natychmiastowe wywołanie API, spinner, przekierowanie na `/login` |
+| Kliknięcie podczas ładowania   | `LogoutButton` (disabled) | Brak akcji (przycisk zablokowany)                                 |
+| Wylogowanie z wygasłą sesją    | `LogoutButton`            | Przekierowanie na `/login?sessionExpired=true`                    |
+| Błąd sieci podczas wylogowania | `LogoutButton`            | Toast z komunikatem błędu                                         |
 
 ### 8.2 Nawigacja w nagłówku
 
-| Akcja | Element | Rezultat |
-|-------|---------|----------|
-| Kliknięcie ikony Home | `StartLink` | Przekierowanie na `/app` |
-| Hover na ikonie Home | `StartLink` | Wyświetlenie tooltipa "Start" |
+| Akcja                           | Element     | Rezultat                                          |
+| ------------------------------- | ----------- | ------------------------------------------------- |
+| Kliknięcie ikony Home           | `StartLink` | Przekierowanie na `/app`                          |
+| Hover na ikonie Home            | `StartLink` | Wyświetlenie tooltipa "Start"                     |
 | Fokus klawiaturą na ikonie Home | `StartLink` | Widoczny outline, możliwość aktywacji Enter/Space |
 
 ### 8.3 Stany widoku nagłówka
 
-| Strona | Tytuł w nagłówku |
-|--------|------------------|
-| `/app` | "Start" |
-| `/app/transactions` | "Transakcje" |
-| `/app/categories` | "Kategorie" |
-| `/app/summary` | "Podsumowanie" |
-| `/app/settings` | "Ustawienia" |
+| Strona              | Tytuł w nagłówku |
+| ------------------- | ---------------- |
+| `/app`              | "Start"          |
+| `/app/transactions` | "Transakcje"     |
+| `/app/categories`   | "Kategorie"      |
+| `/app/summary`      | "Podsumowanie"   |
+| `/app/settings`     | "Ustawienia"     |
 
 ---
 
@@ -462,18 +482,18 @@ window.location.assign("/login");
 
 ### 9.1 Walidacja autoryzacji (AppLayout)
 
-| Warunek | Miejsce sprawdzenia | Efekt |
-|---------|---------------------|-------|
-| Brak sesji | `AppLayout.astro` (server-side) | Przekierowanie na `/login` |
-| Sesja wygasła | `AppLayout.astro` (server-side) | Przekierowanie na `/login?sessionExpired=true` |
-| Token nieprawidłowy | Endpoint API | Zwrot 401, obsługa w hooku |
+| Warunek             | Miejsce sprawdzenia             | Efekt                                          |
+| ------------------- | ------------------------------- | ---------------------------------------------- |
+| Brak sesji          | `AppLayout.astro` (server-side) | Przekierowanie na `/login`                     |
+| Sesja wygasła       | `AppLayout.astro` (server-side) | Przekierowanie na `/login?sessionExpired=true` |
+| Token nieprawidłowy | Endpoint API                    | Zwrot 401, obsługa w hooku                     |
 
 ### 9.2 Walidacja w komponencie LogoutButton
 
-| Warunek | Efekt |
-|---------|-------|
-| `isLoggingOut === true` | Przycisk disabled, spinner |
-| `accessToken` pusty | Przycisk disabled (edge case) |
+| Warunek                 | Efekt                         |
+| ----------------------- | ----------------------------- |
+| `isLoggingOut === true` | Przycisk disabled, spinner    |
+| `accessToken` pusty     | Przycisk disabled (edge case) |
 
 ---
 
@@ -481,20 +501,20 @@ window.location.assign("/login");
 
 ### 10.1 Błędy wylogowania
 
-| Scenariusz | Obsługa |
-|------------|---------|
-| Sukces (200) | Przekierowanie na `/login` |
-| Błąd 401 | Przekierowanie na `/login?sessionExpired=true` |
-| Błąd 500 | Toast z komunikatem "Wystąpił nieoczekiwany błąd" |
-| Błąd sieci | Toast z komunikatem "Wystąpił nieoczekiwany błąd. Spróbuj ponownie." |
+| Scenariusz   | Obsługa                                                              |
+| ------------ | -------------------------------------------------------------------- |
+| Sukces (200) | Przekierowanie na `/login`                                           |
+| Błąd 401     | Przekierowanie na `/login?sessionExpired=true`                       |
+| Błąd 500     | Toast z komunikatem "Wystąpił nieoczekiwany błąd"                    |
+| Błąd sieci   | Toast z komunikatem "Wystąpił nieoczekiwany błąd. Spróbuj ponownie." |
 
 ### 10.2 Scenariusze brzegowe
 
-| Scenariusz | Obsługa |
-|------------|---------|
-| Podwójne kliknięcie przycisku | Blokowane przez `isLoggingOut` |
-| Wylogowanie podczas operacji | Przerwa operacji, przekierowanie |
-| Brak tokenu | Przycisk disabled, logowanie w konsoli |
+| Scenariusz                    | Obsługa                                |
+| ----------------------------- | -------------------------------------- |
+| Podwójne kliknięcie przycisku | Blokowane przez `isLoggingOut`         |
+| Wylogowanie podczas operacji  | Przerwa operacji, przekierowanie       |
+| Brak tokenu                   | Przycisk disabled, logowanie w konsoli |
 
 ---
 
@@ -502,19 +522,19 @@ window.location.assign("/login");
 
 ### 11.1 Strony Astro wymagające zmian
 
-| Plik | Zmiana |
-|------|--------|
-| `src/pages/app/index.astro` | Zamiana `Layout` na `AppLayout`, dodanie `pageTitle="Start"` |
+| Plik                           | Zmiana                                                            |
+| ------------------------------ | ----------------------------------------------------------------- |
+| `src/pages/app/index.astro`    | Zamiana `Layout` na `AppLayout`, dodanie `pageTitle="Start"`      |
 | `src/pages/app/settings.astro` | Zamiana `Layout` na `AppLayout`, dodanie `pageTitle="Ustawienia"` |
-| `src/pages/login.astro` | Zamiana `Layout` na `AuthLayout` |
-| `src/pages/register.astro` | Zamiana `Layout` na `AuthLayout` |
+| `src/pages/login.astro`        | Zamiana `Layout` na `AuthLayout`                                  |
+| `src/pages/register.astro`     | Zamiana `Layout` na `AuthLayout`                                  |
 
 ### 11.2 Komponenty React wymagające zmian
 
-| Plik | Zmiana |
-|------|--------|
-| `src/components/dashboard/DashboardPage.tsx` | Usunięcie `<h1>` (przeniesione do nagłówka) |
-| `src/components/settings/SettingsPage.tsx` | Usunięcie `<h1>` (przeniesione do nagłówka), usunięcie `<Toaster>` (w AppLayout) |
+| Plik                                         | Zmiana                                                                           |
+| -------------------------------------------- | -------------------------------------------------------------------------------- |
+| `src/components/dashboard/DashboardPage.tsx` | Usunięcie `<h1>` (przeniesione do nagłówka)                                      |
+| `src/components/settings/SettingsPage.tsx`   | Usunięcie `<h1>` (przeniesione do nagłówka), usunięcie `<Toaster>` (w AppLayout) |
 
 ---
 
@@ -569,7 +589,7 @@ window.location.assign("/login");
 6. Dodać slot dla treści
 7. Osadzić Toaster
 
-### Krok 7: Aktualizacja stron /app/*
+### Krok 7: Aktualizacja stron /app/\*
 
 1. Zaktualizować `src/pages/app/index.astro`:
    - Zamienić Layout na AppLayout
@@ -619,11 +639,11 @@ window.location.assign("/login");
 
 ### US-003: Wylogowanie z aplikacji
 
-| Kryterium akceptacji | Implementacja |
-|----------------------|---------------|
-| Dostępna jest akcja „Wyloguj" | `LogoutButton` w `AppHeader` na każdej stronie `/app/*` |
-| Po wylogowaniu użytkownik nie ma dostępu do ekranów wymagających autoryzacji | `AppLayout` sprawdza sesję server-side, przekierowanie na `/login` |
-| Próba wejścia na chronione adresy URL po wylogowaniu wymaga ponownego zalogowania | `AppLayout` sprawdza sesję przy każdym request |
+| Kryterium akceptacji                                                              | Implementacja                                                      |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Dostępna jest akcja „Wyloguj"                                                     | `LogoutButton` w `AppHeader` na każdej stronie `/app/*`            |
+| Po wylogowaniu użytkownik nie ma dostępu do ekranów wymagających autoryzacji      | `AppLayout` sprawdza sesję server-side, przekierowanie na `/login` |
+| Próba wejścia na chronione adresy URL po wylogowaniu wymaga ponownego zalogowania | `AppLayout` sprawdza sesję przy każdym request                     |
 
 ---
 
@@ -685,11 +705,11 @@ header {
 
 ### 15.2 Responsywność
 
-| Breakpoint | Zmiana |
-|------------|--------|
-| Mobile (< 640px) | E-mail użytkownika ukryty lub skrócony, ikony bez tekstu |
-| Tablet (640px - 1024px) | Pełny layout |
-| Desktop (> 1024px) | Pełny layout |
+| Breakpoint              | Zmiana                                                   |
+| ----------------------- | -------------------------------------------------------- |
+| Mobile (< 640px)        | E-mail użytkownika ukryty lub skrócony, ikony bez tekstu |
+| Tablet (640px - 1024px) | Pełny layout                                             |
+| Desktop (> 1024px)      | Pełny layout                                             |
 
 ---
 
@@ -698,6 +718,7 @@ header {
 ### 16.1 Nowe zależności
 
 Brak nowych zależności npm. Wszystkie wymagane pakiety są już zainstalowane:
+
 - `lucide-react` - ikony (Home, LogOut)
 - `@radix-ui/react-tooltip` (przez shadcn/ui)
 - `sonner` - toasty

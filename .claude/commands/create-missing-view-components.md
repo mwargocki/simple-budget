@@ -198,36 +198,36 @@ Dokładnie przeanalizuj plan wdrożenia i zasady. Zwróć szczególną uwagę na
 Wykonaj następujące kroki, aby zaimplementować zmiany:
 
 1. Struktura komponentów:
-    - Zidentyfikuj wszystkie komponenty wymienione w planie wdrożenia.
-    - Utwórz hierarchiczną strukturę tych komponentów.
-    - Upewnij się, że obowiązki i relacje każdego komponentu są jasno zdefiniowane.
+   - Zidentyfikuj wszystkie komponenty wymienione w planie wdrożenia.
+   - Utwórz hierarchiczną strukturę tych komponentów.
+   - Upewnij się, że obowiązki i relacje każdego komponentu są jasno zdefiniowane.
 
 2. Integracja API:
-    - Zidentyfikuj wszystkie endpointy API wymienione w planie.
-    - Wdróż niezbędne wywołania API dla każdego endpointa.
-    - Obsłuż odpowiedzi z API i odpowiednio aktualizacji stan komponentów.
+   - Zidentyfikuj wszystkie endpointy API wymienione w planie.
+   - Wdróż niezbędne wywołania API dla każdego endpointa.
+   - Obsłuż odpowiedzi z API i odpowiednio aktualizacji stan komponentów.
 
 3. Interakcje użytkownika:
-    - Wylistuj wszystkie interakcje użytkownika określone w planie wdrożenia.
-    - Wdróż obsługi zdarzeń dla każdej interakcji.
-    - Upewnij się, że każda interakcja wyzwala odpowiednią akcję lub zmianę stanu.
+   - Wylistuj wszystkie interakcje użytkownika określone w planie wdrożenia.
+   - Wdróż obsługi zdarzeń dla każdej interakcji.
+   - Upewnij się, że każda interakcja wyzwala odpowiednią akcję lub zmianę stanu.
 
 4. Zarządzanie stanem:
-    - Zidentyfikuj wymagany stan dla każdego komponentu.
-    - Zaimplementuj zarządzanie stanem przy użyciu odpowiedniej metody (stan lokalny, custom hook, stan współdzielony).
-    - Upewnij się, że zmiany stanu wyzwalają niezbędne ponowne renderowanie.
+   - Zidentyfikuj wymagany stan dla każdego komponentu.
+   - Zaimplementuj zarządzanie stanem przy użyciu odpowiedniej metody (stan lokalny, custom hook, stan współdzielony).
+   - Upewnij się, że zmiany stanu wyzwalają niezbędne ponowne renderowanie.
 
 5. Stylowanie i layout:
-    - Zastosuj określone stylowanie i layout, jak wspomniano w planie wdrożenia.
-    - Zapewnienie responsywności, jeśli wymaga tego plan.
+   - Zastosuj określone stylowanie i layout, jak wspomniano w planie wdrożenia.
+   - Zapewnienie responsywności, jeśli wymaga tego plan.
 
 6. Obsługa błędów i przypadki brzegowe:
-    - Wdrożenie obsługi błędów dla wywołań API i interakcji użytkownika.
-    - Rozważ i obsłuż potencjalne edge case'y wymienione w planie.
+   - Wdrożenie obsługi błędów dla wywołań API i interakcji użytkownika.
+   - Rozważ i obsłuż potencjalne edge case'y wymienione w planie.
 
 7. Optymalizacja wydajności:
-    - Wdrożenie wszelkich optymalizacji wydajności określonych w planie lub zasadach.
-    - Zapewnienie wydajnego renderowania i minimalnej liczby niepotrzebnych ponownych renderowań.
+   - Wdrożenie wszelkich optymalizacji wydajności określonych w planie lub zasadach.
+   - Zapewnienie wydajnego renderowania i minimalnej liczby niepotrzebnych ponownych renderowań.
 
 W trakcie całego procesu implementacji należy ściśle przestrzegać dostarczonych zasad implementacji. Zasady te mają pierwszeństwo przed wszelkimi ogólnymi najlepszymi praktykami, które mogą być z nimi sprzeczne.
 

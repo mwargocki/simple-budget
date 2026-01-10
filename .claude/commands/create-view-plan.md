@@ -11,22 +11,308 @@ Najpierw przejrzyj następujące informacje:
 
 2. Opis widoku:
    <view_description>
-   {{view-description}} <- wklej opis implementowanego widoku z ui-plan.md
-   </view_description>
+   ### Założenia nadrzędne (MVP)
+
+- **Aplikacja webowa, desktop-only** (bez optymalizacji pod małe ekrany).
+- **Strefa zalogowana** działa pod wspólnym prefiksem **`/app/*`** i ma **jeden wspólny layout** (nagłówek + globalne toasty).
+- **Brak cache** danych: po wejściu na widok następuje **fetch z API**, a po mutacjach (create/update/delete) następuje **refetch** bieżącego widoku.
+- **Daty i miesiące w UTC**:
+  - w UI nie ma wyboru godziny; `occurred_at` traktowane jako **dzień**,
+  - do API wysyłamy zawsze `YYYY-MM-DDT00:00:00Z`,
+  - w UI wyświetlamy datę jako dzień w UTC (np. z `YYYY-MM-DD` → `dd/MM/yyyy`) **bez konwersji do strefy przeglądarki**,
+  - wybór miesiąca i granice miesiąca są spójne z backendem (UTC).
+- **Nawigacja w MVP** opiera się na **ekranie Start z kafelkami**; brak stałego menu 4 sekcji (poza linkiem Start w nagłówku).
+- **Bezpieczeństwo i sesja**:
+  - guard tras chronionych: **401 → `/login` + komunikat „Sesja wygasła”**,
+  - **bez `returnTo`**: po zalogowaniu zawsze **`/app`**,
+  - wylogowanie natychmiastowe (bez modala), czyści stan UI.
+
+Dla widoków w strefie `/app/*` obowiązuje wspólny layout (nagłówek + toasty) oraz standard stanów: **loading / empty / error / data**.
+
+### 2.6 Kategorie (lista + CRUD)
+
+- **Ścieżka:** `/app/categories`
+- **Główny cel:** zarządzanie kategoriami użytkownika.
+- **Kluczowe informacje do wyświetlenia:**
+  - Lista kategorii **alfabetycznie** (źródło prawdy: backend)
+  - Wyróżnienie kategorii systemowej **„Brak”** (bez edycji/usuwania)
+- **Kluczowe komponenty widoku:**
+  - Lista kategorii:
+    - Wiersz: nazwa, znacznik „systemowa” (dla „Brak”)
+    - Akcje: „Edytuj”, „Usuń” (tylko dla niesystemowych)
+  - CTA: „Dodaj kategorię” → modal/drawer (CategoryForm)
+  - Usuwanie kategorii:
+    - modal informacyjny o przeniesieniu transakcji do „Brak”
+- **UX / dostępność / bezpieczeństwo:**
+  - Walidacja nazwy: trim, brak pustych/whitespace-only, max 40, unikalność case-insensitive (obsługa 409).
+  - Po usunięciu kategorii:
+    - toast sukcesu,
+    - w Transakcjach (jeśli filtr wskazywał usuniętą kategorię) filtr ma się przełączyć na „Wszystkie” przy kolejnej wizycie lub natychmiast (jeśli oba widoki współdzielą stan nawigacyjny/URL) — minimalnie: **nie zostawić filtra na nieistniejącej kategorii**.
+
+## 4. Układ i struktura nawigacji
+
+### 4.1 Strefa niezalogowana
+
+- `/login` ↔ `/register`
+- Po zalogowaniu zawsze → `/app`
+
+### 4.2 Strefa zalogowana: wspólny layout `/app/*`
+
+**Nagłówek globalny:**
+
+- Lewa strona: e-mail użytkownika
+- Środek: tytuł bieżącego widoku
+- Element stały: ikona/link **Start** (tooltip „Start”) → `/app`
+- Prawa strona: przycisk **Wyloguj** (bez modala)
+
+**Nawigacja funkcjonalna:**
+
+- Główna nawigacja: **kafelki na `/app`**
+- Nawigacja kontekstowa:
+  - w Podsumowaniu: klik kategorii → Transakcje z filtrami w URL
+  - w Transakcjach: filtry (miesiąc zawsze w URL, kategoria opcjonalnie)
+- URL odtwarzalny:
+  - Transakcje: zawsze `month=YYYY-MM`, opcjonalnie `category_id`
+  - Podsumowanie: zawsze `month=YYYY-MM`
+
+---
+
+## 5. Kluczowe komponenty
+
+### 5.1 Komponenty strukturalne
+
+- **AppLayout**: wspólny layout dla `/app/*` (nagłówek, miejsce na treść, globalne toasty).
+- **AuthLayout** : prosty layout dla `/login` i `/register`.
+- **RouteGuard**: ochrona tras `/app/*`; obsługa 401 → `/login` + „Sesja wygasła”.
+
+### 5.2 Komponenty nawigacji i filtrów
+
+- **StartTilesGrid**: 2×2 kafelki na `/app`.
+- **MonthPicker**: wspólny dla Transakcji i Podsumowania (UTC, strzałki + dropdown z 13 miesiącami).
+- **CategorySelect**: dropdown kategorii (w tym „Brak” jako systemowa); opcja „Wszystkie”.
+
+### 5.3 Komponenty danych i stanów widoku
+
+- **DataStateWrapper**: ujednolicone stany: loading / empty / error / data.
+- **ErrorState**: komunikat + przycisk „Spróbuj ponownie” (refetch) dla Transakcji/Kategorii/Podsumowania.
+- **EmptyState**: komunikat zależny od filtrów (np. „Brak transakcji w styczniu 2026 dla kategorii X”) + CTA.
+
+### 5.4 Komponenty CRUD
+
+- **TransactionListRow**: prezentacja transakcji + akcje Edytuj/Usuń.
+- **TransactionFormModal/Drawer**: create/edit + walidacja inline + normalizacja kwoty + data jako dzień.
+- **CategoryFormModal/Drawer**: create/edit nazwy kategorii + walidacja.
+- **ConfirmDialog**:
+  - dla usuwania transakcji: „Czy na pewno?”
+  - dla usuwania kategorii: informacja o przeniesieniu do „Brak”
+
+### 5.5 Komponenty pomocnicze
+
+- **ToastSystem**: spójne komunikaty sukcesu i błędów mutacji.
+- **LoadMoreButton**: loader, retry inline bez kasowania już pobranych elementów.
+  </view_description>
 
 3. User Stories:
    <user_stories>
-   {{user-stories}} <- wklej historyjki użytkownika z @prd.md, które będą adresowane przez widok
-   </user_stories>
+   - ID: US-008
+     Tytuł: Widoczność domyślnej kategorii „Brak”
+     Opis: Jako użytkownik chcę mieć domyślną kategorię „Brak”, aby móc zapisać transakcję bez dopasowanej kategorii.
+     Kryteria akceptacji:
+
+- Po utworzeniu konta w systemie istnieje kategoria „Brak” przypisana do użytkownika.
+- Kategoria „Brak” nie może zostać usunięta.
+
+- ID: US-009
+  Tytuł: Dodanie nowej kategorii
+  Opis: Jako użytkownik chcę dodać kategorię, aby grupować wydatki.
+  Kryteria akceptacji:
+  - Użytkownik może utworzyć kategorię poprzez podanie nazwy.
+  - System odrzuca nazwę dłuższą niż przyjęty limit (30–40 znaków).
+  - System odrzuca nazwę, która już istnieje u użytkownika z uwzględnieniem case-insensitive.
+  - Po dodaniu kategoria jest widoczna na liście kategorii.
+
+- ID: US-010
+  Tytuł: Wyświetlanie listy kategorii posortowanej
+  Opis: Jako użytkownik chcę widzieć posortowaną listę kategorii, aby szybko znaleźć właściwą.
+  Kryteria akceptacji:
+  - Lista kategorii jest sortowana alfabetycznie.
+
+- ID: US-011
+  Tytuł: Edycja nazwy kategorii
+  Opis: Jako użytkownik chcę zmienić nazwę kategorii, aby poprawić organizację danych.
+  Kryteria akceptacji:
+  - Użytkownik może zmienić nazwę kategorii (z wyjątkiem „Brak”).
+  - System odrzuca zmianę na nazwę nieunikalną (case-insensitive) lub zbyt długą.
+  - Po zmianie nazwy, transakcje przypisane do kategorii wyświetlają zaktualizowaną nazwę.
+
+- ID: US-012
+  Tytuł: Usunięcie kategorii i przeniesienie transakcji do „Brak”
+  Opis: Jako użytkownik chcę usunąć kategorię, aby posprzątać listę kategorii, bez utraty transakcji.
+  Kryteria akceptacji:
+  - Użytkownik nie może usunąć kategorii „Brak”.
+  - Przy usunięciu dowolnej innej kategorii wszystkie transakcje do niej przypisane są automatycznie przenoszone do „Brak”.
+  - Po usunięciu kategoria znika z listy kategorii.
+
+- ID: US-013
+  Tytuł: Obsługa filtra kategorii po usunięciu kategorii
+  Opis: Jako użytkownik chcę, aby filtr kategorii nie wskazywał nieistniejącej kategorii po jej usunięciu, aby uniknąć pustych lub błędnych widoków.
+  Kryteria akceptacji:
+  - Jeśli w liście transakcji aktywny jest filtr na kategorię, która zostaje usunięta, system automatycznie przełącza filtr na „Wszystkie” lub „Brak”.
+  - Lista transakcji po przełączeniu filtra ładuje się poprawnie i nie odwołuje się do usuniętej kategorii.
+    </user_stories>
 
 4. Endpoint Description:
    <endpoint_description>
-   {{endpoint-description}} <- wklej opisy endpointów z api-plan.md, z których będzie korzystał widok
-   </endpoint_description>
+   #### GET /api/categories
+
+List all categories for current user (sorted alphabetically).
+
+**Request Headers:**
+
+- `Authorization: Bearer <access_token>`
+
+**Response (200 OK):**
+
+```json
+{
+  "categories": [
+    {
+      "id": "uuid",
+      "name": "Brak",
+      "is_system": true,
+      "system_key": "none",
+      "created_at": "2024-01-15T10:30:00Z",
+      "updated_at": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": "uuid",
+      "name": "Food",
+      "is_system": false,
+      "system_key": null,
+      "created_at": "2024-01-15T11:00:00Z",
+      "updated_at": "2024-01-15T11:00:00Z"
+    }
+  ]
+}
+```
+
+**Error Responses:**
+
+- `401 Unauthorized` - No valid session
+
+---
+
+#### POST /api/categories
+
+Create a new category.
+
+**Request Headers:**
+
+- `Authorization: Bearer <access_token>`
+
+**Request Body:**
+
+```json
+{
+  "name": "Transport"
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": "uuid",
+  "name": "Transport",
+  "is_system": false,
+  "system_key": null,
+  "created_at": "2024-01-15T12:00:00Z",
+  "updated_at": "2024-01-15T12:00:00Z"
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request` - Name empty, whitespace-only, exceeds 40 characters, or has leading/trailing spaces
+- `401 Unauthorized` - No valid session
+- `409 Conflict` - Category name already exists (case-insensitive)
+
+---
+
+#### PATCH /api/categories/{id}
+
+Update category name.
+
+**Request Headers:**
+
+- `Authorization: Bearer <access_token>`
+
+**Path Parameters:**
+
+- `id` (uuid) - Category ID
+
+**Request Body:**
+
+```json
+{
+  "name": "Public Transport"
+}
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "id": "uuid",
+  "name": "Public Transport",
+  "is_system": false,
+  "system_key": null,
+  "created_at": "2024-01-15T12:00:00Z",
+  "updated_at": "2024-01-15T14:00:00Z"
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request` - Name empty, whitespace-only, exceeds 40 characters, or has leading/trailing spaces
+- `401 Unauthorized` - No valid session
+- `403 Forbidden` - Cannot modify system category ("Brak")
+- `404 Not Found` - Category not found or belongs to another user
+- `409 Conflict` - Category name already exists (case-insensitive)
+
+---
+
+#### DELETE /api/categories/{id}
+
+Delete category and move associated transactions to "Brak".
+
+**Request Headers:**
+
+- `Authorization: Bearer <access_token>`
+
+**Path Parameters:**
+
+- `id` (uuid) - Category ID
+
+**Response (200 OK):**
+
+```json
+{
+  "message": "Category deleted successfully",
+  "transactions_moved": 5
+}
+```
+
+**Error Responses:**
+
+- `401 Unauthorized` - No valid session
+- `403 Forbidden` - Cannot delete system category ("Brak")
+- `404 Not Found` - Category not found or belongs to another user
+  </endpoint_description>
 
 5. Endpoint Implementation:
    <endpoint_implementation>
-   {{endpoint-implementation}} <- zamień na referencję do implementacji endpointów, z których będzie korzystał widok (np. @generations.ts, @flashcards.ts)
+   @src/pages/api/categories/[id].ts, @src/pages/api/categories/index.ts
    </endpoint_implementation>
 
 6. Type Definitions:
@@ -40,6 +326,7 @@ Najpierw przejrzyj następujące informacje:
    </tech_stack>
 
 Przed utworzeniem ostatecznego planu wdrożenia przeprowadź analizę i planowanie wewnątrz tagów <implementation_breakdown> w swoim bloku myślenia. Ta sekcja może być dość długa, ponieważ ważne jest, aby być dokładnym.
+Część komponentów wspólnych dla różnych widoków już powinna być zaimplementowana więc możesz je ponownie wykorzystać.
 
 W swoim podziale implementacji wykonaj następujące kroki:
 
