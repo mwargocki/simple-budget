@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { LoginPage } from "../components/auth/LoginPage";
+
+const sessionExpired = Astro.url.searchParams.get("sessionExpired") === "true";
+---
+
+<Layout title="Logowanie - SimpleBudget">
+  <LoginPage sessionExpired={sessionExpired} client:load />
+</Layout>
