@@ -10,7 +10,10 @@ interface DeleteAccountFormProps {
 }
 
 export function DeleteAccountForm({ accessToken }: DeleteAccountFormProps) {
-  console.log("DeleteAccountForm - accessToken:", accessToken ? `${accessToken.substring(0, 30)}... (${accessToken.length} chars)` : "MISSING");
+  console.log(
+    "DeleteAccountForm - accessToken:",
+    accessToken ? `${accessToken.substring(0, 30)}... (${accessToken.length} chars)` : "MISSING"
+  );
   const { formState, errors, handleChange, handleSubmit } = useDeleteAccountForm(accessToken);
 
   const confirmationId = useId();

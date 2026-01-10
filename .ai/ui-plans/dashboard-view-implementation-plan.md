@@ -169,7 +169,9 @@ Widok Dashboard nie wymaga integracji z API:
 
 ```typescript
 // W src/pages/app/index.astro
-const { data: { session } } = await Astro.locals.supabase.auth.getSession();
+const {
+  data: { session },
+} = await Astro.locals.supabase.auth.getSession();
 
 if (!session) {
   return Astro.redirect("/login");
@@ -180,37 +182,37 @@ if (!session) {
 
 ### 8.1 Nawigacja przez kliknięcie kafelka
 
-| Interakcja | Element | Rezultat |
-|------------|---------|----------|
-| Kliknięcie kafelka "Transakcje" | `DashboardTile` | Przekierowanie na `/app/transactions` |
-| Kliknięcie kafelka "Kategorie" | `DashboardTile` | Przekierowanie na `/app/categories` |
-| Kliknięcie kafelka "Podsumowanie" | `DashboardTile` | Przekierowanie na `/app/summary` |
-| Kliknięcie kafelka "Ustawienia" | `DashboardTile` | Przekierowanie na `/app/settings` |
+| Interakcja                        | Element         | Rezultat                              |
+| --------------------------------- | --------------- | ------------------------------------- |
+| Kliknięcie kafelka "Transakcje"   | `DashboardTile` | Przekierowanie na `/app/transactions` |
+| Kliknięcie kafelka "Kategorie"    | `DashboardTile` | Przekierowanie na `/app/categories`   |
+| Kliknięcie kafelka "Podsumowanie" | `DashboardTile` | Przekierowanie na `/app/summary`      |
+| Kliknięcie kafelka "Ustawienia"   | `DashboardTile` | Przekierowanie na `/app/settings`     |
 
 ### 8.2 Nawigacja klawiaturą
 
-| Interakcja | Element | Rezultat |
-|------------|---------|----------|
-| Tab | Cały widok | Przemieszczanie fokusa między kafelkami |
-| Enter/Space | Sfokusowany kafelek | Nawigacja do docelowej ścieżki |
+| Interakcja  | Element             | Rezultat                                |
+| ----------- | ------------------- | --------------------------------------- |
+| Tab         | Cały widok          | Przemieszczanie fokusa między kafelkami |
+| Enter/Space | Sfokusowany kafelek | Nawigacja do docelowej ścieżki          |
 
 ### 8.3 Stany wizualne
 
-| Stan | Opis wizualny |
-|------|---------------|
-| Domyślny | Kafelek z cieniem, jasne tło |
-| Hover | Delikatne powiększenie lub zmiana cienia |
-| Focus | Widoczny outline dla dostępności |
-| Active | Lekkie wciśnięcie (transform) |
+| Stan     | Opis wizualny                            |
+| -------- | ---------------------------------------- |
+| Domyślny | Kafelek z cieniem, jasne tło             |
+| Hover    | Delikatne powiększenie lub zmiana cienia |
+| Focus    | Widoczny outline dla dostępności         |
+| Active   | Lekkie wciśnięcie (transform)            |
 
 ## 9. Warunki i walidacja
 
 ### 9.1 Walidacja autoryzacji
 
-| Warunek | Miejsce sprawdzenia | Efekt |
-|---------|---------------------|-------|
-| Brak sesji użytkownika | `src/pages/app/index.astro` | Przekierowanie na `/login` |
-| Sesja wygasła | `src/pages/app/index.astro` | Przekierowanie na `/login?sessionExpired=true` |
+| Warunek                | Miejsce sprawdzenia         | Efekt                                          |
+| ---------------------- | --------------------------- | ---------------------------------------------- |
+| Brak sesji użytkownika | `src/pages/app/index.astro` | Przekierowanie na `/login`                     |
+| Sesja wygasła          | `src/pages/app/index.astro` | Przekierowanie na `/login?sessionExpired=true` |
 
 ### 9.2 Walidacja danych kafelków
 
@@ -223,18 +225,18 @@ Walidacja odbywa się na poziomie typów TypeScript:
 
 ### 10.1 Błędy autoryzacji
 
-| Scenariusz | Obsługa |
-|------------|---------|
-| Brak sesji | Przekierowanie na `/login` |
-| Błąd sprawdzenia sesji | Przekierowanie na `/login` z parametrem błędu |
-| Wygaśnięcie sesji podczas przeglądania | Obsługa przez middleware Astro |
+| Scenariusz                             | Obsługa                                       |
+| -------------------------------------- | --------------------------------------------- |
+| Brak sesji                             | Przekierowanie na `/login`                    |
+| Błąd sprawdzenia sesji                 | Przekierowanie na `/login` z parametrem błędu |
+| Wygaśnięcie sesji podczas przeglądania | Obsługa przez middleware Astro                |
 
 ### 10.2 Błędy nawigacji
 
-| Scenariusz | Obsługa |
-|------------|---------|
-| Nieistniejąca ścieżka docelowa | Strona 404 (obsługiwana przez router Astro) |
-| Błąd JavaScript | Graceful degradation - linki działają jako natywne `<a>` |
+| Scenariusz                     | Obsługa                                                  |
+| ------------------------------ | -------------------------------------------------------- |
+| Nieistniejąca ścieżka docelowa | Strona 404 (obsługiwana przez router Astro)              |
+| Błąd JavaScript                | Graceful degradation - linki działają jako natywne `<a>` |
 
 ### 10.3 Stany brzegowe
 
@@ -246,6 +248,7 @@ Walidacja odbywa się na poziomie typów TypeScript:
 ### Krok 1: Utworzenie struktury katalogów
 
 Utworzenie wymaganych katalogów:
+
 - `src/pages/app/`
 - `src/components/dashboard/`
 
