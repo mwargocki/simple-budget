@@ -5,14 +5,6 @@ export const chatMessageSchema = z.object({
   content: z.string().min(1, "Message content cannot be empty").max(100000),
 });
 
-export const chatOptionsSchema = z.object({
-  messages: z.array(chatMessageSchema).min(1, "At least one message is required").max(100),
-  model: z.string().optional(),
-  temperature: z.number().min(0).max(2).optional(),
-  maxTokens: z.number().int().positive().max(128000).optional(),
-  topP: z.number().min(0).max(1).optional(),
-});
-
 export const responseFormatSchema = z.object({
   type: z.literal("json_schema"),
   json_schema: z.object({
@@ -25,6 +17,15 @@ export const responseFormatSchema = z.object({
       additionalProperties: z.boolean(),
     }),
   }),
+});
+
+export const chatOptionsSchema = z.object({
+  messages: z.array(chatMessageSchema).min(1, "At least one message is required").max(100),
+  model: z.string().optional(),
+  temperature: z.number().min(0).max(2).optional(),
+  maxTokens: z.number().int().positive().max(128000).optional(),
+  topP: z.number().min(0).max(1).optional(),
+  responseFormat: responseFormatSchema.optional(),
 });
 
 export type ChatMessageInput = z.infer<typeof chatMessageSchema>;
