@@ -1,0 +1,14 @@
+---
+import AppLayout from "../../layouts/AppLayout.astro";
+import { SummaryView } from "../../components/summary/SummaryView";
+
+const {
+  data: { session },
+} = await Astro.locals.supabase.auth.getSession();
+
+const accessToken = session?.access_token ?? "";
+---
+
+<AppLayout title="Podsumowanie - SimpleBudget" pageTitle="Podsumowanie miesięczne">
+  <SummaryView client:load accessToken={accessToken} />
+</AppLayout>
