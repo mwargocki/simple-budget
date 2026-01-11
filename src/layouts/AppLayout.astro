@@ -1,0 +1,31 @@
+---
+import Layout from "./Layout.astro";
+import { AppHeader } from "@/components/layout/AppHeader";
+import { Toaster } from "@/components/ui/sonner";
+
+interface Props {
+  title: string;
+  pageTitle: string;
+}
+
+const { title, pageTitle } = Astro.props;
+
+const {
+  data: { session },
+} = await Astro.locals.supabase.auth.getSession();
+
+if (!session) {
+  return Astro.redirect("/login?sessionExpired=true");
+}
+
+const userEmail = session.user.email ?? "";
+const accessToken = session.access_token;
+---
+
+<Layout title={title}>
+  <div class="min-h-screen bg-background">
+    <AppHeader client:load userEmail={userEmail} pageTitle={pageTitle} accessToken={accessToken} />
+    <slot />
+    <Toaster client:load />
+  </div>
+</Layout>

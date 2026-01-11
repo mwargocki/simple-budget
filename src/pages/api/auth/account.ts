@@ -36,7 +36,7 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
       const errorResponse: ErrorResponseDTO = {
         error: {
           code: "UNAUTHORIZED",
-          message: "No valid session",
+          message: userError?.message || "No valid session",
         },
       };
       return new Response(JSON.stringify(errorResponse), {

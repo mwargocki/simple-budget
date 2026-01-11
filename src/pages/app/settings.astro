@@ -1,0 +1,15 @@
+---
+import AppLayout from "../../layouts/AppLayout.astro";
+import { SettingsPage } from "../../components/settings/SettingsPage";
+
+const {
+  data: { session },
+} = await Astro.locals.supabase.auth.getSession();
+
+const userEmail = session?.user.email ?? "";
+const accessToken = session?.access_token ?? "";
+---
+
+<AppLayout title="Ustawienia - SimpleBudget" pageTitle="Ustawienia">
+  <SettingsPage client:load userEmail={userEmail} accessToken={accessToken} />
+</AppLayout>

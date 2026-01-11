@@ -101,6 +101,18 @@ export class AuthService {
 
   async deleteAccount(userId: string): Promise<DeleteAccountResponseDTO> {
     const { supabaseAdmin } = await import("../../db/supabase.admin");
+
+    // First, delete all user data from public schema using the RPC function
+    // This handles triggers and foreign key constraints properly
+    const { error: rpcError } = await supabaseAdmin.rpc("delete_user_account", {
+      target_user_id: userId,
+    });
+
+    if (rpcError) {
+      throw new Error(`Failed to delete user data: ${rpcError.message}`);
+    }
+
+    // Then delete the user from auth.users
     const { error } = await supabaseAdmin.auth.admin.deleteUser(userId);
 
     if (error) {

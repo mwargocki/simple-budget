@@ -1,0 +1,143 @@
+import { useId } from "react";
+import { useRegisterForm } from "@/components/hooks/useRegisterForm";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+interface RegisterFormProps {
+  onRegisterSuccess?: () => void;
+}
+
+export function RegisterForm({ onRegisterSuccess }: RegisterFormProps) {
+  const { formState, errors, handleChange, handleBlur, handleSubmit } = useRegisterForm(onRegisterSuccess);
+
+  const emailId = useId();
+  const passwordId = useId();
+  const passwordConfirmId = useId();
+  const emailErrorId = useId();
+  const passwordErrorId = useId();
+  const passwordConfirmErrorId = useId();
+  const generalErrorId = useId();
+
+  return (
+    <form onSubmit={handleSubmit} noValidate className="space-y-6">
+      {formState.generalError && (
+        <Alert variant="destructive" id={generalErrorId} role="alert">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-4"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <AlertDescription>{formState.generalError}</AlertDescription>
+        </Alert>
+      )}
+
+      <div className="space-y-2">
+        <Label htmlFor={emailId}>E-mail</Label>
+        <Input
+          id={emailId}
+          type="email"
+          name="email"
+          autoComplete="email"
+          placeholder="jan@example.com"
+          value={formState.email}
+          onChange={(e) => handleChange("email", e.target.value)}
+          onBlur={() => handleBlur("email")}
+          aria-invalid={!!errors.email}
+          aria-describedby={errors.email ? emailErrorId : undefined}
+          disabled={formState.isSubmitting}
+        />
+        {errors.email && (
+          <p id={emailErrorId} className="text-sm text-destructive" role="alert">
+            {errors.email}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor={passwordId}>Hasło</Label>
+        <Input
+          id={passwordId}
+          type="password"
+          name="password"
+          autoComplete="new-password"
+          placeholder="••••••••"
+          value={formState.password}
+          onChange={(e) => handleChange("password", e.target.value)}
+          onBlur={() => handleBlur("password")}
+          aria-invalid={!!errors.password}
+          aria-describedby={errors.password ? passwordErrorId : undefined}
+          disabled={formState.isSubmitting}
+        />
+        {errors.password && (
+          <p id={passwordErrorId} className="text-sm text-destructive" role="alert">
+            {errors.password}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor={passwordConfirmId}>Potwierdź hasło</Label>
+        <Input
+          id={passwordConfirmId}
+          type="password"
+          name="passwordConfirm"
+          autoComplete="new-password"
+          placeholder="••••••••"
+          value={formState.passwordConfirm}
+          onChange={(e) => handleChange("passwordConfirm", e.target.value)}
+          aria-invalid={!!errors.passwordConfirm}
+          aria-describedby={errors.passwordConfirm ? passwordConfirmErrorId : undefined}
+          disabled={formState.isSubmitting}
+        />
+        {errors.passwordConfirm && (
+          <p id={passwordConfirmErrorId} className="text-sm text-destructive" role="alert">
+            {errors.passwordConfirm}
+          </p>
+        )}
+      </div>
+
+      <Button type="submit" className="w-full" disabled={formState.isSubmitting}>
+        {formState.isSubmitting ? (
+          <>
+            <svg
+              className="size-4 animate-spin"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+            <span>Rejestracja...</span>
+          </>
+        ) : (
+          "Utwórz konto"
+        )}
+      </Button>
+
+      <p className="text-center text-sm text-muted-foreground">
+        Masz już konto?{" "}
+        <a href="/login" className="text-primary underline-offset-4 hover:underline focus-visible:underline">
+          Zaloguj się
+        </a>
+      </p>
+    </form>
+  );
+}
