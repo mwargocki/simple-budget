@@ -48,12 +48,12 @@ Everyday users who want to control their spending (groceries, services, etc.) in
 
 ### Testing
 
-| Technology                                                        | Version | Purpose                  |
-| ----------------------------------------------------------------- | ------- | ------------------------ |
-| [Vitest](https://vitest.dev/)                                     | 3.x     | Unit test framework      |
-| [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) | 16.x    | React component testing  |
-| [MSW](https://mswjs.io/)                                          | 2.x     | API mocking              |
-| [Playwright](https://playwright.dev/)                             | -       | E2E test framework       |
+| Technology                                                                       | Version | Purpose                 |
+| -------------------------------------------------------------------------------- | ------- | ----------------------- |
+| [Vitest](https://vitest.dev/)                                                    | 3.x     | Unit test framework     |
+| [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) | 16.x    | React component testing |
+| [MSW](https://mswjs.io/)                                                         | 2.x     | API mocking             |
+| [Playwright](https://playwright.dev/)                                            | -       | E2E test framework      |
 
 ### DevOps
 
@@ -94,14 +94,21 @@ Everyday users who want to control their spending (groceries, services, etc.) in
 
 ## Available Scripts
 
-| Script     | Command            | Description                          |
-| ---------- | ------------------ | ------------------------------------ |
-| `dev`      | `npm run dev`      | Start the development server         |
-| `build`    | `npm run build`    | Create a production build            |
-| `preview`  | `npm run preview`  | Preview the production build locally |
-| `lint`     | `npm run lint`     | Run ESLint to check for code issues  |
-| `lint:fix` | `npm run lint:fix` | Automatically fix ESLint issues      |
-| `format`   | `npm run format`   | Format code with Prettier            |
+| Script           | Command                | Description                          |
+| ---------------- | ---------------------- | ------------------------------------ |
+| `dev`            | `npm run dev`          | Start the development server         |
+| `build`          | `npm run build`        | Create a production build            |
+| `preview`        | `npm run preview`      | Preview the production build locally |
+| `lint`           | `npm run lint`         | Run ESLint to check for code issues  |
+| `lint:fix`       | `npm run lint:fix`     | Automatically fix ESLint issues      |
+| `format`         | `npm run format`       | Format code with Prettier            |
+| `test`           | `npm run test`         | Run unit tests                       |
+| `test:watch`     | `npm run test:watch`   | Run unit tests in watch mode         |
+| `test:ui`        | `npm run test:ui`      | Run unit tests with Vitest UI        |
+| `test:coverage`  | `npm run test:coverage`| Run unit tests with coverage report  |
+| `test:e2e`       | `npm run test:e2e`     | Run E2E tests with Playwright        |
+| `test:e2e:ui`    | `npm run test:e2e:ui`  | Run E2E tests with Playwright UI     |
+| `test:e2e:report`| `npm run test:e2e:report`| Show Playwright test report        |
 
 ## Project Scope
 
