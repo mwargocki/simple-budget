@@ -2,6 +2,7 @@ import { useSummaryPage } from "@/components/hooks/useSummaryPage";
 import { MonthPicker } from "@/components/transactions/MonthPicker";
 import { SummaryTotals } from "./SummaryTotals";
 import { SummaryCategoriesList } from "./SummaryCategoriesList";
+import { AISummary } from "./AISummary";
 import type { SummaryViewProps } from "./types";
 
 export function SummaryView({ accessToken }: SummaryViewProps) {
@@ -27,6 +28,8 @@ export function SummaryView({ accessToken }: SummaryViewProps) {
         error={error}
         onRetry={fetchSummary}
       />
+
+      <AISummary accessToken={accessToken} month={month} />
     </main>
   );
 }

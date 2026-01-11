@@ -449,12 +449,10 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   - Po usunięciu transakcji wartości w podsumowaniu nie uwzględniają usuniętej pozycji.
 
 - ID: US-030
-  Tytuł: Opcjonalna wizualizacja (wykres) w podsumowaniu
-  Opis: Jako użytkownik chcę zobaczyć wykres struktury wydatków, aby szybciej zrozumieć rozkład kategorii, jeśli funkcja zostanie dodana.
+  Tytuł: Analiza przychodów i wydatków za pomocą AI (openrouter)
+  Opis: Jako użytkownik chcę zobaczyć analizę moich przychodów i wydatków wygenerowaną przez AI, aby lepiej zrozumieć moje nawyki finansowe.
   Kryteria akceptacji:
-  - Jeśli wykres jest wdrożony, przedstawia dane dla wybranego miesiąca.
-  - Wykres nie zmienia logiki obliczeń sum (jest tylko wizualizacją).
-  - Jeśli wykres nie jest wdrożony w MVP, brak tej sekcji nie blokuje korzystania z podsumowania listowego.
+  - Na widoku podsumowania miesięcznego dostępna jest sekcja z analizą AI.
 
 ### 5.6 Walidacje, błędy i scenariusze skrajne
 

@@ -220,6 +220,12 @@ export interface MonthlySummaryDTO {
   categories: CategorySummaryDTO[];
 }
 
+/** AI analysis response for monthly summary */
+export interface AIAnalysisResponseDTO {
+  analysis: string;
+  month: string;
+}
+
 // ============================================================================
 // Event DTOs and Commands
 // ============================================================================
