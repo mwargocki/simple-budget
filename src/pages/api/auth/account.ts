@@ -32,12 +32,6 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
       error: userError,
     } = await locals.supabase.auth.getUser(token);
 
-    console.log("Delete account - getUser result:", {
-      user: user?.id,
-      error: userError?.message,
-      token: token.substring(0, 20) + "...",
-    });
-
     if (userError || !user) {
       const errorResponse: ErrorResponseDTO = {
         error: {
@@ -73,17 +67,14 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
     }
 
     // 4. Delete account
-    console.log("Delete account - calling authService.deleteAccount for user:", user.id);
     const authService = new AuthService(locals.supabase);
     const result: DeleteAccountResponseDTO = await authService.deleteAccount(user.id);
-    console.log("Delete account - success:", result);
 
     return new Response(JSON.stringify(result), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.log("Delete account - caught error:", error);
     // Handle JSON parsing errors
     if (error instanceof SyntaxError) {
       const errorResponse: ErrorResponseDTO = {

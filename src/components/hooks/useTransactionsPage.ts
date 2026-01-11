@@ -118,8 +118,8 @@ export function useTransactionsPage(accessToken: string): UseTransactionsPageRes
 
       const data: CategoriesListDTO = await response.json();
       setCategories(data.categories);
-    } catch (err) {
-      console.error("Error fetching categories:", err);
+    } catch {
+      // Błędy kategorii są ignorowane - użytkownik zobaczy pustą listę
     }
   }, [accessToken, handleUnauthorized]);
 
