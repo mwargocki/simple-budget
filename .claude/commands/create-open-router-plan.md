@@ -16,11 +16,11 @@ Teraz przeanalizuj dostarczone informacje i rozbij szczegóły implementacji. U�
    b. Wymień potencjalne wyzwania związane z wdrożeniem, numerując je.
    c. Zaproponuj niezależne od technologii rozwiązania tych wyzwań, numerując je tak, aby odpowiadały wyzwaniom.
 3. Wyraźne rozważenie sposobu włączenia każdego z poniższych elementów, wymieniając potencjalne metody lub podejścia w celu spełnienia oczekiwań OpenRouter API:
-    - Komunikat systemowy
-    - Komunikat użytkownika
-    - Ustrukturyzowane odpowiedzi poprzez response_format (schemat JSON w odpowiedzi modelu)
-    - Nazwa modelu
-    - Parametry modelu
+   - Komunikat systemowy
+   - Komunikat użytkownika
+   - Ustrukturyzowane odpowiedzi poprzez response_format (schemat JSON w odpowiedzi modelu)
+   - Nazwa modelu
+   - Parametry modelu
 
 Podaj konkretne przykłady dla każdego elementu, numerując je. Upewnij się, że przykłady te są jasne i pokazują, w jaki sposób należy je zaimplementować w usłudze, zwłaszcza w przypadku response_format. Wykorzystaj wzór poprawnie zdefiniowanego response_format: { type: 'json_schema', json_schema: { name: [schema-name], strict: true, schema: [schema-obj] } }
 
@@ -37,6 +37,7 @@ Na podstawie przeprowadzonej analizy utwórz kompleksowy przewodnik implementacj
 7. Plan wdrożenia krok po kroku
 
 Upewnij się, że plan wdrożenia
+
 1. Jest dostosowany do określonego stacku technologicznego
 2. Obejmuje wszystkie istotne komponenty usługi OpenRouter
 3. Obejmuje obsługę błędów i najlepsze praktyki bezpieczeństwa

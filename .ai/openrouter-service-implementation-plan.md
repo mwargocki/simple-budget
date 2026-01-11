@@ -13,12 +13,12 @@ OpenRouterService to usługa odpowiedzialna za komunikację z API OpenRouter w c
 
 ### Główne cechy
 
-| Cecha | Opis |
-|-------|------|
-| Endpoint | `https://openrouter.ai/api/v1/chat/completions` |
-| Metoda | POST |
-| Autoryzacja | Bearer token (API key) |
-| Format odpowiedzi | JSON lub Streaming (SSE) |
+| Cecha             | Opis                                            |
+| ----------------- | ----------------------------------------------- |
+| Endpoint          | `https://openrouter.ai/api/v1/chat/completions` |
+| Metoda            | POST                                            |
+| Autoryzacja       | Bearer token (API key)                          |
+| Format odpowiedzi | JSON lub Streaming (SSE)                        |
 
 ---
 
@@ -46,15 +46,15 @@ interface OpenRouterConfig {
 
 ### Parametry konfiguracji
 
-| Parametr | Typ | Wymagany | Domyślna wartość       | Opis |
-|----------|-----|----------|------------------------|------|
-| `apiKey` | `string` | Tak | -                      | Klucz API OpenRouter |
-| `defaultModel` | `string` | Nie | `"openai/gpt-4o-mini"` | Domyślny model do użycia |
-| `defaultTemperature` | `number` | Nie | `1.0`                  | Domyślna temperatura (0.0-2.0) |
-| `defaultMaxTokens` | `number` | Nie | `undefined`            | Domyślny limit tokenów |
-| `siteUrl` | `string` | Nie | `undefined`            | URL aplikacji (dla statystyk) |
-| `siteName` | `string` | Nie | `undefined`            | Nazwa aplikacji (dla statystyk) |
-| `timeout` | `number` | Nie | `30000`                | Timeout w milisekundach |
+| Parametr             | Typ      | Wymagany | Domyślna wartość       | Opis                            |
+| -------------------- | -------- | -------- | ---------------------- | ------------------------------- |
+| `apiKey`             | `string` | Tak      | -                      | Klucz API OpenRouter            |
+| `defaultModel`       | `string` | Nie      | `"openai/gpt-4o-mini"` | Domyślny model do użycia        |
+| `defaultTemperature` | `number` | Nie      | `1.0`                  | Domyślna temperatura (0.0-2.0)  |
+| `defaultMaxTokens`   | `number` | Nie      | `undefined`            | Domyślny limit tokenów          |
+| `siteUrl`            | `string` | Nie      | `undefined`            | URL aplikacji (dla statystyk)   |
+| `siteName`           | `string` | Nie      | `undefined`            | Nazwa aplikacji (dla statystyk) |
+| `timeout`            | `number` | Nie      | `30000`                | Timeout w milisekundach         |
 
 ### Przykład inicjalizacji
 
@@ -142,16 +142,16 @@ const response = await openRouterService.chat({
   messages: [
     {
       role: "system",
-      content: "Jesteś asystentem finansowym pomagającym kategoryzować transakcje."
+      content: "Jesteś asystentem finansowym pomagającym kategoryzować transakcje.",
     },
     {
       role: "user",
-      content: "Zaklasyfikuj transakcję: 'Zakupy w Biedronce - 156.78 PLN'"
-    }
+      content: "Zaklasyfikuj transakcję: 'Zakupy w Biedronce - 156.78 PLN'",
+    },
   ],
   model: "anthropic/claude-sonnet-4",
   temperature: 0.3,
-  maxTokens: 500
+  maxTokens: 500,
 });
 ```
 
@@ -187,19 +187,19 @@ const transactionCategorySchema: JsonSchema = {
     category: {
       type: "string",
       description: "Nazwa kategorii transakcji",
-      enum: ["Jedzenie", "Transport", "Rozrywka", "Rachunki", "Inne"]
+      enum: ["Jedzenie", "Transport", "Rozrywka", "Rachunki", "Inne"],
     },
     confidence: {
       type: "number",
-      description: "Poziom pewności klasyfikacji (0.0-1.0)"
+      description: "Poziom pewności klasyfikacji (0.0-1.0)",
     },
     reasoning: {
       type: "string",
-      description: "Uzasadnienie wyboru kategorii"
-    }
+      description: "Uzasadnienie wyboru kategorii",
+    },
   },
   required: ["category", "confidence", "reasoning"],
-  additionalProperties: false
+  additionalProperties: false,
 };
 
 interface TransactionCategory {
@@ -212,16 +212,16 @@ const response = await openRouterService.chatWithSchema<TransactionCategory>({
   messages: [
     {
       role: "system",
-      content: "Kategoryzujesz transakcje finansowe. Odpowiadaj zawsze w formacie JSON."
+      content: "Kategoryzujesz transakcje finansowe. Odpowiadaj zawsze w formacie JSON.",
     },
     {
       role: "user",
-      content: "Kategoryzuj: 'Uber Eats - dostawa jedzenia 45.00 PLN'"
-    }
+      content: "Kategoryzuj: 'Uber Eats - dostawa jedzenia 45.00 PLN'",
+    },
   ],
   schema: transactionCategorySchema,
   schemaName: "transaction_category",
-  temperature: 0.2
+  temperature: 0.2,
 });
 
 // response.data = { category: "Jedzenie", confidence: 0.95, reasoning: "..." }
@@ -249,9 +249,7 @@ interface StreamChunk {
 
 ```typescript
 const stream = openRouterService.chatStream({
-  messages: [
-    { role: "user", content: "Wyjaśnij budżetowanie domowe" }
-  ]
+  messages: [{ role: "user", content: "Wyjaśnij budżetowanie domowe" }],
 });
 
 for await (const chunk of stream) {
@@ -374,17 +372,17 @@ export class OpenRouterError extends Error {
 
 // Kody błędów
 export type OpenRouterErrorCode =
-  | "INVALID_REQUEST"      // 400 - Nieprawidłowe parametry
-  | "UNAUTHORIZED"         // 401 - Nieprawidłowy klucz API
+  | "INVALID_REQUEST" // 400 - Nieprawidłowe parametry
+  | "UNAUTHORIZED" // 401 - Nieprawidłowy klucz API
   | "INSUFFICIENT_CREDITS" // 402 - Brak środków
-  | "CONTENT_MODERATED"    // 403 - Treść zablokowana przez moderację
-  | "TIMEOUT"              // 408 - Przekroczony czas oczekiwania
-  | "RATE_LIMITED"         // 429 - Przekroczony limit zapytań
-  | "PROVIDER_ERROR"       // 502 - Błąd dostawcy modelu
-  | "SERVICE_UNAVAILABLE"  // 503 - Usługa niedostępna
-  | "SCHEMA_VALIDATION"    // Błąd walidacji schematu JSON
-  | "NETWORK_ERROR"        // Błąd sieci
-  | "UNKNOWN";             // Nieznany błąd
+  | "CONTENT_MODERATED" // 403 - Treść zablokowana przez moderację
+  | "TIMEOUT" // 408 - Przekroczony czas oczekiwania
+  | "RATE_LIMITED" // 429 - Przekroczony limit zapytań
+  | "PROVIDER_ERROR" // 502 - Błąd dostawcy modelu
+  | "SERVICE_UNAVAILABLE" // 503 - Usługa niedostępna
+  | "SCHEMA_VALIDATION" // Błąd walidacji schematu JSON
+  | "NETWORK_ERROR" // Błąd sieci
+  | "UNKNOWN"; // Nieznany błąd
 
 // Specjalizowane błędy
 export class OpenRouterAuthError extends OpenRouterError {
@@ -428,16 +426,16 @@ export class OpenRouterModerationError extends OpenRouterError {
 
 ### 5.2 Mapowanie kodów HTTP na błędy
 
-| Kod HTTP | Klasa błędu | Opis |
-|----------|-------------|------|
-| 400 | `OpenRouterError` | Nieprawidłowe parametry żądania |
-| 401 | `OpenRouterAuthError` | Nieprawidłowy lub brakujący klucz API |
-| 402 | `OpenRouterError` | Niewystarczające środki na koncie |
-| 403 | `OpenRouterModerationError` | Treść zablokowana przez moderację |
-| 408 | `OpenRouterError` | Timeout żądania |
-| 429 | `OpenRouterRateLimitError` | Przekroczony limit zapytań |
-| 502 | `OpenRouterError` | Błąd dostawcy modelu |
-| 503 | `OpenRouterError` | Usługa niedostępna |
+| Kod HTTP | Klasa błędu                 | Opis                                  |
+| -------- | --------------------------- | ------------------------------------- |
+| 400      | `OpenRouterError`           | Nieprawidłowe parametry żądania       |
+| 401      | `OpenRouterAuthError`       | Nieprawidłowy lub brakujący klucz API |
+| 402      | `OpenRouterError`           | Niewystarczające środki na koncie     |
+| 403      | `OpenRouterModerationError` | Treść zablokowana przez moderację     |
+| 408      | `OpenRouterError`           | Timeout żądania                       |
+| 429      | `OpenRouterRateLimitError`  | Przekroczony limit zapytań            |
+| 502      | `OpenRouterError`           | Błąd dostawcy modelu                  |
+| 503      | `OpenRouterError`           | Usługa niedostępna                    |
 
 ### 5.3 Obsługa błędów podczas streamingu
 
@@ -492,14 +490,14 @@ OPENROUTER_API_KEY=sk-or-v1-your-api-key-here
 // Schemat walidacji dla wiadomości
 const chatMessageSchema = z.object({
   role: z.enum(["system", "user", "assistant"]),
-  content: z.string().min(1).max(100000)
+  content: z.string().min(1).max(100000),
 });
 
 const chatOptionsSchema = z.object({
   messages: z.array(chatMessageSchema).min(1).max(100),
   model: z.string().optional(),
   temperature: z.number().min(0).max(2).optional(),
-  maxTokens: z.number().int().positive().max(128000).optional()
+  maxTokens: z.number().int().positive().max(128000).optional(),
 });
 ```
 
@@ -678,14 +676,20 @@ export class OpenRouterAuthError extends OpenRouterError {
 }
 
 export class OpenRouterRateLimitError extends OpenRouterError {
-  constructor(message: string, public readonly retryAfter?: number) {
+  constructor(
+    message: string,
+    public readonly retryAfter?: number
+  ) {
     super(message, "RATE_LIMITED", 429);
     this.name = "OpenRouterRateLimitError";
   }
 }
 
 export class OpenRouterSchemaError extends OpenRouterError {
-  constructor(message: string, public readonly receivedData: unknown) {
+  constructor(
+    message: string,
+    public readonly receivedData: unknown
+  ) {
     super(message, "SCHEMA_VALIDATION");
     this.name = "OpenRouterSchemaError";
   }
@@ -712,18 +716,15 @@ import { z } from "zod";
 
 export const chatMessageSchema = z.object({
   role: z.enum(["system", "user", "assistant"]),
-  content: z.string().min(1, "Message content cannot be empty").max(100000)
+  content: z.string().min(1, "Message content cannot be empty").max(100000),
 });
 
 export const chatOptionsSchema = z.object({
-  messages: z
-    .array(chatMessageSchema)
-    .min(1, "At least one message is required")
-    .max(100),
+  messages: z.array(chatMessageSchema).min(1, "At least one message is required").max(100),
   model: z.string().optional(),
   temperature: z.number().min(0).max(2).optional(),
   maxTokens: z.number().int().positive().max(128000).optional(),
-  topP: z.number().min(0).max(1).optional()
+  topP: z.number().min(0).max(1).optional(),
 });
 
 export const responseFormatSchema = z.object({
@@ -735,9 +736,9 @@ export const responseFormatSchema = z.object({
       type: z.literal("object"),
       properties: z.record(z.unknown()),
       required: z.array(z.string()),
-      additionalProperties: z.boolean()
-    })
-  })
+      additionalProperties: z.boolean(),
+    }),
+  }),
 });
 
 export type ChatMessageInput = z.infer<typeof chatMessageSchema>;
@@ -757,14 +758,14 @@ import type {
   StreamChunk,
   ResponseFormat,
   JsonSchema,
-  TokenUsage
+  TokenUsage,
 } from "../../types";
 import {
   OpenRouterError,
   OpenRouterAuthError,
   OpenRouterRateLimitError,
   OpenRouterSchemaError,
-  OpenRouterModerationError
+  OpenRouterModerationError,
 } from "../errors/openrouter.errors";
 import { chatOptionsSchema } from "../schemas/openrouter.schema";
 
@@ -809,7 +810,7 @@ export class OpenRouterService {
       defaultMaxTokens: config.defaultMaxTokens ?? 4096,
       siteUrl: config.siteUrl ?? "",
       siteName: config.siteName ?? "",
-      timeout: config.timeout ?? 30000
+      timeout: config.timeout ?? 30000,
     };
   }
 
@@ -820,14 +821,11 @@ export class OpenRouterService {
     const requestBody = this.buildRequestBody(validatedOptions);
     const headers = this.buildHeaders();
 
-    const response = await this.fetchWithTimeout(
-      `${this.baseUrl}/chat/completions`,
-      {
-        method: "POST",
-        headers,
-        body: JSON.stringify(requestBody)
-      }
-    );
+    const response = await this.fetchWithTimeout(`${this.baseUrl}/chat/completions`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(requestBody),
+    });
 
     if (!response.ok) {
       await this.handleHttpError(response);
@@ -848,13 +846,13 @@ export class OpenRouterService {
       json_schema: {
         name: options.schemaName,
         strict: true,
-        schema: options.schema
-      }
+        schema: options.schema,
+      },
     };
 
     const response = await this.chat({
       ...options,
-      responseFormat
+      responseFormat,
     });
 
     try {
@@ -865,13 +863,10 @@ export class OpenRouterService {
         id: response.id,
         model: response.model,
         finishReason: response.finishReason,
-        usage: response.usage
+        usage: response.usage,
       };
     } catch {
-      throw new OpenRouterSchemaError(
-        "Failed to parse JSON response",
-        response.content
-      );
+      throw new OpenRouterSchemaError("Failed to parse JSON response", response.content);
     }
   }
 
@@ -880,14 +875,11 @@ export class OpenRouterService {
     const requestBody = this.buildRequestBody(validatedOptions, true);
     const headers = this.buildHeaders();
 
-    const response = await this.fetchWithTimeout(
-      `${this.baseUrl}/chat/completions`,
-      {
-        method: "POST",
-        headers,
-        body: JSON.stringify(requestBody)
-      }
-    );
+    const response = await this.fetchWithTimeout(`${this.baseUrl}/chat/completions`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(requestBody),
+    });
 
     if (!response.ok) {
       await this.handleHttpError(response);
@@ -923,14 +915,11 @@ export class OpenRouterService {
     }
   }
 
-  private buildRequestBody(
-    options: ChatOptions,
-    stream = false
-  ): Record<string, unknown> {
+  private buildRequestBody(options: ChatOptions, stream = false): Record<string, unknown> {
     const body: Record<string, unknown> = {
       model: options.model ?? this.config.defaultModel,
       messages: options.messages,
-      stream
+      stream,
     };
 
     if (options.temperature !== undefined) {
@@ -959,7 +948,7 @@ export class OpenRouterService {
   private buildHeaders(): Record<string, string> {
     const headers: Record<string, string> = {
       Authorization: `Bearer ${this.config.apiKey}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     };
 
     if (this.config.siteUrl) {
@@ -984,8 +973,8 @@ export class OpenRouterService {
       usage: {
         promptTokens: data.usage?.prompt_tokens ?? 0,
         completionTokens: data.usage?.completion_tokens ?? 0,
-        totalTokens: data.usage?.total_tokens ?? 0
-      }
+        totalTokens: data.usage?.total_tokens ?? 0,
+      },
     };
   }
 
@@ -1005,58 +994,37 @@ export class OpenRouterService {
       return {
         content: delta?.content ?? "",
         finishReason,
-        isComplete: finishReason !== null && finishReason !== undefined
+        isComplete: finishReason !== null && finishReason !== undefined,
       };
     } catch {
       return null;
     }
   }
 
-  private normalizeFinishReason(
-    reason?: string
-  ): ChatResponse["finishReason"] {
-    const validReasons = [
-      "stop",
-      "length",
-      "tool_calls",
-      "content_filter",
-      "error"
-    ] as const;
+  private normalizeFinishReason(reason?: string): ChatResponse["finishReason"] {
+    const validReasons = ["stop", "length", "tool_calls", "content_filter", "error"] as const;
 
-    if (reason && validReasons.includes(reason as typeof validReasons[number])) {
+    if (reason && validReasons.includes(reason as (typeof validReasons)[number])) {
       return reason as ChatResponse["finishReason"];
     }
 
     return "stop";
   }
 
-  private async fetchWithTimeout(
-    url: string,
-    options: RequestInit
-  ): Promise<Response> {
+  private async fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
     const controller = new AbortController();
-    const timeoutId = setTimeout(
-      () => controller.abort(),
-      this.config.timeout
-    );
+    const timeoutId = setTimeout(() => controller.abort(), this.config.timeout);
 
     try {
       return await fetch(url, {
         ...options,
-        signal: controller.signal
+        signal: controller.signal,
       });
     } catch (error) {
       if (error instanceof Error && error.name === "AbortError") {
-        throw new OpenRouterError(
-          "Request timeout",
-          "TIMEOUT",
-          408
-        );
+        throw new OpenRouterError("Request timeout", "TIMEOUT", 408);
       }
-      throw new OpenRouterError(
-        "Network error",
-        "NETWORK_ERROR"
-      );
+      throw new OpenRouterError("Network error", "NETWORK_ERROR");
     } finally {
       clearTimeout(timeoutId);
     }
@@ -1103,9 +1071,7 @@ export class OpenRouterService {
       default:
         throw new OpenRouterError(
           message,
-          response.status >= 400 && response.status < 500
-            ? "INVALID_REQUEST"
-            : "UNKNOWN",
+          response.status >= 400 && response.status < 500 ? "INVALID_REQUEST" : "UNKNOWN",
           response.status
         );
     }
@@ -1139,22 +1105,22 @@ const categorizeSchema = {
   properties: {
     category: {
       type: "string",
-      description: "Suggested category for the transaction"
+      description: "Suggested category for the transaction",
     },
     confidence: {
       type: "number",
-      description: "Confidence level from 0 to 1"
-    }
+      description: "Confidence level from 0 to 1",
+    },
   },
   required: ["category", "confidence"],
-  additionalProperties: false
+  additionalProperties: false,
 };
 
 export const POST: APIRoute = async ({ request, locals }) => {
   const session = await locals.supabase.auth.getSession();
   if (!session.data.session) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401
+      status: 401,
     });
   }
 
@@ -1163,7 +1129,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const openRouter = new OpenRouterService({
       apiKey: import.meta.env.OPENROUTER_API_KEY,
-      defaultModel: "anthropic/claude-sonnet-4"
+      defaultModel: "anthropic/claude-sonnet-4",
     });
 
     const response = await openRouter.chatWithSchema<{
@@ -1173,25 +1139,24 @@ export const POST: APIRoute = async ({ request, locals }) => {
       messages: [
         {
           role: "system",
-          content: "You are a financial assistant that categorizes transactions."
+          content: "You are a financial assistant that categorizes transactions.",
         },
         {
           role: "user",
-          content: `Categorize this transaction: "${description}"`
-        }
+          content: `Categorize this transaction: "${description}"`,
+        },
       ],
       schema: categorizeSchema,
       schemaName: "transaction_category",
-      temperature: 0.2
+      temperature: 0.2,
     });
 
     return new Response(JSON.stringify(response.data), { status: 200 });
   } catch (error) {
     if (error instanceof OpenRouterError) {
-      return new Response(
-        JSON.stringify({ error: error.message, code: error.code }),
-        { status: error.statusCode ?? 500 }
-      );
+      return new Response(JSON.stringify({ error: error.message, code: error.code }), {
+        status: error.statusCode ?? 500,
+      });
     }
     throw error;
   }
@@ -1210,15 +1175,14 @@ import { OpenRouterAuthError } from "../../errors/openrouter.errors";
 
 describe("OpenRouterService", () => {
   it("should throw error when API key is missing", () => {
-    expect(() => new OpenRouterService({ apiKey: "" }))
-      .toThrow(OpenRouterAuthError);
+    expect(() => new OpenRouterService({ apiKey: "" })).toThrow(OpenRouterAuthError);
   });
 
   it("should build correct headers", () => {
     const service = new OpenRouterService({
       apiKey: "test-key",
       siteUrl: "https://example.com",
-      siteName: "Test App"
+      siteName: "Test App",
     });
 
     // Test internal header building via chat method mock
