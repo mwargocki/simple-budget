@@ -61,14 +61,7 @@ export function createMockAPIContext(options: CreateMockAPIContextOptions = {}):
   context: MockAPIContext;
   mockSupabase: MockSupabaseClient;
 } {
-  const {
-    method = "GET",
-    path = "/api/test",
-    body,
-    headers = {},
-    params = {},
-    supabase,
-  } = options;
+  const { method = "GET", path = "/api/test", body, headers = {}, params = {}, supabase } = options;
 
   const mockSupabase = supabase ?? createMockSupabaseClient();
 
@@ -108,9 +101,7 @@ export function createMockAPIContext(options: CreateMockAPIContextOptions = {}):
 /**
  * Creates a mock request with Authorization header.
  */
-export function createMockAPIContextWithAuth(
-  options: CreateMockAPIContextOptions & { token?: string } = {}
-): {
+export function createMockAPIContextWithAuth(options: CreateMockAPIContextOptions & { token?: string } = {}): {
   context: MockAPIContext;
   mockSupabase: MockSupabaseClient;
 } {

@@ -194,9 +194,7 @@ describe("POST /api/auth/change-password", () => {
       // Assert
       expect(response.status).toBe(400);
       expect(body.error.code).toBe("VALIDATION_ERROR");
-      expect(body.error.details).toContainEqual(
-        expect.objectContaining({ field: "newPassword" })
-      );
+      expect(body.error.details).toContainEqual(expect.objectContaining({ field: "newPassword" }));
     });
 
     it("should return 400 when new passwords do not match", async () => {
@@ -223,9 +221,7 @@ describe("POST /api/auth/change-password", () => {
       // Assert
       expect(response.status).toBe(400);
       expect(body.error.code).toBe("VALIDATION_ERROR");
-      expect(body.error.details).toContainEqual(
-        expect.objectContaining({ field: "newPasswordConfirm" })
-      );
+      expect(body.error.details).toContainEqual(expect.objectContaining({ field: "newPasswordConfirm" }));
     });
 
     it("should return 400 when new password is same as current", async () => {

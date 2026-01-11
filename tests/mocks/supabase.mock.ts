@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 import type { SupabaseClient } from "@/db/supabase.client";
 
-type MockChain = {
+interface MockChain {
   select: ReturnType<typeof vi.fn>;
   eq: ReturnType<typeof vi.fn>;
   single: ReturnType<typeof vi.fn>;
@@ -13,16 +13,16 @@ type MockChain = {
   order: ReturnType<typeof vi.fn>;
   range: ReturnType<typeof vi.fn>;
   maybeSingle: ReturnType<typeof vi.fn>;
-};
+}
 
-type MockAuth = {
+interface MockAuth {
   signUp: ReturnType<typeof vi.fn>;
   signInWithPassword: ReturnType<typeof vi.fn>;
   signOut: ReturnType<typeof vi.fn>;
   updateUser: ReturnType<typeof vi.fn>;
   getSession: ReturnType<typeof vi.fn>;
   getUser: ReturnType<typeof vi.fn>;
-};
+}
 
 export interface MockSupabaseClient {
   from: ReturnType<typeof vi.fn>;

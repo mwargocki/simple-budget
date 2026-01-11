@@ -221,9 +221,7 @@ describe("DELETE /api/auth/account", () => {
       // Assert
       expect(response.status).toBe(400);
       expect(body.error.code).toBe("VALIDATION_ERROR");
-      expect(body.error.details).toContainEqual(
-        expect.objectContaining({ field: "confirmation" })
-      );
+      expect(body.error.details).toContainEqual(expect.objectContaining({ field: "confirmation" }));
     });
 
     it("should return 400 when JSON is invalid", async () => {

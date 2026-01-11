@@ -59,9 +59,7 @@ describe("CategoryService", () => {
       // Assert
       expect(result).toEqual({ categories: testCategories });
       expect(mockClient.from).toHaveBeenCalledWith("categories");
-      expect(mockClient._chain.select).toHaveBeenCalledWith(
-        "id, name, is_system, system_key, created_at, updated_at"
-      );
+      expect(mockClient._chain.select).toHaveBeenCalledWith("id, name, is_system, system_key, created_at, updated_at");
       expect(mockClient._chain.order).toHaveBeenCalledWith("name", { ascending: true });
     });
 
@@ -135,9 +133,7 @@ describe("CategoryService", () => {
         name: "Entertainment",
         user_id: testUserId,
       });
-      expect(mockClient._chain.select).toHaveBeenCalledWith(
-        "id, name, is_system, system_key, created_at, updated_at"
-      );
+      expect(mockClient._chain.select).toHaveBeenCalledWith("id, name, is_system, system_key, created_at, updated_at");
       expect(mockClient._chain.single).toHaveBeenCalled();
     });
 
@@ -206,11 +202,7 @@ describe("CategoryService", () => {
         });
 
       // Act
-      const result = await service.updateCategory(
-        testCategory.id,
-        { name: "Updated Groceries" },
-        testUserId
-      );
+      const result = await service.updateCategory(testCategory.id, { name: "Updated Groceries" }, testUserId);
 
       // Assert
       expect(result).toEqual(updatedCategory);
@@ -228,9 +220,9 @@ describe("CategoryService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.updateCategory(testCategory.id, { name: "New Name" }, testUserId)
-      ).rejects.toThrow(CategoryNotFoundError);
+      await expect(service.updateCategory(testCategory.id, { name: "New Name" }, testUserId)).rejects.toThrow(
+        CategoryNotFoundError
+      );
     });
 
     it("should throw CategoryNotFoundError when fetch returns null data", async () => {
@@ -241,9 +233,9 @@ describe("CategoryService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.updateCategory(testCategory.id, { name: "New Name" }, testUserId)
-      ).rejects.toThrow(CategoryNotFoundError);
+      await expect(service.updateCategory(testCategory.id, { name: "New Name" }, testUserId)).rejects.toThrow(
+        CategoryNotFoundError
+      );
     });
 
     it("should throw SystemCategoryError when trying to update system category", async () => {
@@ -254,12 +246,12 @@ describe("CategoryService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.updateCategory(systemCategory.id, { name: "New Name" }, testUserId)
-      ).rejects.toThrow(SystemCategoryError);
-      await expect(
-        service.updateCategory(systemCategory.id, { name: "New Name" }, testUserId)
-      ).rejects.toThrow("Cannot modify system category");
+      await expect(service.updateCategory(systemCategory.id, { name: "New Name" }, testUserId)).rejects.toThrow(
+        SystemCategoryError
+      );
+      await expect(service.updateCategory(systemCategory.id, { name: "New Name" }, testUserId)).rejects.toThrow(
+        "Cannot modify system category"
+      );
     });
 
     it("should propagate database errors during update", async () => {
@@ -280,9 +272,9 @@ describe("CategoryService", () => {
         });
 
       // Act & Assert
-      await expect(
-        service.updateCategory(testCategory.id, { name: "Duplicate Name" }, testUserId)
-      ).rejects.toEqual(dbError);
+      await expect(service.updateCategory(testCategory.id, { name: "Duplicate Name" }, testUserId)).rejects.toEqual(
+        dbError
+      );
     });
   });
 
@@ -410,9 +402,7 @@ describe("CategoryService", () => {
       });
 
       // Act & Assert
-      await expect(service.deleteCategory(testCategory.id, testUserId)).rejects.toThrow(
-        CategoryNotFoundError
-      );
+      await expect(service.deleteCategory(testCategory.id, testUserId)).rejects.toThrow(CategoryNotFoundError);
     });
 
     it("should throw SystemCategoryError when trying to delete system category", async () => {
@@ -423,9 +413,7 @@ describe("CategoryService", () => {
       });
 
       // Act & Assert
-      await expect(service.deleteCategory(systemCategory.id, testUserId)).rejects.toThrow(
-        SystemCategoryError
-      );
+      await expect(service.deleteCategory(systemCategory.id, testUserId)).rejects.toThrow(SystemCategoryError);
     });
 
     it("should throw error when 'Brak' category not found", async () => {

@@ -288,9 +288,7 @@ describe("SummaryService", () => {
 
       it("should handle integer amounts with .00 formatting", async () => {
         // Arrange
-        const integerAmounts = [
-          { category_id: "cat-1", amount: 100, type: "income", categories: { name: "Salary" } },
-        ];
+        const integerAmounts = [{ category_id: "cat-1", amount: 100, type: "income", categories: { name: "Salary" } }];
         setupMonthlySummaryMock("UTC", integerAmounts);
 
         // Act
@@ -303,9 +301,7 @@ describe("SummaryService", () => {
 
       it("should handle amounts with more than 2 decimal places", async () => {
         // Arrange - JavaScript floating point can cause precision issues
-        const preciseAmounts = [
-          { category_id: "cat-1", amount: 10.999, type: "income", categories: { name: "Test" } },
-        ];
+        const preciseAmounts = [{ category_id: "cat-1", amount: 10.999, type: "income", categories: { name: "Test" } }];
         setupMonthlySummaryMock("UTC", preciseAmounts);
 
         // Act
@@ -317,9 +313,7 @@ describe("SummaryService", () => {
 
       it("should handle very small amounts", async () => {
         // Arrange
-        const smallAmounts = [
-          { category_id: "cat-1", amount: 0.01, type: "expense", categories: { name: "Fee" } },
-        ];
+        const smallAmounts = [{ category_id: "cat-1", amount: 0.01, type: "expense", categories: { name: "Fee" } }];
         setupMonthlySummaryMock("UTC", smallAmounts);
 
         // Act
@@ -640,15 +634,9 @@ describe("SummaryService", () => {
 
       // Assert
       expect(mockClient.from).toHaveBeenCalledWith("transactions");
-      expect(transactionChain.select).toHaveBeenCalledWith(
-        expect.stringContaining("category_id")
-      );
-      expect(transactionChain.select).toHaveBeenCalledWith(
-        expect.stringContaining("amount")
-      );
-      expect(transactionChain.select).toHaveBeenCalledWith(
-        expect.stringContaining("type")
-      );
+      expect(transactionChain.select).toHaveBeenCalledWith(expect.stringContaining("category_id"));
+      expect(transactionChain.select).toHaveBeenCalledWith(expect.stringContaining("amount"));
+      expect(transactionChain.select).toHaveBeenCalledWith(expect.stringContaining("type"));
       expect(transactionChain.eq).toHaveBeenCalledWith("user_id", testUserId);
     });
   });

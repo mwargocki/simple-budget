@@ -162,9 +162,7 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(service.createTransaction(validCommand, testUserId)).rejects.toThrow(
-        CategoryNotFoundError
-      );
+      await expect(service.createTransaction(validCommand, testUserId)).rejects.toThrow(CategoryNotFoundError);
     });
 
     it("should throw CategoryNotFoundError when category returns null data without error", async () => {
@@ -175,9 +173,7 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(service.createTransaction(validCommand, testUserId)).rejects.toThrow(
-        CategoryNotFoundError
-      );
+      await expect(service.createTransaction(validCommand, testUserId)).rejects.toThrow(CategoryNotFoundError);
     });
 
     it("should propagate database errors on insert", async () => {
@@ -245,9 +241,7 @@ describe("TransactionService", () => {
         updated_at: testTransaction.updated_at,
       });
       expect(mockClient.from).toHaveBeenCalledWith("transactions");
-      expect(mockClient._chain.select).toHaveBeenCalledWith(
-        expect.stringContaining("categories!inner(name)")
-      );
+      expect(mockClient._chain.select).toHaveBeenCalledWith(expect.stringContaining("categories!inner(name)"));
       expect(mockClient._chain.eq).toHaveBeenCalledWith("id", testTransaction.id);
       expect(mockClient._chain.eq).toHaveBeenCalledWith("user_id", testUserId);
     });
@@ -260,9 +254,7 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.getTransactionById("non-existent-id", testUserId)
-      ).rejects.toThrow(TransactionNotFoundError);
+      await expect(service.getTransactionById("non-existent-id", testUserId)).rejects.toThrow(TransactionNotFoundError);
     });
 
     it("should throw TransactionNotFoundError when data is null without error", async () => {
@@ -273,9 +265,9 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.getTransactionById(testTransaction.id, testUserId)
-      ).rejects.toThrow(TransactionNotFoundError);
+      await expect(service.getTransactionById(testTransaction.id, testUserId)).rejects.toThrow(
+        TransactionNotFoundError
+      );
     });
 
     it("should format amount correctly for integer values", async () => {
@@ -399,7 +391,7 @@ describe("TransactionService", () => {
       const dataQueryResult = { data: [transactionsList[0]], error: null };
 
       const categoryId = testCategory.id;
-      let eqCalls: string[][] = [];
+      const eqCalls: string[][] = [];
 
       mockClient._chain.eq.mockImplementation((...args: string[]) => {
         eqCalls.push(args);
@@ -430,10 +422,7 @@ describe("TransactionService", () => {
       });
 
       // Act
-      const result = await service.getTransactions(
-        { month: "2024-01", category_id: categoryId },
-        testUserId
-      );
+      const result = await service.getTransactions({ month: "2024-01", category_id: categoryId }, testUserId);
 
       // Assert
       expect(result.transactions).toHaveLength(1);
@@ -587,10 +576,7 @@ describe("TransactionService", () => {
       });
 
       // Act
-      const result = await service.getTransactions(
-        { month: "2024-01", limit: 10, offset: 20 },
-        testUserId
-      );
+      const result = await service.getTransactions({ month: "2024-01", limit: 10, offset: 20 }, testUserId);
 
       // Assert
       expect(rangeStart).toBe(20);
@@ -656,9 +642,7 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.getTransactions({ month: "2024-01" }, testUserId)
-      ).rejects.toEqual(countError);
+      await expect(service.getTransactions({ month: "2024-01" }, testUserId)).rejects.toEqual(countError);
     });
 
     it("should propagate data query error", async () => {
@@ -682,9 +666,7 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.getTransactions({ month: "2024-01" }, testUserId)
-      ).rejects.toEqual(dataError);
+      await expect(service.getTransactions({ month: "2024-01" }, testUserId)).rejects.toEqual(dataError);
     });
 
     it("should handle null data in data query gracefully", async () => {
@@ -745,11 +727,7 @@ describe("TransactionService", () => {
       mockClient._chain.eq.mockReturnThis();
 
       // Act
-      const result = await service.updateTransaction(
-        testTransaction.id,
-        updateCommand,
-        testUserId
-      );
+      const result = await service.updateTransaction(testTransaction.id, updateCommand, testUserId);
 
       // Assert
       expect(result.amount).toBe("150.75");
@@ -835,9 +813,9 @@ describe("TransactionService", () => {
         });
 
       // Act & Assert
-      await expect(
-        service.updateTransaction(testTransaction.id, commandWithCategory, testUserId)
-      ).rejects.toThrow(CategoryNotFoundError);
+      await expect(service.updateTransaction(testTransaction.id, commandWithCategory, testUserId)).rejects.toThrow(
+        CategoryNotFoundError
+      );
     });
 
     it("should throw TransactionNotFoundError when transaction does not exist", async () => {
@@ -848,9 +826,9 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.updateTransaction("non-existent-id", updateCommand, testUserId)
-      ).rejects.toThrow(TransactionNotFoundError);
+      await expect(service.updateTransaction("non-existent-id", updateCommand, testUserId)).rejects.toThrow(
+        TransactionNotFoundError
+      );
     });
 
     it("should throw TransactionNotFoundError when transaction data is null", async () => {
@@ -861,9 +839,9 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.updateTransaction(testTransaction.id, updateCommand, testUserId)
-      ).rejects.toThrow(TransactionNotFoundError);
+      await expect(service.updateTransaction(testTransaction.id, updateCommand, testUserId)).rejects.toThrow(
+        TransactionNotFoundError
+      );
     });
 
     it("should parse string amount to number", async () => {
@@ -918,9 +896,7 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.updateTransaction(testTransaction.id, updateCommand, testUserId)
-      ).rejects.toEqual(dbError);
+      await expect(service.updateTransaction(testTransaction.id, updateCommand, testUserId)).rejects.toEqual(dbError);
     });
 
     it("should update all fields when all are provided", async () => {
@@ -991,9 +967,7 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.deleteTransaction("non-existent-id", testUserId)
-      ).rejects.toThrow(TransactionNotFoundError);
+      await expect(service.deleteTransaction("non-existent-id", testUserId)).rejects.toThrow(TransactionNotFoundError);
     });
 
     it("should throw TransactionNotFoundError when data is null without error", async () => {
@@ -1004,9 +978,7 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.deleteTransaction(testTransaction.id, testUserId)
-      ).rejects.toThrow(TransactionNotFoundError);
+      await expect(service.deleteTransaction(testTransaction.id, testUserId)).rejects.toThrow(TransactionNotFoundError);
     });
 
     it("should not delete transaction belonging to another user", async () => {
@@ -1019,9 +991,9 @@ describe("TransactionService", () => {
       });
 
       // Act & Assert
-      await expect(
-        service.deleteTransaction(testTransaction.id, differentUserId)
-      ).rejects.toThrow(TransactionNotFoundError);
+      await expect(service.deleteTransaction(testTransaction.id, differentUserId)).rejects.toThrow(
+        TransactionNotFoundError
+      );
     });
   });
 

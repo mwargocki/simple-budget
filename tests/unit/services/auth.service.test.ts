@@ -450,9 +450,7 @@ describe("AuthService", () => {
       });
 
       // Act & Assert
-      await expect(service.deleteAccount(testUserId)).rejects.toThrow(
-        "Failed to delete user data: RPC function error"
-      );
+      await expect(service.deleteAccount(testUserId)).rejects.toThrow("Failed to delete user data: RPC function error");
 
       // deleteUser should not be called
       expect(mockAdminAuth.admin.deleteUser).not.toHaveBeenCalled();

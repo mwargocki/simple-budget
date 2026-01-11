@@ -2,11 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import type { APIContext } from "astro";
 import { AuthApiError } from "@supabase/supabase-js";
 import { POST } from "@/pages/api/auth/login";
-import {
-  createMockAPIContext,
-  parseJsonResponse,
-  type MockAPIContext,
-} from "../../helpers/astro-context.mock";
+import { createMockAPIContext, parseJsonResponse, type MockAPIContext } from "../../helpers/astro-context.mock";
 import type { MockSupabaseClient } from "../../../mocks/supabase.mock";
 import type { LoginResponseDTO, ErrorResponseDTO } from "@/types";
 
@@ -110,9 +106,7 @@ describe("POST /api/auth/login", () => {
       // Assert
       expect(response.status).toBe(400);
       expect(body.error.code).toBe("VALIDATION_ERROR");
-      expect(body.error.details).toContainEqual(
-        expect.objectContaining({ field: "email" })
-      );
+      expect(body.error.details).toContainEqual(expect.objectContaining({ field: "email" }));
     });
 
     it("should return 400 when password is missing", async () => {

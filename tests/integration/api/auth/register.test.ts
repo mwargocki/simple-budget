@@ -1,11 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { APIContext } from "astro";
 import { POST } from "@/pages/api/auth/register";
-import {
-  createMockAPIContext,
-  parseJsonResponse,
-  type MockAPIContext,
-} from "../../helpers/astro-context.mock";
+import { createMockAPIContext, parseJsonResponse, type MockAPIContext } from "../../helpers/astro-context.mock";
 import type { MockSupabaseClient } from "../../../mocks/supabase.mock";
 import type { RegisterResponseDTO, ErrorResponseDTO } from "@/types";
 
@@ -102,9 +98,7 @@ describe("POST /api/auth/register", () => {
       // Assert
       expect(response.status).toBe(400);
       expect(body.error.code).toBe("VALIDATION_ERROR");
-      expect(body.error.details).toContainEqual(
-        expect.objectContaining({ field: "email" })
-      );
+      expect(body.error.details).toContainEqual(expect.objectContaining({ field: "email" }));
     });
 
     it("should return 400 when password is too short", async () => {
@@ -126,9 +120,7 @@ describe("POST /api/auth/register", () => {
       // Assert
       expect(response.status).toBe(400);
       expect(body.error.code).toBe("VALIDATION_ERROR");
-      expect(body.error.details).toContainEqual(
-        expect.objectContaining({ field: "password" })
-      );
+      expect(body.error.details).toContainEqual(expect.objectContaining({ field: "password" }));
     });
 
     it("should return 400 when passwords do not match", async () => {
@@ -150,9 +142,7 @@ describe("POST /api/auth/register", () => {
       // Assert
       expect(response.status).toBe(400);
       expect(body.error.code).toBe("VALIDATION_ERROR");
-      expect(body.error.details).toContainEqual(
-        expect.objectContaining({ field: "passwordConfirm" })
-      );
+      expect(body.error.details).toContainEqual(expect.objectContaining({ field: "passwordConfirm" }));
     });
   });
 
