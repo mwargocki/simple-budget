@@ -46,6 +46,15 @@ Everyday users who want to control their spending (groceries, services, etc.) in
 | --------------------------------- | ------------------------------------------------- |
 | [Supabase](https://supabase.com/) | PostgreSQL database, authentication, and BaaS SDK |
 
+### Testing
+
+| Technology                                                        | Version | Purpose                  |
+| ----------------------------------------------------------------- | ------- | ------------------------ |
+| [Vitest](https://vitest.dev/)                                     | 3.x     | Unit test framework      |
+| [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) | 16.x    | React component testing  |
+| [MSW](https://mswjs.io/)                                          | 2.x     | API mocking              |
+| [Playwright](https://playwright.dev/)                             | -       | E2E test framework       |
+
 ### DevOps
 
 | Technology     | Purpose                        |
