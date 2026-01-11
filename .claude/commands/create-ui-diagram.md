@@ -24,71 +24,69 @@ Kiedy będziesz gotowy do utworzenia diagramu, postępuj zgodnie z poniższymi w
    ```
 
 2. Uwzględnij następujące elementy w swoim diagramie:
-
-    - Zaktualizowaną strukturę UI po wdrożeniu nowych wymagań
-    - Layouts, server pages i aktualizacje istniejących komponentów
-    - Grupowanie elementów według funkcjonalności
-    - Kierunek przepływu danych między komponentami
-    - Moduły odpowiedzialne za stan aplikacji
-    - Podział na komponenty współdzielone i komponenty specyficzne dla stron
-    - Zależności między komponentami związanymi z autentykacją a resztą aplikacji
-    - Wyróżnij komponenty, które wymagały aktualizacji ze względu na nowe wymagania
+   - Zaktualizowaną strukturę UI po wdrożeniu nowych wymagań
+   - Layouts, server pages i aktualizacje istniejących komponentów
+   - Grupowanie elementów według funkcjonalności
+   - Kierunek przepływu danych między komponentami
+   - Moduły odpowiedzialne za stan aplikacji
+   - Podział na komponenty współdzielone i komponenty specyficzne dla stron
+   - Zależności między komponentami związanymi z autentykacją a resztą aplikacji
+   - Wyróżnij komponenty, które wymagały aktualizacji ze względu na nowe wymagania
 
 3. Przestrzegaj tych zasad składni Mermaid:
-
-    - Używaj spójnego formatowania ID węzłów:
-      ```
-      A[Panel Główny] --> B[Formularz Logowania]
-      B --> C[Walidacja Danych]
-      ```
-    - Pamiętaj, że ID węzłów rozróżniają wielkość liter i muszą być unikalne
-    - Używaj poprawnych kształtów węzłów:
-        - `[Tekst]` dla prostokątów
-        - `(Tekst)` dla zaokrąglonych prostokątów
-        - `((Tekst))` dla okręgów
-        - `{Tekst}` dla rombów
-        - `>Tekst]` dla flag
-        - `[[Tekst]]` dla podprogramów
-    - Grupuj powiązane elementy za pomocą subgrafów:
-      ```
-      subgraph "Moduł Autentykacji"
-        A[Formularz Logowania]
-        B[Walidacja Danych]
-        C[Zarządzanie Sesją]
-      end
-      ```
-    - Używaj węzłów pośrednich dla złożonych relacji zamiast skomplikowanych połączeń
-    - Preferuj układ pionowy dla hierarchii i poziomy dla przepływu procesu
-    - Używaj poprawnych typów połączeń:
-        - `-->` dla standardowych strzałek
-        - `---` dla linii bez strzałek
-        - `-.->` dla linii kropkowanych ze strzałkami
-        - `==>` dla grubych linii ze strzałkami
-        - `--Tekst-->` dla strzałek z etykietami
-    - Unikaj używania adresów URL, adresów endpointów, nawiasów, długich nazw funkcji lub złożonych wyrażeń w nazwach węzłów
-    - Używaj spójnego nazewnictwa w całym dokumencie
-    - Unikaj długich etykiet, które mogą powodować problemy z renderowaniem
-    - Używaj cudzysłowów dla tekstu zawierającego spacje:
-      ```
-      A["Komponent Autentykacji"] --> B["Zarządzanie Stanem"]
-      ```
-    - Dla stylizacji węzłów, używaj poprawnej składni:
-      ```
-      A:::styleClass --> B
-      ```
-      z definicją klasy:
-      ```
-      classDef styleClass fill:#f96,stroke:#333,stroke-width:2px;
-      ```
+   - Używaj spójnego formatowania ID węzłów:
+     ```
+     A[Panel Główny] --> B[Formularz Logowania]
+     B --> C[Walidacja Danych]
+     ```
+   - Pamiętaj, że ID węzłów rozróżniają wielkość liter i muszą być unikalne
+   - Używaj poprawnych kształtów węzłów:
+     - `[Tekst]` dla prostokątów
+     - `(Tekst)` dla zaokrąglonych prostokątów
+     - `((Tekst))` dla okręgów
+     - `{Tekst}` dla rombów
+     - `>Tekst]` dla flag
+     - `[[Tekst]]` dla podprogramów
+   - Grupuj powiązane elementy za pomocą subgrafów:
+     ```
+     subgraph "Moduł Autentykacji"
+       A[Formularz Logowania]
+       B[Walidacja Danych]
+       C[Zarządzanie Sesją]
+     end
+     ```
+   - Używaj węzłów pośrednich dla złożonych relacji zamiast skomplikowanych połączeń
+   - Preferuj układ pionowy dla hierarchii i poziomy dla przepływu procesu
+   - Używaj poprawnych typów połączeń:
+     - `-->` dla standardowych strzałek
+     - `---` dla linii bez strzałek
+     - `-.->` dla linii kropkowanych ze strzałkami
+     - `==>` dla grubych linii ze strzałkami
+     - `--Tekst-->` dla strzałek z etykietami
+   - Unikaj używania adresów URL, adresów endpointów, nawiasów, długich nazw funkcji lub złożonych wyrażeń w nazwach węzłów
+   - Używaj spójnego nazewnictwa w całym dokumencie
+   - Unikaj długich etykiet, które mogą powodować problemy z renderowaniem
+   - Używaj cudzysłowów dla tekstu zawierającego spacje:
+     ```
+     A["Komponent Autentykacji"] --> B["Zarządzanie Stanem"]
+     ```
+   - Dla stylizacji węzłów, używaj poprawnej składni:
+     ```
+     A:::styleClass --> B
+     ```
+     z definicją klasy:
+     ```
+     classDef styleClass fill:#f96,stroke:#333,stroke-width:2px;
+     ```
 
 4. Unikaj tych typowych błędów:
-    - Brak deklaracji sekcji Mermaid i typu diagramu na początku
-    - Nieprawidłowe ID węzłów (zawierające niedozwolone znaki)
-    - Niezamknięte subgrafy (brakujący "end" dla rozpoczętego "subgraph")
-    - Niezamknięte nawiasy kwadratowe w opisach węzłów
-    - Niespójne kierunki przepływu (mieszanie TD i LR bez uzasadnienia)
-    - Zbyt złożone diagramy bez odpowiedniego grupowania
-    - Nakładające się etykiety i połączenia
+   - Brak deklaracji sekcji Mermaid i typu diagramu na początku
+   - Nieprawidłowe ID węzłów (zawierające niedozwolone znaki)
+   - Niezamknięte subgrafy (brakujący "end" dla rozpoczętego "subgraph")
+   - Niezamknięte nawiasy kwadratowe w opisach węzłów
+   - Niespójne kierunki przepływu (mieszanie TD i LR bez uzasadnienia)
+   - Zbyt złożone diagramy bez odpowiedniego grupowania
+   - Nakładające się etykiety i połączenia
 
 Po utworzeniu diagramu, przejrzyj go dokładnie, aby upewnić się, że nie ma błędów składniowych ani problemów z renderowaniem. Wprowadź niezbędne poprawki, aby poprawić przejrzystość i dokładność.
 

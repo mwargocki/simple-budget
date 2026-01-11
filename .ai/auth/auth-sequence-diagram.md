@@ -5,6 +5,7 @@
 ## 1. Przepływy autentykacji w aplikacji
 
 ### Rejestracja (Register)
+
 - Użytkownik wypełnia formularz rejestracji (email, hasło, potwierdzenie hasła)
 - Walidacja po stronie klienta (Zod schema)
 - Żądanie POST do `/api/auth/register`
@@ -13,6 +14,7 @@
 - Przekierowanie na stronę logowania po sukcesie
 
 ### Logowanie (Login)
+
 - Użytkownik wypełnia formularz logowania (email, hasło)
 - Walidacja po stronie klienta (Zod schema)
 - Żądanie POST do `/api/auth/login`
@@ -22,12 +24,14 @@
 - Przekierowanie do `/app`
 
 ### Wylogowanie (Logout)
+
 - Żądanie POST do `/api/auth/logout` z tokenem Bearer
 - Walidacja tokenu przez `getUser`
 - Wylogowanie w Supabase Auth (`signOut` z scope: global)
 - Przekierowanie na stronę logowania
 
 ### Dostęp do chronionych zasobów
+
 - Sprawdzenie sesji w middleware (dla `/`)
 - Sprawdzenie sesji w AppLayout (dla `/app/*`)
 - Tokeny przekazywane do komponentów React przez props
@@ -200,6 +204,7 @@ sequenceDiagram
 ## Opis przepływów
 
 ### Rejestracja
+
 1. Użytkownik wypełnia formularz rejestracji
 2. Walidacja Zod po stronie klienta (email, hasło min 8 znaków, potwierdzenie)
 3. Żądanie POST do `/api/auth/register`
@@ -208,6 +213,7 @@ sequenceDiagram
 6. Przekierowanie na `/login`
 
 ### Logowanie
+
 1. Użytkownik wypełnia formularz logowania
 2. Walidacja Zod po stronie klienta
 3. Żądanie POST do `/api/auth/login`
@@ -216,18 +222,21 @@ sequenceDiagram
 6. Przekierowanie do `/app`
 
 ### Dostęp do chronionych zasobów
+
 1. **Strony Astro** (`/app/*`): AppLayout sprawdza sesję przez `getSession()`
 2. **API endpoints**: Wymagają nagłówka `Authorization: Bearer <token>`
 3. Weryfikacja tokenu przez `getUser(token)`
 4. Brak/wygasły token = 401 + redirect do `/login`
 
 ### Wylogowanie
+
 1. Żądanie POST do `/api/auth/logout` z tokenem Bearer
 2. Weryfikacja tokenu
 3. Supabase `signOut` z `scope: global` (wylogowanie ze wszystkich urządzeń)
 4. Przekierowanie na `/login`
 
 ### Obsługa wygaśnięcia tokenu
+
 1. Żądanie z wygasłym tokenem zwraca 401
 2. Klient wykrywa 401 i przekierowuje na `/login?sessionExpired=true`
 3. Użytkownik musi zalogować się ponownie

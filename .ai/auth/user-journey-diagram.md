@@ -5,6 +5,7 @@
 ## 1. Ścieżki użytkownika zidentyfikowane w dokumentacji
 
 ### Wymagania z PRD:
+
 - **US-001**: Rejestracja konta (email, hasło, powtórzenie hasła)
 - **US-002**: Logowanie do aplikacji (email, hasło)
 - **US-003**: Wylogowanie z aplikacji
@@ -13,6 +14,7 @@
 - **US-006**: Usunięcie konta (z potwierdzeniem "DELETE")
 
 ### Dodatkowe przepływy z implementacji:
+
 - Dostęp do strony głównej (`/`) z przekierowaniem w zależności od sesji
 - Dostęp do chronionych stron (`/app/*`) - wymaga aktywnej sesji
 - Obsługa wygaśnięcia sesji - toast informacyjny
@@ -21,6 +23,7 @@
 ## 2. Główne podróże użytkownika
 
 ### A. Nowy użytkownik (rejestracja)
+
 - Wejście na stronę główną
 - Przejście do formularza rejestracji
 - Walidacja danych (email, hasło 8+ znaków, potwierdzenie)
@@ -28,18 +31,21 @@
 - Błąd → powrót do formularza z komunikatem
 
 ### B. Istniejący użytkownik (logowanie)
+
 - Wypełnienie formularza logowania
 - Walidacja danych
 - Sukces → przekierowanie do aplikacji (`/app`)
 - Błąd → generyczny komunikat (bez ujawniania czy email istnieje)
 
 ### C. Zalogowany użytkownik (zarządzanie kontem)
+
 - Dostęp do panelu aplikacji
 - Możliwość zmiany hasła (wymaga aktualnego hasła)
 - Możliwość usunięcia konta (wymaga potwierdzenia "DELETE")
 - Wylogowanie (globalne - ze wszystkich urządzeń)
 
 ### D. Obsługa sesji
+
 - Automatyczne sprawdzanie ważności sesji
 - Wygaśnięcie → przekierowanie do logowania z komunikatem
 - Odświeżanie tokenów (obsługiwane przez Supabase)
@@ -47,20 +53,24 @@
 ## 3. Punkty decyzyjne
 
 ### Rejestracja:
+
 - Email już zarejestrowany → błąd konfliktu
 - Hasła różne → błąd walidacji
 - Hasło za krótkie (<8 znaków) → błąd walidacji
 
 ### Logowanie:
+
 - Nieprawidłowe dane → generyczny komunikat błędu
 - Sesja wygasła → toast informacyjny
 
 ### Zmiana hasła:
+
 - Złe aktualne hasło → błąd autoryzacji
 - Nowe hasło = aktualne → błąd walidacji
 - Hasła nie pasują → błąd walidacji
 
 ### Usunięcie konta:
+
 - Brak potwierdzenia "DELETE" → formularz zablokowany
 - Sukces → wylogowanie, usunięcie wszystkich danych, przekierowanie
 
@@ -375,11 +385,14 @@ stateDiagram-v2
 ## Opis przepływów
 
 ### 1. Wejście do aplikacji
+
 Użytkownik wchodzi na stronę główną. System sprawdza, czy istnieje aktywna sesja:
+
 - **Sesja aktywna** → automatyczne przekierowanie do panelu aplikacji (`/app`)
 - **Brak sesji** → wyświetlenie strony z opcjami logowania lub rejestracji
 
 ### 2. Rejestracja nowego konta
+
 1. Użytkownik wypełnia formularz rejestracji (e-mail, hasło, potwierdzenie hasła)
 2. Walidacja po stronie klienta (format e-mail, hasło min. 8 znaków, zgodność haseł)
 3. Wysłanie żądania do API
@@ -389,6 +402,7 @@ Użytkownik wchodzi na stronę główną. System sprawdza, czy istnieje aktywna 
    - **Błąd walidacji** → wyświetlenie szczegółów błędu
 
 ### 3. Logowanie
+
 1. Użytkownik wypełnia formularz logowania (e-mail, hasło)
 2. Walidacja po stronie klienta
 3. Wysłanie żądania do API
@@ -397,26 +411,31 @@ Użytkownik wchodzi na stronę główną. System sprawdza, czy istnieje aktywna 
    - **Błąd** → generyczny komunikat "Nieprawidłowe dane logowania"
 
 ### 4. Zarządzanie kontem (Ustawienia)
+
 Zalogowany użytkownik ma dostęp do ustawień konta:
 
 #### Zmiana hasła
+
 1. Formularz z trzema polami (aktualne hasło, nowe hasło, potwierdzenie)
 2. Walidacja: min. 8 znaków, zgodność haseł, różne od aktualnego
 3. Weryfikacja aktualnego hasła przez serwer
 4. Sukces → toast z potwierdzeniem, reset formularza
 
 #### Usunięcie konta
+
 1. Ostrzeżenie o nieodwracalności operacji
 2. Pole potwierdzenia - wymaga wpisania "DELETE"
 3. Sukces → usunięcie wszystkich danych, wylogowanie, przekierowanie
 
 ### 5. Wylogowanie
+
 1. Kliknięcie "Wyloguj" w aplikacji
 2. Żądanie do API z globalnym scope (wylogowanie ze wszystkich urządzeń)
 3. Wyczyszczenie tokenów
 4. Przekierowanie do formularza logowania
 
 ### 6. Obsługa wygaśnięcia sesji
+
 1. Wykrycie wygasłego tokenu podczas żądania API (401) lub sprawdzenia middleware
 2. Przekierowanie do `/login?sessionExpired=true`
 3. Wyświetlenie toastu informującego o wygaśnięciu sesji
