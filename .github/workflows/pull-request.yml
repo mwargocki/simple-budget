@@ -93,8 +93,8 @@ jobs:
           path: playwright-report/
           retention-days: 5
 
-  status-comment:
-    name: Status Comment
+  success-comment:
+    name: Success Comment
     needs: [lint, unit-tests, e2e-tests]
     if: ${{ success() }}
     runs-on: ubuntu-latest
