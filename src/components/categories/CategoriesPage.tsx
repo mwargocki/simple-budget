@@ -65,12 +65,12 @@ export function CategoriesPage({ accessToken }: CategoriesPageProps) {
   };
 
   return (
-    <main className="container mx-auto max-w-2xl px-4 py-8">
+    <main className="container mx-auto max-w-2xl px-4 py-8" data-testid="categories-page">
       <div className="flex flex-col gap-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <p className="text-muted-foreground">Zarządzaj kategoriami swoich transakcji.</p>
-          <Button onClick={openCreateDialog} disabled={isLoading}>
+          <Button onClick={openCreateDialog} disabled={isLoading} data-testid="add-category-button">
             <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
             Dodaj kategorię
           </Button>

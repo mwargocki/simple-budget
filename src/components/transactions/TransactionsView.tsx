@@ -88,7 +88,7 @@ export function TransactionsView({ accessToken }: TransactionsViewProps) {
   }, [deleteDialog.transaction, deleteTransaction]);
 
   return (
-    <main className="container mx-auto max-w-4xl px-4 py-8">
+    <main className="container mx-auto max-w-4xl px-4 py-8" data-testid="transactions-page">
       <div className="flex flex-col gap-6">
         {/* Header z filtrami i przyciskiem dodawania */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -100,7 +100,7 @@ export function TransactionsView({ accessToken }: TransactionsViewProps) {
             onCategoryChange={setCategoryId}
             isLoading={isLoading}
           />
-          <Button onClick={openCreateDialog} disabled={isLoading}>
+          <Button onClick={openCreateDialog} disabled={isLoading} data-testid="add-transaction-button">
             <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
             Dodaj transakcję
           </Button>

@@ -19,7 +19,7 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
   const generalErrorId = useId();
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-6">
+    <form onSubmit={handleSubmit} noValidate className="space-y-6" data-testid="login-form">
       {formState.generalError && (
         <Alert variant="destructive" id={generalErrorId} role="alert">
           <svg
@@ -55,6 +55,7 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? emailErrorId : undefined}
           disabled={formState.isSubmitting}
+          data-testid="login-email-input"
         />
         {errors.email && (
           <p id={emailErrorId} className="text-sm text-destructive" role="alert">
@@ -77,6 +78,7 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? passwordErrorId : undefined}
           disabled={formState.isSubmitting}
+          data-testid="login-password-input"
         />
         {errors.password && (
           <p id={passwordErrorId} className="text-sm text-destructive" role="alert">
@@ -85,7 +87,7 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
         )}
       </div>
 
-      <Button type="submit" className="w-full" disabled={formState.isSubmitting}>
+      <Button type="submit" className="w-full" disabled={formState.isSubmitting} data-testid="login-submit-button">
         {formState.isSubmitting ? (
           <>
             <svg

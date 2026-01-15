@@ -29,7 +29,7 @@ export function CategoryForm({ mode, initialName = "", onSubmit, onCancel }: Cat
   const submitLabel = isCreate ? "Dodaj" : "Zapisz";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4" data-testid="category-form">
       <div className="space-y-2">
         <Label htmlFor={inputId}>Nazwa kategorii</Label>
         <Input
@@ -42,6 +42,7 @@ export function CategoryForm({ mode, initialName = "", onSubmit, onCancel }: Cat
           aria-invalid={!!errors.name}
           aria-describedby={errors.name ? errorId : undefined}
           disabled={formState.isSubmitting}
+          data-testid="category-name-input"
         />
         {errors.name && (
           <p id={errorId} className="text-sm text-destructive" role="alert">
@@ -57,10 +58,16 @@ export function CategoryForm({ mode, initialName = "", onSubmit, onCancel }: Cat
       )}
 
       <div className="flex justify-end gap-2 pt-2">
-        <Button type="button" variant="outline" onClick={onCancel} disabled={formState.isSubmitting}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          disabled={formState.isSubmitting}
+          data-testid="category-cancel-button"
+        >
           Anuluj
         </Button>
-        <Button type="submit" disabled={formState.isSubmitting}>
+        <Button type="submit" disabled={formState.isSubmitting} data-testid="category-submit-button">
           {formState.isSubmitting ? "Zapisywanie..." : submitLabel}
         </Button>
       </div>

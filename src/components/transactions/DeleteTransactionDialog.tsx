@@ -27,7 +27,7 @@ export function DeleteTransactionDialog({
 
   return (
     <AlertDialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <AlertDialogContent>
+      <AlertDialogContent data-testid="delete-transaction-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle>Usuń transakcję</AlertDialogTitle>
           <AlertDialogDescription>
@@ -38,11 +38,14 @@ export function DeleteTransactionDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Anuluj</AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting} data-testid="delete-transaction-cancel-button">
+            Anuluj
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
             disabled={isDeleting}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            data-testid="delete-transaction-confirm-button"
           >
             {isDeleting ? "Usuwanie..." : "Usuń"}
           </AlertDialogAction>

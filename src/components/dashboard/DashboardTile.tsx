@@ -3,6 +3,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { cn } from "@/lib/utils";
 
 export interface DashboardTileProps {
+  id?: string;
   title: string;
   description?: string;
   href: string;
@@ -10,10 +11,11 @@ export interface DashboardTileProps {
   className?: string;
 }
 
-export function DashboardTile({ title, description, href, icon, className }: DashboardTileProps) {
+export function DashboardTile({ id, title, description, href, icon, className }: DashboardTileProps) {
   return (
     <a
       href={href}
+      data-testid={id ? `dashboard-tile-${id}` : undefined}
       className={cn(
         "group block rounded-xl transition-all duration-200",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",

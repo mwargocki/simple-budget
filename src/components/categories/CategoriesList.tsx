@@ -12,7 +12,7 @@ export function CategoriesList({ categories, onEdit, onDelete }: CategoriesListP
   return (
     <Card>
       <CardContent className="p-0">
-        <ul className="divide-y px-4" aria-label="Lista kategorii">
+        <ul className="divide-y px-4" aria-label="Lista kategorii" data-testid="categories-list">
           {categories.map((category) => (
             <CategoryListItem key={category.id} category={category} onEdit={onEdit} onDelete={onDelete} />
           ))}

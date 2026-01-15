@@ -19,6 +19,7 @@ export function LogoutButton({ accessToken, className }: LogoutButtonProps) {
       aria-label="Wyloguj się z aplikacji"
       aria-busy={isLoggingOut}
       className={cn("gap-2", className)}
+      data-testid="logout-button"
     >
       {isLoggingOut ? (
         <>

@@ -43,7 +43,7 @@ export function TransactionsList({
   }
 
   return (
-    <div className="flex flex-col gap-2" role="list" aria-label="Lista transakcji">
+    <div className="flex flex-col gap-2" role="list" aria-label="Lista transakcji" data-testid="transactions-list">
       {transactions.map((transaction) => (
         <TransactionListRow
           key={transaction.id}
