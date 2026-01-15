@@ -25,6 +25,7 @@ jobs:
         run: npm run lint
 
   unit-tests:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -43,6 +44,7 @@ jobs:
         run: npm run test
 
   build:
+    needs: unit-tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
