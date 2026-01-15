@@ -9,7 +9,6 @@
 | Categories   | `public.categories`                | Categories per user                      |
 | Transactions | `public.transactions`              | Financial transactions (expenses/income) |
 | Summary      | `public.transactions` (aggregated) | Monthly financial summary                |
-| Events       | `public.events`                    | Analytics event tracking                 |
 
 ## 2. Endpoints
 
@@ -664,54 +663,6 @@ Get monthly financial summary.
 
 ---
 
-### 2.6 Event Endpoints
-
-#### POST /api/events
-
-Track an analytics event.
-
-**Request Headers:**
-
-- `Authorization: Bearer <access_token>`
-
-**Request Body:**
-
-```json
-{
-  "event_name": "screen_view_transactions_list",
-  "properties": {
-    "filter_month": "2024-01",
-    "filter_category_id": "uuid"
-  }
-}
-```
-
-| Field        | Type   | Required | Description                                                              |
-| ------------ | ------ | -------- | ------------------------------------------------------------------------ |
-| `event_name` | string | Yes      | Must be "screen_view_transactions_list" or "screen_view_monthly_summary" |
-| `properties` | object | No       | Additional event metadata. Defaults to empty object                      |
-
-**Response (201 Created):**
-
-```json
-{
-  "id": "uuid",
-  "event_name": "screen_view_transactions_list",
-  "event_at": "2024-01-15T14:30:00Z",
-  "properties": {
-    "filter_month": "2024-01",
-    "filter_category_id": "uuid"
-  }
-}
-```
-
-**Error Responses:**
-
-- `400 Bad Request` - Invalid event_name or properties is not a valid JSON object
-- `401 Unauthorized` - No valid session
-
----
-
 ## 3. Authentication and Authorization
 
 ### 3.1 Authentication Mechanism
@@ -734,7 +685,6 @@ All data access is protected by PostgreSQL Row Level Security (RLS) policies:
 | `profiles`     | Own record only | Via trigger          | Own record only      | Via cascade          |
 | `categories`   | Own records     | Own, non-system only | Own, non-system only | Own, non-system only |
 | `transactions` | Own records     | Own records          | Own records          | Own records          |
-| `events`       | Own records     | Own records          | Blocked              | Blocked              |
 
 **Authorization Checks:**
 
@@ -776,13 +726,6 @@ All data access is protected by PostgreSQL Row Level Security (RLS) policies:
 | `category_id` | Required, uuid, must exist and belong to user                            |
 | `description` | Required, max 255 characters, cannot be whitespace-only, cannot be empty |
 | `occurred_at` | Optional, valid ISO 8601 datetime, defaults to now()                     |
-
-#### Event Validation
-
-| Field        | Rules                                                                            |
-| ------------ | -------------------------------------------------------------------------------- |
-| `event_name` | Required, enum: "screen_view_transactions_list" \| "screen_view_monthly_summary" |
-| `properties` | Optional, must be valid JSON object, defaults to {}                              |
 
 ### 4.2 Business Logic Implementation
 

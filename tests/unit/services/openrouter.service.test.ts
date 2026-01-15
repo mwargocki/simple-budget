@@ -11,7 +11,6 @@ import type { OpenRouterConfig, ChatOptions, OpenRouterApiResponse } from "@/typ
 
 describe("OpenRouterService", () => {
   const validApiKey = "sk-or-test-api-key-12345";
-  const baseUrl = "https://openrouter.ai/api/v1/chat/completions";
 
   const defaultConfig: OpenRouterConfig = {
     apiKey: validApiKey,
@@ -1120,7 +1119,8 @@ describe("OpenRouterService", () => {
 
       // Act & Assert
       try {
-        for await (const _ of service.chatStream(validChatOptions)) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for await (const _chunk of service.chatStream(validChatOptions)) {
           // This should not execute
           expect.fail("Should not yield any chunks");
         }
@@ -1144,7 +1144,8 @@ describe("OpenRouterService", () => {
 
       // Act & Assert
       try {
-        for await (const _ of service.chatStream(validChatOptions)) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for await (const _chunk of service.chatStream(validChatOptions)) {
           // This should not execute
         }
         expect.fail("Should have thrown an error");

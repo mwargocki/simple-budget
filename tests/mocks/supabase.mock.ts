@@ -1,5 +1,4 @@
 import { vi } from "vitest";
-import type { SupabaseClient } from "@/db/supabase.client";
 
 interface MockChain {
   select: ReturnType<typeof vi.fn>;

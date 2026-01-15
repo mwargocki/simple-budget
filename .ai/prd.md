@@ -489,14 +489,6 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   - System pozwala określić liczbę transakcji utworzonych przez użytkownika w oknie 30 dni od daty rejestracji.
   - Dane do pomiaru są dostępne w bazie danych (np. created_at transakcji + created_at użytkownika).
 
-- ID: US-035
-  Tytuł: Logowanie otwarć kluczowych ekranów (lista i podsumowanie)
-  Opis: Jako właściciel produktu chcę wiedzieć, które ekrany są używane, aby rozumieć zachowania użytkowników.
-  Kryteria akceptacji:
-  - System rejestruje otwarcia co najmniej ekranów: lista transakcji, podsumowanie miesięczne.
-  - Zdarzenia zawierają identyfikator użytkownika oraz znacznik czasu.
-  - Zdarzenia można agregować w celu analizy użycia.
-
 ---
 
 ## 6. Metryki sukcesu

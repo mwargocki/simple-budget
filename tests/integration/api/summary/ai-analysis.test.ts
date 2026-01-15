@@ -103,10 +103,7 @@ describe("POST /api/summary/ai-analysis", () => {
   describe("Success cases", () => {
     it("should return AI analysis for specified month", async () => {
       // Arrange - simplified mocking
-      let fromCallCount = 0;
       mockSupabaseWithAuth.from.mockImplementation((table: string) => {
-        fromCallCount++;
-
         if (table === "profiles") {
           return {
             select: vi.fn().mockReturnValue({

@@ -50,33 +50,6 @@ export interface Database {
         };
         Relationships: [];
       };
-      events: {
-        Row: {
-          created_at: string;
-          event_at: string;
-          event_name: Database["public"]["Enums"]["event_name"];
-          id: string;
-          properties: Json;
-          user_id: string;
-        };
-        Insert: {
-          created_at?: string;
-          event_at?: string;
-          event_name: Database["public"]["Enums"]["event_name"];
-          id?: string;
-          properties?: Json;
-          user_id: string;
-        };
-        Update: {
-          created_at?: string;
-          event_at?: string;
-          event_name?: Database["public"]["Enums"]["event_name"];
-          id?: string;
-          properties?: Json;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
       profiles: {
         Row: {
           created_at: string;
@@ -146,7 +119,6 @@ export interface Database {
     Views: Record<never, never>;
     Functions: Record<never, never>;
     Enums: {
-      event_name: "screen_view_transactions_list" | "screen_view_monthly_summary";
       transaction_type: "expense" | "income";
     };
     CompositeTypes: Record<never, never>;
@@ -268,7 +240,6 @@ export const Constants = {
   },
   public: {
     Enums: {
-      event_name: ["screen_view_transactions_list", "screen_view_monthly_summary"],
       transaction_type: ["expense", "income"],
     },
   },

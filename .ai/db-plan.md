@@ -8,9 +8,6 @@
 - **Enum**: `public.transaction_type`
   - wartości: `expense`, `income`
 
-- **Enum**: `public.event_name`
-  - wartości (MVP): `screen_view_transactions_list`, `screen_view_monthly_summary`
-
 ---
 
 ### (Źródło tożsamości) `auth.users` (Supabase Auth)
@@ -105,26 +102,6 @@ Klucze obce:
 
 ---
 
-### `public.events`
-
-**Cel:** instrumentacja (minimum: otwarcia ekranów listy i podsumowania).
-
-Kolumny:
-
-- `id uuid` **PK** `DEFAULT gen_random_uuid()`
-- `user_id uuid` **NOT NULL**, **FK → auth.users(id)** `ON DELETE CASCADE`
-- `event_name public.event_name` **NOT NULL**
-- `event_at timestamptz` **NOT NULL** `DEFAULT now()`
-- `properties jsonb` **NOT NULL** `DEFAULT '{}'::jsonb`
-  - **CHECK**: `jsonb_typeof(properties) = 'object'`
-- `created_at timestamptz` **NOT NULL** `DEFAULT now()`
-
-Ograniczenia/uwagi:
-
-- W MVP zakładamy insert-only (brak UPDATE/DELETE z poziomu klienta).
-
----
-
 ## 2. Relacje między tabelami (kardynalność)
 
 - `auth.users (1) — (1) public.profiles`
@@ -139,9 +116,6 @@ Ograniczenia/uwagi:
 - `public.categories (1) — (N) public.transactions`
   - przez kompozyt: `(transactions.user_id, transactions.category_id) → (categories.user_id, categories.id)`
   - wymusza zgodność właściciela
-
-- `auth.users (1) — (N) public.events`
-  - `events.user_id → auth.users.id`
 
 ---
 
@@ -163,18 +137,11 @@ Ograniczenia/uwagi:
 - Metryka aktywacji (count w oknie 30 dni od rejestracji, po `created_at`):
   - `INDEX transactions_user_created_at ON (user_id, created_at)`
 
-### `public.events`
-
-- Odczyt zdarzeń użytkownika w czasie:
-  - `INDEX events_user_event_at_desc ON (user_id, event_at DESC)`
-- (opcjonalnie) analityka per typ zdarzenia:
-  - `INDEX events_user_name_event_at_desc ON (user_id, event_name, event_at DESC)`
-
 ---
 
 ## 4. Zasady PostgreSQL (RLS)
 
-> Włącz RLS na: `public.profiles`, `public.categories`, `public.transactions`, `public.events`.
+> Włącz RLS na: `public.profiles`, `public.categories`, `public.transactions`.
 
 ### `public.profiles`
 
@@ -197,12 +164,6 @@ Ograniczenia/uwagi:
 - **UPDATE**: `user_id = auth.uid()`
 - **DELETE**: `user_id = auth.uid()`
 
-### `public.events`
-
-- **SELECT**: `user_id = auth.uid()` (opcjonalnie — można wyłączyć, jeśli niepotrzebne w UI)
-- **INSERT**: `user_id = auth.uid()`
-- **UPDATE/DELETE**: brak polityk (domyślnie zablokowane)
-
 ---
 
 ## 5. Dodatkowe uwagi / decyzje projektowe (ważne dla migracji)
@@ -212,7 +173,7 @@ Ograniczenia/uwagi:
 1. **Audyt `updated_at`**
 
 - Funkcja: `public.set_updated_at()` ustawiająca `NEW.updated_at = now()`
-- Triggery `BEFORE UPDATE` na: `profiles`, `categories`, `transactions` (opcjonalnie `events` jeśli dopuszczasz update)
+- Triggery `BEFORE UPDATE` na: `profiles`, `categories`, `transactions`
 
 2. **Seed po rejestracji (Supabase Auth)**
 

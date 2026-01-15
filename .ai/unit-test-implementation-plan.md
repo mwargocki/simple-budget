@@ -19,69 +19,69 @@
 
 ### 2.1 Schematy Walidacji (Zod) - Czysty kod
 
-| Plik | Odpowiedzialność | Typ |
-|------|------------------|-----|
-| `src/lib/schemas/auth.schema.ts` | Walidacja rejestracji, logowania, zmiany hasła, usunięcia konta | Czysty |
-| `src/lib/schemas/transaction.schema.ts` | Walidacja tworzenia/edycji transakcji, query params | Czysty |
-| `src/lib/schemas/category.schema.ts` | Walidacja tworzenia/edycji kategorii | Czysty |
-| `src/lib/schemas/profile.schema.ts` | Walidacja aktualizacji profilu | Czysty |
-| `src/lib/schemas/summary.schema.ts` | Walidacja query params podsumowania | Czysty |
-| `src/lib/schemas/openrouter.schema.ts` | Walidacja opcji czatu AI | Czysty |
+| Plik                                    | Odpowiedzialność                                                | Typ    |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `src/lib/schemas/auth.schema.ts`        | Walidacja rejestracji, logowania, zmiany hasła, usunięcia konta | Czysty |
+| `src/lib/schemas/transaction.schema.ts` | Walidacja tworzenia/edycji transakcji, query params             | Czysty |
+| `src/lib/schemas/category.schema.ts`    | Walidacja tworzenia/edycji kategorii                            | Czysty |
+| `src/lib/schemas/profile.schema.ts`     | Walidacja aktualizacji profilu                                  | Czysty |
+| `src/lib/schemas/summary.schema.ts`     | Walidacja query params podsumowania                             | Czysty |
+| `src/lib/schemas/openrouter.schema.ts`  | Walidacja opcji czatu AI                                        | Czysty |
 
 ### 2.2 Serwisy Biznesowe - IO/Integracje
 
-| Plik | Odpowiedzialność | Typ zależności |
-|------|------------------|----------------|
-| `src/lib/services/auth.service.ts` | Rejestracja, logowanie, wylogowanie, zmiana hasła, usunięcie konta | IO (Supabase Auth + Admin) |
-| `src/lib/services/transaction.service.ts` | CRUD transakcji, filtrowanie, paginacja | IO (Supabase DB) |
-| `src/lib/services/category.service.ts` | CRUD kategorii, ochrona systemowych, przenoszenie transakcji | IO (Supabase DB) |
-| `src/lib/services/summary.service.ts` | Podsumowanie miesięczne, agregacja, obsługa stref czasowych | IO (Supabase DB) + logika obliczeń |
-| `src/lib/services/profile.service.ts` | Pobieranie/aktualizacja profilu | IO (Supabase DB) |
-| `src/lib/services/openrouter.service.ts` | Integracja z OpenRouter AI | Zewnętrzna integracja (HTTP) |
+| Plik                                      | Odpowiedzialność                                                   | Typ zależności                     |
+| ----------------------------------------- | ------------------------------------------------------------------ | ---------------------------------- |
+| `src/lib/services/auth.service.ts`        | Rejestracja, logowanie, wylogowanie, zmiana hasła, usunięcie konta | IO (Supabase Auth + Admin)         |
+| `src/lib/services/transaction.service.ts` | CRUD transakcji, filtrowanie, paginacja                            | IO (Supabase DB)                   |
+| `src/lib/services/category.service.ts`    | CRUD kategorii, ochrona systemowych, przenoszenie transakcji       | IO (Supabase DB)                   |
+| `src/lib/services/summary.service.ts`     | Podsumowanie miesięczne, agregacja, obsługa stref czasowych        | IO (Supabase DB) + logika obliczeń |
+| `src/lib/services/profile.service.ts`     | Pobieranie/aktualizacja profilu                                    | IO (Supabase DB)                   |
+| `src/lib/services/openrouter.service.ts`  | Integracja z OpenRouter AI                                         | Zewnętrzna integracja (HTTP)       |
 
 ### 2.3 Utility Functions - Czysty kod
 
-| Plik | Odpowiedzialność | Typ |
-|------|------------------|-----|
+| Plik               | Odpowiedzialność                    | Typ    |
+| ------------------ | ----------------------------------- | ------ |
 | `src/lib/utils.ts` | Funkcja `cn()` do łączenia klas CSS | Czysty |
 
 ### 2.4 Klasy Błędów - Czysty kod
 
-| Plik | Odpowiedzialność | Typ |
-|------|------------------|-----|
+| Plik                                  | Odpowiedzialność                  | Typ    |
+| ------------------------------------- | --------------------------------- | ------ |
 | `src/lib/errors/openrouter.errors.ts` | Klasy błędów OpenRouter (5 typów) | Czysty |
 
 ### 2.5 Middleware - IO
 
-| Plik | Odpowiedzialność | Typ |
-|------|------------------|-----|
+| Plik                      | Odpowiedzialność                  | Typ                |
+| ------------------------- | --------------------------------- | ------------------ |
 | `src/middleware/index.ts` | Przekierowania, zarządzanie sesją | IO (Supabase Auth) |
 
 ### 2.6 API Endpoints - IO
 
-| Katalog | Endpointy | Typ |
-|---------|-----------|-----|
-| `src/pages/api/auth/` | register, login, logout, change-password, account | IO |
-| `src/pages/api/transactions/` | index (GET, POST), [id] (GET, PUT, DELETE) | IO |
-| `src/pages/api/categories/` | index (GET, POST), [id] (GET, PUT, DELETE) | IO |
-| `src/pages/api/summary/` | index, ai-analysis | IO |
-| `src/pages/api/profile.ts` | GET, PUT | IO |
+| Katalog                       | Endpointy                                         | Typ |
+| ----------------------------- | ------------------------------------------------- | --- |
+| `src/pages/api/auth/`         | register, login, logout, change-password, account | IO  |
+| `src/pages/api/transactions/` | index (GET, POST), [id] (GET, PUT, DELETE)        | IO  |
+| `src/pages/api/categories/`   | index (GET, POST), [id] (GET, PUT, DELETE)        | IO  |
+| `src/pages/api/summary/`      | index, ai-analysis                                | IO  |
+| `src/pages/api/profile.ts`    | GET, PUT                                          | IO  |
 
 ### 2.7 React Hooks - Logika kliencka
 
-| Plik | Odpowiedzialność | Typ |
-|------|------------------|-----|
-| `src/components/hooks/useLoginForm.ts` | Logika formularza logowania | React + API |
-| `src/components/hooks/useRegisterForm.ts` | Logika formularza rejestracji | React + API |
-| `src/components/hooks/useChangePasswordForm.ts` | Logika zmiany hasła | React + API |
-| `src/components/hooks/useDeleteAccountForm.ts` | Logika usunięcia konta | React + API |
-| `src/components/hooks/useCategoryForm.ts` | Logika formularza kategorii | React + API |
-| `src/components/hooks/useCategoriesPage.ts` | Zarządzanie stroną kategorii | React + API |
-| `src/components/hooks/useTransactionForm.ts` | Logika formularza transakcji | React + API |
-| `src/components/hooks/useTransactionsPage.ts` | Zarządzanie stroną transakcji | React + API |
-| `src/components/hooks/useSummaryPage.ts` | Zarządzanie stroną podsumowania | React + API |
-| `src/components/hooks/useAISummary.ts` | Integracja z analizą AI | React + API |
-| `src/components/hooks/useLogout.ts` | Logika wylogowania | React + API |
+| Plik                                            | Odpowiedzialność                | Typ         |
+| ----------------------------------------------- | ------------------------------- | ----------- |
+| `src/components/hooks/useLoginForm.ts`          | Logika formularza logowania     | React + API |
+| `src/components/hooks/useRegisterForm.ts`       | Logika formularza rejestracji   | React + API |
+| `src/components/hooks/useChangePasswordForm.ts` | Logika zmiany hasła             | React + API |
+| `src/components/hooks/useDeleteAccountForm.ts`  | Logika usunięcia konta          | React + API |
+| `src/components/hooks/useCategoryForm.ts`       | Logika formularza kategorii     | React + API |
+| `src/components/hooks/useCategoriesPage.ts`     | Zarządzanie stroną kategorii    | React + API |
+| `src/components/hooks/useTransactionForm.ts`    | Logika formularza transakcji    | React + API |
+| `src/components/hooks/useTransactionsPage.ts`   | Zarządzanie stroną transakcji   | React + API |
+| `src/components/hooks/useSummaryPage.ts`        | Zarządzanie stroną podsumowania | React + API |
+| `src/components/hooks/useAISummary.ts`          | Integracja z analizą AI         | React + API |
+| `src/components/hooks/useLogout.ts`             | Logika wylogowania              | React + API |
 
 ---
 
@@ -92,6 +92,7 @@
 **Nazwa**: `validation-schemas`
 
 **Zakres**:
+
 - `src/lib/schemas/auth.schema.ts`
 - `src/lib/schemas/transaction.schema.ts`
 - `src/lib/schemas/category.schema.ts`
@@ -100,10 +101,11 @@
 - `src/lib/schemas/openrouter.schema.ts`
 
 **Co testujemy** (kluczowe przypadki):
-1. `registerSchema` - walidacja email, hasła min 8 znaków, zgodność haseł *(już istnieje)*
-2. `loginSchema` - walidacja email, wymagane hasło *(już istnieje)*
-3. `changePasswordSchema` - nowe hasło różne od starego, zgodność potwierdzeń *(już istnieje)*
-4. `deleteAccountSchema` - wymagane "DELETE" *(już istnieje)*
+
+1. `registerSchema` - walidacja email, hasła min 8 znaków, zgodność haseł _(już istnieje)_
+2. `loginSchema` - walidacja email, wymagane hasło _(już istnieje)_
+3. `changePasswordSchema` - nowe hasło różne od starego, zgodność potwierdzeń _(już istnieje)_
+4. `deleteAccountSchema` - wymagane "DELETE" _(już istnieje)_
 5. `createTransactionSchema` - kwota 0.01-1000000, typ expense/income, UUID kategorii, opis niepusty
 6. `updateTransactionSchema` - przynajmniej jedno pole, walidacje częściowe
 7. `transactionsQuerySchema` - format miesiąca YYYY-MM, limit 1-100, offset >= 0
@@ -115,6 +117,7 @@
 **Mocking/stubbing**: Brak - czyste funkcje
 
 **Dane testowe**:
+
 - Poprawne dane (happy path)
 - Puste stringi
 - Zbyt krótkie/długie wartości
@@ -135,9 +138,11 @@
 **Nazwa**: `transaction-service`
 
 **Zakres**:
+
 - `src/lib/services/transaction.service.ts`
 
 **Co testujemy**:
+
 1. `createTransaction()` - utworzenie z poprawnymi danymi
 2. `createTransaction()` - błąd gdy kategoria nie istnieje (`CategoryNotFoundError`)
 3. `getTransactionById()` - pobranie istniejącej transakcji
@@ -150,10 +155,12 @@
 10. `deleteTransaction()` - usunięcie istniejącej transakcji
 
 **Mocking/stubbing**:
+
 - Mock `SupabaseClient` z metodami: `from().select().eq().single()`, `from().insert().select()`, etc.
 - Użyć `vi.fn()` dla chainable API Supabase
 
 **Dane testowe**:
+
 - Transakcje różnych typów (expense/income)
 - UUID dla id, category_id, user_id
 - Różne kwoty (min, max, typowe)
@@ -161,6 +168,7 @@
 - Paginacja: limit=20, offset=0, offset=20
 
 **Ryzyka**:
+
 - Skomplikowany chainable API Supabase wymaga starannego mockowania
 - Metoda `calculateMonthRange` jest prywatna - testować przez publiczne API
 
@@ -175,9 +183,11 @@
 **Nazwa**: `category-service`
 
 **Zakres**:
+
 - `src/lib/services/category.service.ts`
 
 **Co testujemy**:
+
 1. `getCategories()` - pobranie listy kategorii
 2. `createCategory()` - utworzenie nowej kategorii
 3. `updateCategory()` - aktualizacja nazwy kategorii
@@ -188,16 +198,19 @@
 8. `deleteCategory()` - błąd dla kategorii systemowej
 
 **Mocking/stubbing**:
+
 - Mock `SupabaseClient`
 - Symulacja kategorii systemowej (is_system: true)
 - Symulacja transakcji przypisanych do kategorii
 
 **Dane testowe**:
+
 - Kategorie użytkownika (is_system: false)
 - Kategorie systemowe (is_system: true, system_key: "none")
 - Kategorie z transakcjami i bez
 
 **Ryzyka**:
+
 - Logika przenoszenia transakcji wymaga mockowania wielu operacji
 
 **Szacunkowy nakład**: **M** (średni)
@@ -211,9 +224,11 @@
 **Nazwa**: `auth-service`
 
 **Zakres**:
+
 - `src/lib/services/auth.service.ts`
 
 **Co testujemy**:
+
 1. `register()` - sukces rejestracji
 2. `register()` - obsługa błędu Supabase (np. duplikat email)
 3. `register()` - obsługa braku user/email w response
@@ -225,16 +240,19 @@
 9. `deleteAccount()` - sukces usunięcia konta
 
 **Mocking/stubbing**:
+
 - Mock `SupabaseClient.auth.signUp()`, `signInWithPassword()`, `signOut()`, `updateUser()`
 - Mock dynamiczny import `supabaseAdmin` dla `deleteAccount()`
 - Mock `supabaseAdmin.rpc()` i `supabaseAdmin.auth.admin.deleteUser()`
 
 **Dane testowe**:
+
 - Poprawne email/password
 - Błędne hasło
 - UUID dla userId
 
 **Ryzyka**:
+
 - Dynamiczny import `supabaseAdmin` w `deleteAccount()` - wymaga mockowania modułu
 - Zależność od `signInWithPassword` do weryfikacji hasła w `changePassword`
 
@@ -249,9 +267,11 @@
 **Nazwa**: `summary-service`
 
 **Zakres**:
+
 - `src/lib/services/summary.service.ts`
 
 **Co testujemy**:
+
 1. `getMonthlySummary()` - agregacja po kategoriach
 2. `getMonthlySummary()` - obliczenia total_income, total_expenses, balance
 3. `getMonthlySummary()` - formatowanie kwot (2 miejsca po przecinku)
@@ -261,10 +281,12 @@
 7. Obsługa przejścia roku (grudzień → styczeń)
 
 **Mocking/stubbing**:
+
 - Mock `SupabaseClient` dla transactions i profiles
 - Symulacja transakcji z różnymi typami i kategoriami
 
 **Dane testowe**:
+
 - Transakcje różnych typów w jednej kategorii
 - Wiele kategorii
 - Różne strefy czasowe (UTC, Europe/Warsaw, America/New_York)
@@ -272,6 +294,7 @@
 - Puste dane (brak transakcji)
 
 **Ryzyka**:
+
 - Złożona logika stref czasowych w `calculateMonthRangeWithTimezone`
 - `getTimezoneOffset` używa `toLocaleString` - może się różnić między środowiskami
 
@@ -286,9 +309,11 @@
 **Nazwa**: `profile-service`
 
 **Zakres**:
+
 - `src/lib/services/profile.service.ts`
 
 **Co testujemy**:
+
 1. `getProfile()` - pobranie istniejącego profilu
 2. `getProfile()` - zwrócenie null gdy profil nie istnieje (PGRST116)
 3. `getProfile()` - propagacja innych błędów
@@ -296,10 +321,12 @@
 5. `updateProfile()` - błąd gdy profil nie istnieje (`ProfileNotFoundError`)
 
 **Mocking/stubbing**:
+
 - Mock `SupabaseClient`
 - Symulacja błędu PGRST116
 
 **Dane testowe**:
+
 - Poprawne timezone (np. "Europe/Warsaw")
 - UUID dla userId
 
@@ -316,10 +343,12 @@
 **Nazwa**: `openrouter-service`
 
 **Zakres**:
+
 - `src/lib/services/openrouter.service.ts`
 - `src/lib/errors/openrouter.errors.ts`
 
 **Co testujemy**:
+
 1. Konstruktor - wymaga API key (`OpenRouterAuthError`)
 2. Konstruktor - domyślne wartości konfiguracji
 3. `chat()` - sukces z poprawną odpowiedzią
@@ -332,17 +361,20 @@
 10. `chatStream()` - parsowanie chunków SSE
 
 **Mocking/stubbing**:
+
 - Mock globalny `fetch` z `vi.stubGlobal()`
 - Symulacja różnych HTTP responses
 - Symulacja ReadableStream dla streaming
 
 **Dane testowe**:
+
 - Poprawne API responses
 - Błędne HTTP status codes
 - Niepoprawny JSON
 - SSE format data
 
 **Ryzyka**:
+
 - Streaming z `ReadableStream` wymaga starannego mockowania
 - `fetchWithTimeout` używa `AbortController`
 
@@ -357,10 +389,12 @@
 **Nazwa**: `errors-and-utils`
 
 **Zakres**:
+
 - `src/lib/errors/openrouter.errors.ts`
 - `src/lib/utils.ts`
 
 **Co testujemy**:
+
 1. `cn()` - łączenie klas CSS
 2. `cn()` - usuwanie duplikatów (twMerge)
 3. `cn()` - obsługa conditional classes (clsx)
@@ -373,6 +407,7 @@
 **Mocking/stubbing**: Brak - czyste klasy
 
 **Dane testowe**:
+
 - Różne kombinacje klas CSS
 - Conflicting Tailwind classes
 - Różne wartości dla error metadata
@@ -390,6 +425,7 @@
 **Nazwa**: `api-auth-endpoints`
 
 **Zakres**:
+
 - `src/pages/api/auth/register.ts`
 - `src/pages/api/auth/login.ts`
 - `src/pages/api/auth/logout.ts`
@@ -397,6 +433,7 @@
 - `src/pages/api/auth/account.ts`
 
 **Co testujemy**:
+
 1. `POST /api/auth/register` - walidacja + wywołanie serwisu
 2. `POST /api/auth/login` - walidacja + wywołanie serwisu + ustawienie cookies
 3. `POST /api/auth/logout` - wywołanie serwisu
@@ -406,15 +443,18 @@
 7. Obsługa braku sesji (401)
 
 **Mocking/stubbing**:
+
 - Mock `AuthService`
 - Mock `context.locals.supabase`
 - Mock `Astro.cookies`
 
 **Dane testowe**:
+
 - Poprawne i niepoprawne request bodies
 - Zalogowany/niezalogowany użytkownik
 
 **Ryzyka**:
+
 - Astro API context trudny do mockowania
 - Interakcja z cookies
 
@@ -429,10 +469,12 @@
 **Nazwa**: `api-transaction-endpoints`
 
 **Zakres**:
+
 - `src/pages/api/transactions/index.ts`
 - `src/pages/api/transactions/[id].ts`
 
 **Co testujemy**:
+
 1. `GET /api/transactions` - paginacja, filtrowanie
 2. `POST /api/transactions` - tworzenie transakcji
 3. `GET /api/transactions/[id]` - pobieranie pojedynczej
@@ -441,10 +483,12 @@
 6. Obsługa błędów (404, 400, 401)
 
 **Mocking/stubbing**:
+
 - Mock `TransactionService`
 - Mock `context.locals.supabase`
 
 **Dane testowe**:
+
 - Query params dla GET
 - Request bodies dla POST/PUT
 - UUID dla [id]
@@ -462,6 +506,7 @@
 **Nazwa**: `api-other-endpoints`
 
 **Zakres**:
+
 - `src/pages/api/categories/index.ts`
 - `src/pages/api/categories/[id].ts`
 - `src/pages/api/summary.ts`
@@ -469,6 +514,7 @@
 - `src/pages/api/profile.ts`
 
 **Co testujemy**:
+
 1. `GET/POST /api/categories`
 2. `GET/PUT/DELETE /api/categories/[id]`
 3. `GET /api/summary`
@@ -476,6 +522,7 @@
 5. `GET/PUT /api/profile`
 
 **Mocking/stubbing**:
+
 - Mock odpowiednich serwisów
 - Mock `context.locals.supabase`
 
@@ -494,23 +541,28 @@
 **Nazwa**: `react-hooks`
 
 **Zakres**:
+
 - `src/components/hooks/*.ts`
 
 **Co testujemy**:
+
 1. Stan początkowy hooków
 2. Obsługa submit formularzy
 3. Obsługa błędów
 4. Aktualizacja stanu po API call
 
 **Mocking/stubbing**:
+
 - Mock `fetch` dla API calls
 - `@testing-library/react` z `renderHook`
 
 **Dane testowe**:
+
 - Poprawne/niepoprawne formularze
 - Sukces/błąd API
 
 **Ryzyka**:
+
 - Hooks mogą wymagać React Context (np. dla toastów)
 - Asynchroniczna logika wymaga `waitFor`
 
@@ -537,11 +589,11 @@
 
 ### Top 3 grupy na start:
 
-| Kolejność | Grupa | Uzasadnienie |
-|-----------|-------|--------------|
-| **1** | **GRUPA 1: Schematy Walidacji** | Już istnieje test `auth.schema.test.ts` - wzorzec gotowy. Czyste funkcje, brak zależności. Szybki sukces, buduje momentum. |
-| **2** | **GRUPA 8: Errors & Utils** | Małe, proste, zerowe zależności. Pozwala zweryfikować setup testów. |
-| **3** | **GRUPA 6: Profile Service** | Najprostszy serwis (2 metody). Pozwala wypracować wzorzec mockowania Supabase przed bardziej złożonymi serwisami. |
+| Kolejność | Grupa                           | Uzasadnienie                                                                                                               |
+| --------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **1**     | **GRUPA 1: Schematy Walidacji** | Już istnieje test `auth.schema.test.ts` - wzorzec gotowy. Czyste funkcje, brak zależności. Szybki sukces, buduje momentum. |
+| **2**     | **GRUPA 8: Errors & Utils**     | Małe, proste, zerowe zależności. Pozwala zweryfikować setup testów.                                                        |
+| **3**     | **GRUPA 6: Profile Service**    | Najprostszy serwis (2 metody). Pozwala wypracować wzorzec mockowania Supabase przed bardziej złożonymi serwisami.          |
 
 ---
 
@@ -552,6 +604,7 @@
 **Problem**: Chainable API Supabase (`from().select().eq().single()`) jest trudne do mockowania.
 
 **Propozycja**:
+
 ```typescript
 // tests/mocks/supabase.mock.ts
 export function createMockSupabaseClient(overrides = {}) {
@@ -588,6 +641,7 @@ export function createMockSupabaseClient(overrides = {}) {
 **Problem**: `deleteAccount()` używa dynamicznego importu `supabaseAdmin`.
 
 **Rozwiązanie**: Mock modułu przez `vi.mock()`:
+
 ```typescript
 vi.mock("../../db/supabase.admin", () => ({
   supabaseAdmin: mockSupabaseAdmin,
@@ -605,6 +659,7 @@ vi.mock("../../db/supabase.admin", () => ({
 **Problem**: Endpointy Astro używają `APIContext` który jest trudny do symulacji.
 
 **Propozycja**: Stworzyć helper:
+
 ```typescript
 // tests/helpers/astro-context.mock.ts
 export function createMockAPIContext(overrides = {}) {
@@ -688,11 +743,11 @@ tests/
 
 ## 7. Podsumowanie Priorytetów
 
-| Priorytet | Grupy | Opis |
-|-----------|-------|------|
-| **P0** | 1, 2, 3, 4 | Krytyczne: walidacja, transakcje, kategorie, auth |
-| **P1** | 5, 7, 9, 10, 11 | Wysokie: podsumowania, OpenRouter, API endpoints |
-| **P2** | 6, 8, 12 | Niskie: profil, utils/errors, React hooks |
+| Priorytet | Grupy           | Opis                                              |
+| --------- | --------------- | ------------------------------------------------- |
+| **P0**    | 1, 2, 3, 4      | Krytyczne: walidacja, transakcje, kategorie, auth |
+| **P1**    | 5, 7, 9, 10, 11 | Wysokie: podsumowania, OpenRouter, API endpoints  |
+| **P2**    | 6, 8, 12        | Niskie: profil, utils/errors, React hooks         |
 
 ---
 

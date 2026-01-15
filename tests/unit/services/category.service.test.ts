@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import type { SupabaseClient } from "@/db/supabase.client";
 import { CategoryService, CategoryNotFoundError, SystemCategoryError } from "@/lib/services/category.service";
-import { createMockSupabaseClient, resetMockSupabaseClient, type MockSupabaseClient } from "../../mocks/supabase.mock";
+import { createMockSupabaseClient, type MockSupabaseClient } from "../../mocks/supabase.mock";
 
 describe("CategoryService", () => {
   let mockClient: MockSupabaseClient;

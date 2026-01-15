@@ -2,7 +2,7 @@
 
 ## 1. Przegląd punktu końcowego
 
-Endpoint DELETE `/api/auth/account` umożliwia uwierzytelnionemu użytkownikowi trwałe usunięcie swojego konta wraz ze wszystkimi powiązanymi danymi (profil, kategorie, transakcje, zdarzenia). Operacja wymaga jawnego potwierdzenia poprzez przesłanie ciągu "DELETE" w celu zapobieżenia przypadkowym usunięciom.
+Endpoint DELETE `/api/auth/account` umożliwia uwierzytelnionemu użytkownikowi trwałe usunięcie swojego konta wraz ze wszystkimi powiązanymi danymi (profil, kategorie, transakcje). Operacja wymaga jawnego potwierdzenia poprzez przesłanie ciągu "DELETE" w celu zapobieżenia przypadkowym usunięciom.
 
 ## 2. Szczegóły żądania
 
@@ -91,7 +91,7 @@ export interface ErrorResponseDTO {
 └────────┬────────┘
          │ CASCADE DELETE
          │ (profiles, categories,
-         │  transactions, events)
+         │  transactions)
          ▼
 ┌─────────────────┐
 │  auth.users     │
@@ -115,7 +115,6 @@ export interface ErrorResponseDTO {
    - `profiles.id` → referencja do `auth.users.id`
    - `categories.user_id` → referencja do `auth.users.id`
    - `transactions.user_id` → referencja do `auth.users.id`
-   - `events.user_id` → referencja do `auth.users.id`
 
 ## 7. Obsługa błędów
 

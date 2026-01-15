@@ -53,38 +53,6 @@ describe("SummaryService", () => {
   });
 
   /**
-   * Helper to setup profile mock response
-   */
-  function mockProfileResponse(timezone: string | null, error: unknown = null) {
-    // Create a separate chain for profiles query
-    const profileChain = {
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      single: vi.fn().mockResolvedValue({
-        data: timezone ? { timezone } : null,
-        error,
-      }),
-    };
-
-    // Create a separate chain for transactions query
-    const transactionChain = {
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      gte: vi.fn().mockReturnThis(),
-      lt: vi.fn().mockResolvedValue({ data: [], error: null }),
-    };
-
-    mockClient.from.mockImplementation((table: string) => {
-      if (table === "profiles") {
-        return profileChain;
-      }
-      return transactionChain;
-    });
-
-    return { profileChain, transactionChain };
-  }
-
-  /**
    * Helper to setup full mock for getMonthlySummary
    */
   function setupMonthlySummaryMock(timezone: string, transactions: unknown[]) {

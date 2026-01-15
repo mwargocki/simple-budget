@@ -76,7 +76,7 @@ describe("POST /api/auth/register", () => {
       expect(body.error.code).toBe("VALIDATION_ERROR");
       expect(body.error.message).toBe("Validation failed");
       expect(body.error.details).toBeDefined();
-      expect(body.error.details!.length).toBeGreaterThan(0);
+      expect(body.error.details?.length).toBeGreaterThan(0);
     });
 
     it("should return 400 when email is invalid", async () => {

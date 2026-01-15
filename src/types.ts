@@ -7,14 +7,10 @@ import type { Database } from "./db/database.types";
 /** Transaction type enum */
 export type TransactionType = Database["public"]["Enums"]["transaction_type"];
 
-/** Event name enum */
-export type EventName = Database["public"]["Enums"]["event_name"];
-
 /** Database row types for internal use */
 type CategoryRow = Database["public"]["Tables"]["categories"]["Row"];
 type TransactionRow = Database["public"]["Tables"]["transactions"]["Row"];
 type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
-type EventRow = Database["public"]["Tables"]["events"]["Row"];
 
 // ============================================================================
 // Authentication DTOs and Commands
@@ -224,24 +220,6 @@ export interface MonthlySummaryDTO {
 export interface AIAnalysisResponseDTO {
   analysis: string;
   month: string;
-}
-
-// ============================================================================
-// Event DTOs and Commands
-// ============================================================================
-
-/** Command for tracking an analytics event */
-export interface CreateEventCommand {
-  event_name: EventName;
-  properties?: Record<string, unknown>;
-}
-
-/** Event data transfer object - returned after creating an event */
-export interface EventDTO {
-  id: EventRow["id"];
-  event_name: EventName;
-  event_at: EventRow["event_at"];
-  properties: Record<string, unknown>;
 }
 
 // ============================================================================

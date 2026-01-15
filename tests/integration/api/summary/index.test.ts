@@ -90,9 +90,7 @@ describe("GET /api/summary", () => {
   describe("Success cases", () => {
     it("should return monthly summary with aggregated data", async () => {
       // Arrange
-      let fromCallCount = 0;
       mockSupabaseWithAuth.from.mockImplementation((table: string) => {
-        fromCallCount++;
         if (table === "profiles") {
           return {
             ...mockSupabaseWithAuth._chain,
