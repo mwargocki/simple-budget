@@ -45,7 +45,7 @@ export function TransactionForm({
   const submitLabel = isCreate ? "Dodaj" : "Zapisz";
 
   return (
-    <form onSubmit={handleFormSubmit} className="space-y-4">
+    <form onSubmit={handleFormSubmit} className="space-y-4" data-testid="transaction-form">
       {/* Kwota */}
       <div className="space-y-2">
         <Label htmlFor={amountId}>Kwota (PLN)</Label>
@@ -63,6 +63,7 @@ export function TransactionForm({
           aria-invalid={!!errors.amount}
           aria-describedby={errors.amount ? amountErrorId : undefined}
           disabled={isSubmitting}
+          data-testid="transaction-amount-input"
         />
         {errors.amount && (
           <p id={amountErrorId} className="text-sm text-destructive" role="alert">
@@ -83,6 +84,7 @@ export function TransactionForm({
             id={typeId}
             aria-invalid={!!errors.type}
             aria-describedby={errors.type ? typeErrorId : undefined}
+            data-testid="transaction-type-select"
           >
             <SelectValue placeholder="Wybierz typ" />
           </SelectTrigger>
@@ -110,6 +112,7 @@ export function TransactionForm({
             id={categoryId}
             aria-invalid={!!errors.category_id}
             aria-describedby={errors.category_id ? categoryErrorId : undefined}
+            data-testid="transaction-category-select"
           >
             <SelectValue placeholder="Wybierz kategorię" />
           </SelectTrigger>
@@ -142,6 +145,7 @@ export function TransactionForm({
           aria-describedby={errors.description ? descriptionErrorId : undefined}
           disabled={isSubmitting}
           maxLength={255}
+          data-testid="transaction-description-input"
         />
         {errors.description && (
           <p id={descriptionErrorId} className="text-sm text-destructive" role="alert">
@@ -162,6 +166,7 @@ export function TransactionForm({
           aria-invalid={!!errors.occurred_at}
           aria-describedby={errors.occurred_at ? dateErrorId : undefined}
           disabled={isSubmitting}
+          data-testid="transaction-date-input"
         />
         {errors.occurred_at && (
           <p id={dateErrorId} className="text-sm text-destructive" role="alert">
@@ -179,10 +184,16 @@ export function TransactionForm({
 
       {/* Przyciski */}
       <div className="flex justify-end gap-2 pt-2">
-        <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          disabled={isSubmitting}
+          data-testid="transaction-cancel-button"
+        >
           Anuluj
         </Button>
-        <Button type="submit" disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting} data-testid="transaction-submit-button">
           {isSubmitting ? "Zapisywanie..." : submitLabel}
         </Button>
       </div>

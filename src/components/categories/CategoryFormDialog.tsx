@@ -18,7 +18,7 @@ export function CategoryFormDialog({ isOpen, onClose, mode, category, onSubmit }
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent>
+      <DialogContent data-testid="category-form-dialog">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
