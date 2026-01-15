@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
 import { TestApiClient } from "./helpers/api-client";
 
 /**
  * Global teardown for Playwright E2E tests
  * Cleans up test data created during test execution
+ * Console statements are intentional for teardown logging
  */
 async function globalTeardown() {
   const username = process.env.E2E_USERNAME;

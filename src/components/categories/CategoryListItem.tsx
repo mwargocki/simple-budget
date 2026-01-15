@@ -15,7 +15,9 @@ export function CategoryListItem({ category, onEdit, onDelete }: CategoryListIte
   return (
     <li className="flex items-center justify-between border-b py-3 last:border-b-0" data-testid="category-list-item">
       <div className="flex items-center gap-3">
-        <span className="font-medium" data-testid="category-name">{category.name}</span>
+        <span className="font-medium" data-testid="category-name">
+          {category.name}
+        </span>
         {isSystem && (
           <Badge variant="secondary" className="text-xs">
             Systemowa
