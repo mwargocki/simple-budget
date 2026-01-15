@@ -91,8 +91,7 @@ describe("GET /api/transactions", () => {
           // Count query
           return {
             ...countChain,
-            then: (resolve: (value: { count: number; error: null }) => void) =>
-              resolve({ count: 1, error: null }),
+            then: (resolve: (value: { count: number; error: null }) => void) => resolve({ count: 1, error: null }),
           };
         }
         return mockSupabaseWithAuth._chain;
@@ -136,8 +135,7 @@ describe("GET /api/transactions", () => {
             eq: vi.fn().mockReturnThis(),
             gte: vi.fn().mockReturnThis(),
             lt: vi.fn().mockReturnThis(),
-            then: (resolve: (value: { count: number; error: null }) => void) =>
-              resolve({ count: 0, error: null }),
+            then: (resolve: (value: { count: number; error: null }) => void) => resolve({ count: 0, error: null }),
           };
         }
         return mockSupabaseWithAuth._chain;
@@ -181,8 +179,7 @@ describe("GET /api/transactions", () => {
             eq: vi.fn().mockReturnThis(),
             gte: vi.fn().mockReturnThis(),
             lt: vi.fn().mockReturnThis(),
-            then: (resolve: (value: { count: number; error: null }) => void) =>
-              resolve({ count: 1, error: null }),
+            then: (resolve: (value: { count: number; error: null }) => void) => resolve({ count: 1, error: null }),
           };
         }
         return mockSupabaseWithAuth._chain;
@@ -222,8 +219,7 @@ describe("GET /api/transactions", () => {
             eq: vi.fn().mockReturnThis(),
             gte: vi.fn().mockReturnThis(),
             lt: vi.fn().mockReturnThis(),
-            then: (resolve: (value: { count: number; error: null }) => void) =>
-              resolve({ count: 50, error: null }),
+            then: (resolve: (value: { count: number; error: null }) => void) => resolve({ count: 50, error: null }),
           };
         }
         return mockSupabaseWithAuth._chain;
@@ -339,12 +335,13 @@ describe("GET /api/transactions", () => {
 
     it("should return 400 when offset is negative", async () => {
       // Arrange
-      const { context: negativeOffsetContext, mockSupabase: negativeOffsetMockSupabase } =
-        createMockAPIContextWithAuth({
+      const { context: negativeOffsetContext, mockSupabase: negativeOffsetMockSupabase } = createMockAPIContextWithAuth(
+        {
           method: "GET",
           path: "/api/transactions?offset=-5",
           token: testToken,
-        });
+        }
+      );
 
       negativeOffsetMockSupabase.auth.getUser.mockResolvedValue({
         data: { user: { id: testUserId, email: "test@example.com" } },
