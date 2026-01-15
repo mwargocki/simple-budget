@@ -1,6 +1,6 @@
 # SimpleBudget
 
-A web application for quick expense tracking and simple monthly budget analysis.
+Simple Budget is a web application for quick expense tracking and simple monthly budget analysis.
 
 ## Table of Contents
 
