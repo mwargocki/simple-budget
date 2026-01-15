@@ -49,9 +49,9 @@ export class CategoriesPage {
     const items = await this.categoryItems.all();
     const names: string[] = [];
     for (const item of items) {
-      const name = await item.locator("span.font-medium").textContent();
+      const name = await item.getByTestId("category-name").textContent();
       if (name) {
-        names.push(name);
+        names.push(name.trim());
       }
     }
     return names;
