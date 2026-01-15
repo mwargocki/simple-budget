@@ -259,10 +259,10 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   Tytuł: Bezpieczne przechowywanie haseł i ochrona logowania (wymóg wydania)
   Opis: Jako właściciel produktu chcę, aby hasła były przechowywane bezpiecznie i aby logowanie było odporne na ataki brute-force, aby chronić użytkowników.
   Kryteria akceptacji:
-  - Hasła są przechowywane w bazie w postaci hasha (nie w czystym tekście).
-  - System ogranicza liczbę nieudanych prób logowania (np. czasowa blokada lub opóźnienie po kolejnych porażkach).
+  - Hasła są przechowywane w bazie w postaci hasha (nie w czystym tekście). Realizowane przez Supabase Auth (bcrypt).
+  - Ochrona przed atakami brute-force jest zapewniona przez wbudowane mechanizmy Supabase Auth.
   - Po wdrożeniu zmian logowanie i rejestracja nadal działają zgodnie z US-001 i US-002.
-  - W logach aplikacji rejestrowane są nieudane próby logowania (co najmniej licznik zdarzeń), bez logowania haseł.
+  - Nieudane próby logowania są rejestrowane w logach Supabase (dostępne w panelu administracyjnym).
 
 ### 5.2 Kategorie
 
@@ -306,10 +306,11 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
 
 - ID: US-013
   Tytuł: Obsługa filtra kategorii po usunięciu kategorii
-  Opis: Jako użytkownik chcę, aby filtr kategorii nie wskazywał nieistniejącej kategorii po jej usunięciu, aby uniknąć pustych lub błędnych widoków.
+  Opis: Jako użytkownik chcę, aby filtr kategorii nie powodował błędów po usunięciu kategorii, aby uniknąć problemów z wyświetlaniem.
   Kryteria akceptacji:
-  - Jeśli w liście transakcji aktywny jest filtr na kategorię, która zostaje usunięta, system automatycznie przełącza filtr na „Wszystkie” lub „Brak”.
-  - Lista transakcji po przełączeniu filtra ładuje się poprawnie i nie odwołuje się do usuniętej kategorii.
+  - Usunięcie kategorii odbywa się na dedykowanej stronie zarządzania kategoriami, oddzielnej od listy transakcji.
+  - Jeśli użytkownik wejdzie na listę transakcji z filtrem wskazującym na nieistniejącą kategorię (np. z zakładki), lista wyświetla się bez błędów (pusta lista lub brak filtrowania).
+  - Transakcje z usuniętej kategorii są automatycznie przenoszone do „Brak" i widoczne pod tą kategorią.
 
 ### 5.3 Transakcje (dodawanie, edycja, usuwanie)
 
@@ -317,8 +318,8 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   Tytuł: Dodanie transakcji z minimalną liczbą pól
   Opis: Jako użytkownik chcę szybko dodać transakcję, aby nie tracić czasu na skomplikowane formularze.
   Kryteria akceptacji:
-  - Formularz dodania transakcji zawiera: kwota, kategoria, typ (Wydatek/Przychód), opis (wymagany), data (domyślnie „dzisiaj"), godzina (domyślnie „teraz").
-  - Jeśli użytkownik nie zmieni daty i godziny, system zapisuje bieżący moment jako datę+godzinę transakcji.
+  - Formularz dodania transakcji zawiera: kwota, kategoria, typ (Wydatek/Przychód), opis (wymagany), data (domyślnie „dzisiaj").
+  - Pole godziny nie jest wymagane w MVP – system zapisuje transakcję z datą wybraną przez użytkownika.
   - Po poprawnym zapisie transakcja jest widoczna na liście transakcji.
 
 - ID: US-015
@@ -338,13 +339,13 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   - System odrzuca próbę zapisu transakcji z kategorią nieistniejącą (np. przez manipulację żądaniem).
 
 - ID: US-017
-  Tytuł: Ustawienie i edycja daty oraz godziny transakcji
-  Opis: Jako użytkownik chcę ustawić lub skorygować datę i godzinę transakcji, aby zachować poprawną chronologię.
+  Tytuł: Ustawienie i edycja daty transakcji
+  Opis: Jako użytkownik chcę ustawić lub skorygować datę transakcji, aby zachować poprawną chronologię.
   Kryteria akceptacji:
-  - Użytkownik może wybrać datę z date pickera.
-  - Użytkownik może opcjonalnie wybrać godzinę z time pickera (lub edytować pole czasu).
-  - Lista transakcji wyświetla datę i godzinę transakcji.
-  - System odrzuca niepoprawny format daty, jeśli data jest wpisywana ręcznie (dd/MM/rrrr).
+  - Użytkownik może wybrać datę z natywnego date pickera przeglądarki.
+  - Pole godziny nie jest dostępne w MVP – transakcje są zapisywane z wybraną datą.
+  - Lista transakcji wyświetla datę transakcji (bez godziny w MVP).
+  - Walidacja daty jest zapewniona przez natywny date picker (format ISO: YYYY-MM-DD).
 
 - ID: US-018
   Tytuł: Dodanie opisu do transakcji
@@ -360,7 +361,8 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   Tytuł: Edycja transakcji
   Opis: Jako użytkownik chcę edytować transakcję, aby poprawić błędy lub zaktualizować informacje.
   Kryteria akceptacji:
-  - Użytkownik może edytować: kwotę, typ, datę+godzinę, kategorię oraz opis.
+  - Użytkownik może edytować: kwotę, typ, datę, kategorię oraz opis.
+  - Edycja godziny nie jest dostępna w MVP (spójnie z US-014 i US-017).
   - Edycja podlega tym samym walidacjom co tworzenie.
   - Po zapisaniu zmian transakcja na liście odzwierciedla zaktualizowane dane.
 
@@ -394,9 +396,10 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   Tytuł: Filtrowanie transakcji po miesiącu kalendarzowym
   Opis: Jako użytkownik chcę filtrować transakcje po miesiącu, aby analizować wydatki w skali miesięcznej.
   Kryteria akceptacji:
-  - Użytkownik może wybrać miesiąc (np. „Styczeń 2026”).
-  - Lista transakcji pokazuje tylko transakcje z wybranego miesiąca w lokalnej strefie czasowej.
+  - Użytkownik może wybrać miesiąc (np. „Styczeń 2026").
+  - Lista transakcji pokazuje tylko transakcje z wybranego miesiąca (na podstawie daty transakcji).
   - Zmiana miesiąca odświeża listę transakcji.
+  - W MVP transakcje są filtrowane według daty bez uwzględnienia godziny (brak edycji godziny w formularzu).
 
 - ID: US-024
   Tytuł: Filtrowanie transakcji po kategorii
@@ -460,9 +463,9 @@ Poniżej zebrano komplet historyjek dla MVP, obejmujących scenariusze podstawow
   Tytuł: Czytelne komunikaty błędów walidacji
   Opis: Jako użytkownik chcę otrzymać jasny komunikat, co jest niepoprawne, aby szybko poprawić dane.
   Kryteria akceptacji:
-  - Przy błędnej kwocie system pokazuje komunikat wskazujący dozwolony zakres i wymagany format (2 miejsca po przecinku).
-  - Przy błędnej dacie system pokazuje komunikat o wymaganym formacie dd/MM/rrrr lub konieczności wyboru z date pickera.
-  - Przy nieprawidłowej kategorii system pokazuje komunikat, że należy wybrać kategorię z listy.
+  - Przy błędnej kwocie system pokazuje komunikat wskazujący dozwolony zakres (0,01 – 1 000 000,00).
+  - Przy braku lub nieprawidłowej dacie system pokazuje komunikat o konieczności wyboru daty. Natywny date picker przeglądarki zapewnia walidację formatu.
+  - Przy braku kategorii system pokazuje komunikat o konieczności wyboru kategorii z listy.
   - Komunikaty nie ujawniają danych technicznych (np. stack trace) użytkownikowi.
 
 - ID: US-032
