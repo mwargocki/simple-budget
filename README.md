@@ -18,7 +18,7 @@ SimpleBudget is a minimalist web application designed for users who want to trac
 
 ### Key Features
 
-- **Quick Transaction Entry** - Minimal form fields with smart defaults (current date/time)
+- **Quick Transaction Entry** - Minimal form fields with smart defaults (current date)
 - **Two Transaction Types** - Track both expenses and income
 - **Custom Categories** - Organize transactions with user-defined categories
 - **Monthly Analysis** - View summaries by total and per category
@@ -57,10 +57,9 @@ Everyday users who want to control their spending (groceries, services, etc.) in
 
 ### DevOps
 
-| Technology     | Purpose                        |
-| -------------- | ------------------------------ |
-| GitHub Actions | CI/CD pipelines                |
-| DigitalOcean   | Application hosting via Docker |
+| Technology     | Purpose         |
+| -------------- | --------------- |
+| GitHub Actions | CI/CD pipelines |
 
 ## Getting Started Locally
 
@@ -123,12 +122,12 @@ Everyday users who want to control their spending (groceries, services, etc.) in
 - **Category Management**
   - Create, read, update, and delete custom categories
   - Default "None" category (non-deletable)
-  - Alphabetical sorting with "None" always at top
+  - Alphabetical sorting
   - Automatic transaction reassignment when deleting categories
 
 - **Transaction Management**
   - Create, read, update, and delete transactions
-  - Fields: amount (PLN), date/time, category, description (optional), type (expense/income)
+  - Fields: amount (PLN), date, category, description (required, max 255 characters), type (expense/income)
   - Amount validation: 0.01 - 1,000,000.00 PLN
   - Support for both comma and period as decimal separators
 
@@ -141,6 +140,7 @@ Everyday users who want to control their spending (groceries, services, etc.) in
   - Total balance (income minus expenses)
   - Per-category breakdown
   - Click-through navigation to filtered transaction list
+  - AI-powered analysis of income and expenses (via OpenRouter)
 
 ### Out of Scope (Post-MVP)
 
@@ -151,14 +151,6 @@ Everyday users who want to control their spending (groceries, services, etc.) in
 - External integrations
 - Mobile applications
 - Full-text search in descriptions
-
-## Project Status
-
-🚧 **In Development** - This project is currently in the early stages of development. The MVP is being built according to the product requirements document.
-
-## License
-
-This project is proprietary software. All rights reserved.
 
 ---
 

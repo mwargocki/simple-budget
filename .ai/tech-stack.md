@@ -13,6 +13,8 @@ Backend - Supabase jako kompleksowe rozwiązanie backendowe:
 - Jest rozwiązaniem open source, które można hostować lokalnie lub na własnym serwerze
 - Posiada wbudowaną autentykację użytkowników
 
+AI/LLM - OpenRouter do generowania analiz i treści
+
 Testowanie:
 
 - Vitest 3 jako framework do testów jednostkowych i integracyjnych
@@ -23,4 +25,3 @@ Testowanie:
 CI/CD i Hosting:
 
 - Github Actions do tworzenia pipeline'ów CI/CD
-- DigitalOcean do hostowania aplikacji za pośrednictwem obrazu docker
