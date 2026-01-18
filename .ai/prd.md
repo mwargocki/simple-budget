@@ -14,9 +14,10 @@ SimpleBudget to webowa aplikacja do szybkiego rejestrowania wydatków i prostego
 
 - Aplikacja webowa (brak aplikacji mobilnych w MVP).
 - Waluta: tylko PLN, 2 miejsca po przecinku.
-- Analiza: miesiąc kalendarzowy w lokalnej strefie czasowej użytkownika.
+- Analiza: miesiąc kalendarzowy.
 - Dwa typy transakcji: Wydatek oraz Przychód.
-- Minimum kroków do dodania transakcji, domyślnie data+godzina ustawione na „teraz”.
+- Minimum kroków do dodania transakcji, domyślnie data ustawiona na „dzisiaj".
+- Integracja AI (OpenRouter) dla analizy podsumowań miesięcznych.
 
 ### 1.4 Kluczowe moduły MVP
 
@@ -115,15 +116,15 @@ Użytkownicy chcą kontrolować swoje wydatki, ale zniechęcają ich rozbudowane
 3.3.1 Pola transakcji
 
 - Kwota (PLN, 2 miejsca po przecinku).
-- Data i godzina (date picker + opcjonalny time picker).
+- Data (date picker, bez godziny w MVP).
 - Kategoria (wymagana; musi istnieć w katalogu użytkownika).
 - Opis (wymagany, max 255 znaków).
 - Typ transakcji: Wydatek lub Przychód.
 
   3.3.2 Domyślne wartości i UX
 
-- Domyślnie data+godzina ustawione na moment dodawania.
-- Użytkownik może edytować wszystkie pola, w tym datę i godzinę.
+- Domyślnie data ustawiona na moment dodawania.
+- Użytkownik może edytować wszystkie pola, w tym datę.
 
   3.3.3 Walidacje transakcji
 
@@ -152,17 +153,15 @@ Użytkownicy chcą kontrolować swoje wydatki, ale zniechęcają ich rozbudowane
 - Filtry:
   - miesiąc kalendarzowy,
   - kategoria (w tym „Wszystkie” oraz „Brak”).
-- W widoku listy wyświetlana jest data i godzina transakcji.
-- Wyszukiwanie po opisie: poza MVP (nie implementować w MVP).
+- W widoku listy wyświetlana jest data transakcji.
 
 ### 3.5 Podsumowanie miesięczne
 
-- Użytkownik wybiera miesiąc kalendarzowy w lokalnej strefie czasowej.
+- Użytkownik wybiera miesiąc kalendarzowy.
 - Widok podsumowania pokazuje:
   - sumę wszystkich transakcji (saldo uwzględniające typ: Wydatek minus, Przychód plus),
   - sumę per kategoria (również w logice salda).
 - Kliknięcie kategorii w podsumowaniu przenosi użytkownika do listy transakcji z ustawionym filtrem na tę kategorię i ten sam miesiąc.
-- Wykres (kołowy/słupkowy): opcjonalny, decyzja pozostaje otwarta (nie blokuje MVP).
 
 ---
 
@@ -179,6 +178,7 @@ Użytkownicy chcą kontrolować swoje wydatki, ale zniechęcają ich rozbudowane
 - Transakcje: pełny CRUD + typ Wydatek/Przychód + walidacje kwoty, daty i kategorii.
 - Lista transakcji: filtrowanie po miesiącu i kategorii + sortowanie + paginacja/„load more”.
 - Podsumowanie miesięczne: suma całości i suma per kategoria + nawigacja do listy po kliknięciu.
+- Analiza wydatów miesięcznych z użyciem AI (OpenRouter).
 
 ### 4.2 Co nie wchodzi w zakres MVP
 
@@ -189,11 +189,6 @@ Użytkownicy chcą kontrolować swoje wydatki, ale zniechęcają ich rozbudowane
 - Integracje z zewnętrznymi systemami finansowymi.
 - Aplikacje mobilne.
 - Wyszukiwanie po opisie (opcjonalne rozważenie po MVP).
-
-### 4.3 Otwarte kwestie (do decyzji)
-
-- Wykresy w podsumowaniu: czy w MVP, oraz czy kołowy czy słupkowy, i jakie dokładnie dane wizualizować.
-- Minimalny standard bezpieczeństwa haseł: wymagane przed produkcją (hash + ochrona brute-force), mimo wcześniejszej decyzji tymczasowej.
 
 ---
 
