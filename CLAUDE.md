@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with code in this repository.
 
 ## Project Overview
 
@@ -8,11 +8,16 @@ SimpleBudget is a web application for tracking personal expenses and income in P
 
 ## Tech Stack
 
+### Frontend
 - Astro 5
 - TypeScript 5
 - React 19
 - Tailwind 4
 - Shadcn/ui
+
+### Backend
+- Supabase (PostgreSQL + Auth)
+- OpenRouter (AI analysis)
 
 ## Commands
 
@@ -38,14 +43,21 @@ When introducing changes to the project, always follow the directory structure b
 
 - `./src` - source code
 - `./src/layouts` - Astro layouts
-- `./src/pages` - Astro pages
+- `./src/pages` - Astro pages (public)
+- `./src/pages/app` - Astro pages (authenticated)
 - `./src/pages/api` - API endpoints
 - `./src/middleware/index.ts` - Astro middleware
 - `./src/db` - Supabase clients and types
 - `./src/types.ts` - Shared types for backend and frontend (Entities, DTOs)
+- `./src/types` - Additional type definitions (e.g., OpenRouter)
+- `./src/styles` - Global styles
 - `./src/components` - Client-side components written in Astro (static) and React (dynamic)
 - `./src/components/ui` - Client-side components from Shadcn/ui
+- `./src/components/hooks` - Custom React hooks
 - `./src/lib` - Services and helpers
+- `./src/lib/services` - Backend services (auth, category, transaction, summary, openrouter)
+- `./src/lib/schemas` - Zod validation schemas
+- `./src/lib/errors` - Custom error classes
 - `./src/assets` - static internal assets
 - `./public` - public assets
 - `./tests` - test files
@@ -133,11 +145,20 @@ When modifying the directory structure, always update this section.
 
 ### Backend and Database
 
+#### Supabase
 - Use Supabase for backend services, including authentication and database interactions.
 - Follow Supabase guidelines for security and performance.
 - Use Zod schemas to validate data exchanged with the backend.
 - Use supabase from context.locals in Astro routes instead of importing supabaseClient directly
 - Use SupabaseClient type from `src/db/supabase.client.ts`, not from `@supabase/supabase-js`
+
+#### OpenRouter (AI)
+- Use OpenRouterService from `src/lib/services/openrouter.service.ts` for AI analysis
+- Configure via environment variable `OPENROUTER_API_KEY`
+- Use custom error classes from `src/lib/errors/openrouter.errors.ts` for error handling
+- Use `chatWithSchema<T>()` method for structured JSON responses with type safety
+- Use `chatStream()` for streaming responses when needed
+- Define types in `src/types/openrouter.types.ts` and schemas in `src/lib/schemas/openrouter.schema.ts`
 
 ## TESTING
 
