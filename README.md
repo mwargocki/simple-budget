@@ -42,9 +42,10 @@ Everyday users who want to control their spending (groceries, services, etc.) in
 
 ### Backend
 
-| Technology                        | Purpose                                           |
-| --------------------------------- | ------------------------------------------------- |
-| [Supabase](https://supabase.com/) | PostgreSQL database, authentication, and BaaS SDK |
+| Technology                            | Purpose                                           |
+| ------------------------------------- | ------------------------------------------------- |
+| [Supabase](https://supabase.com/)     | PostgreSQL database, authentication, and BaaS SDK |
+| [OpenRouter](https://openrouter.ai/)  | AI-powered spending analysis                      |
 
 ### Testing
 
