@@ -9,6 +9,7 @@ SimpleBudget is a web application for tracking personal expenses and income in P
 ## Tech Stack
 
 ### Frontend
+
 - Astro 5
 - TypeScript 5
 - React 19
@@ -16,6 +17,7 @@ SimpleBudget is a web application for tracking personal expenses and income in P
 - Shadcn/ui
 
 ### Backend
+
 - Supabase (PostgreSQL + Auth)
 - OpenRouter (AI analysis)
 
@@ -146,6 +148,7 @@ When modifying the directory structure, always update this section.
 ### Backend and Database
 
 #### Supabase
+
 - Use Supabase for backend services, including authentication and database interactions.
 - Follow Supabase guidelines for security and performance.
 - Use Zod schemas to validate data exchanged with the backend.
@@ -153,6 +156,7 @@ When modifying the directory structure, always update this section.
 - Use SupabaseClient type from `src/db/supabase.client.ts`, not from `@supabase/supabase-js`
 
 #### OpenRouter (AI)
+
 - Use OpenRouterService from `src/lib/services/openrouter.service.ts` for AI analysis
 - Configure via environment variable `OPENROUTER_API_KEY`
 - Use custom error classes from `src/lib/errors/openrouter.errors.ts` for error handling

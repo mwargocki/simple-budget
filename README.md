@@ -57,9 +57,9 @@ Everyday users who want to control their spending (groceries, services, etc.) in
 
 ### DevOps
 
-| Technology     | Purpose                        |
-| -------------- | ------------------------------ |
-| GitHub Actions | CI/CD pipelines                |
+| Technology     | Purpose         |
+| -------------- | --------------- |
+| GitHub Actions | CI/CD pipelines |
 
 ## Getting Started Locally
 
